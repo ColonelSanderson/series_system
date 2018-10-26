@@ -1,0 +1,5 @@
+<% define_template "subrecord_function", jsonmodel_definition(:function) do |form| %>
+  <div class="subrecord-form-fields">
+    <%= render_aspace_partial :partial => "functions/linker", :locals => { :form => form }%>
+  </div>
+<% end %>

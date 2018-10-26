@@ -1,0 +1,21 @@
+<%
+  section_id = "mandates" if section_id.blank?
+%>
+
+<section id="<%= section_id %>" class="subrecord-form-dummy">
+  <h3><%= I18n.t("mandate._plural") %></h3>
+  <div class="subrecord-form-container">
+    <div class="subrecord-form-fields">
+      <% mandates.each_with_index do | mandate, index | %>
+        <div class="row">
+          <div class="col-md-12 token-list">
+            <%= render_token :object => mandate['_resolved'],
+                             :label => mandate['_resolved']['title'],
+                             :type => "mandate",
+                             :uri => mandate['ref'] %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,8 @@
+<%= render(:layout => '/shared/sidebar',
+           :locals => {
+               :record_type => 'function',
+               :record => @function,
+               :plusone => :submit
+           }) do |sidebar| %>
+  <%= sidebar.render_for_view_and_edit(:subrecord_type => 'mandate', :property => 'mandates') %>
+<% end %>

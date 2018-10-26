@@ -1,0 +1,12 @@
+<%= javascript_include_tag "#{AppConfig[:frontend_prefix]}assets/series-system.js" %>
+
+<script type="text/template" id="seriesSystemBrowseActions">
+  <li class="divider"></li>
+  <li><%= link_to I18n.t("mandate._plural"), :controller => :mandates, :action => :index %></li>
+  <li><%= link_to I18n.t("function._plural"), :controller => :functions, :action => :index %></li>
+</script>
+<script type="text/template" id="seriesSystemCreateActions">
+  <li class="divider"></li>
+  <li><%= link_to I18n.t("mandate._plural"), :controller => :mandates, :action => :new %></li>
+  <li><%= link_to I18n.t("function._plural"), :controller => :functions, :action => :new %></li>
+</script>

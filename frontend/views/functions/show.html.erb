@@ -1,0 +1,32 @@
+<%= setup_context :object => @function, :title => @function.title %>
+
+<div class="row">
+  <div class="col-md-3">
+    <%= render_aspace_partial :partial => "sidebar" %>
+  </div>
+  <div class="col-md-9">
+    <%= render_aspace_partial :partial => "toolbar" %>
+    <div class="record-pane">
+      <%= readonly_context :function, @function do |readonly| %>
+        <h2><%= @function.title %>  <span class="label label-info"><%= I18n.t("function._singular") %></span></h2>
+
+        <%= render_aspace_partial :partial => "shared/flash_messages" %>
+
+        <% define_template "function", jsonmodel_definition(:function) do |form, function| %>
+          <section id="basic_information">
+            <h3><%= I18n.t("function._frontend.section.basic_information") %></h3>
+
+            <%= form.label_and_textfield "title" %>
+            <%= display_audit_info(@function) %>
+          </section>
+        <% end %>
+
+        <%= readonly.emit_template "function" %>
+
+        <% if not @function.mandates.blank? %>
+          <%= render_aspace_partial :partial => "mandates/show_as_subrecords", :locals => {:mandates => @function.mandates, :section_id => "function_mandates_"} %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</div>

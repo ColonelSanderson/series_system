@@ -1,0 +1,21 @@
+<%
+  section_id = "functions" if section_id.blank?
+%>
+
+<section id="<%= section_id %>" class="subrecord-form-dummy">
+  <h3><%= I18n.t("function._plural") %></h3>
+  <div class="subrecord-form-container">
+    <div class="subrecord-form-fields">
+      <% functions.each_with_index do | function, index | %>
+        <div class="row">
+          <div class="col-md-12 token-list">
+            <%= render_token :object => function['_resolved'],
+                             :label => function['_resolved']['title'],
+                             :type => "function",
+                             :uri => function['ref'] %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</section>

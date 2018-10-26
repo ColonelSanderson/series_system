@@ -1,0 +1,6 @@
+<%= form_for @function, :as => "function", :url => {:action => :create}, :html => {:class => 'form-horizontal aspace-record-form'} do |f| %>
+  <%= form_context :function, @function do |form| %>
+    <%= hidden_field "inline", "true" %>
+    <%= render_aspace_partial :partial => "functions/form", :locals => {:form => form} %>
+  <% end %>
+<% end %>

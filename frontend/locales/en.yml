@@ -1,0 +1,42 @@
+en:
+  plugins:
+    series_system:
+      testing: true
+
+  mandate:
+    title: Title
+    function: Functions
+    _singular: Mandate
+    _plural: Mandates
+    _frontend:
+      section:
+        basic_information: Basic Information
+      action:
+        create: Create Mandate
+        save: Save Mandate
+        add: Add Mandate
+      messages:
+        created: Mandate created
+        updated: Mandate updated
+        deleted: Mandate deleted
+
+  function:
+    title: Title
+    mandates: Mandates
+    _singular: Function
+    _plural: Functions
+    _frontend:
+      section:
+        basic_information: Basic Information
+      action:
+        create: Create Function
+        save: Save Function
+        add: Add Function
+      messages:
+        created: Function created
+        updated: Function updated
+        deleted: Function deleted
+
+  agent_corporate_entity:
+    mandates: Mandates
+    function: Functions

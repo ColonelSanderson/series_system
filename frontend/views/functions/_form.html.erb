@@ -1,0 +1,18 @@
+<%= render_aspace_partial :partial => "shared/form_messages", :locals => {:object => @function, :form => form} %>
+
+<fieldset>
+  <% define_template "function", jsonmodel_definition(:function) do |form| %>
+    <section id="basic_information">
+      <h3>
+        <%= I18n.t("function._frontend.section.basic_information") %>
+        <%= link_to_help :topic => "function_basic_information" %>
+      </h3>
+      <%= form.label_and_textfield "title" %>
+    </section>
+  <% end %>
+
+  <% form.emit_template("function") %>
+
+  <%= render_aspace_partial :partial => "shared/subrecord_form", :locals => {:form => form, :name => "mandates", :template => "subrecord_mandate"} %>
+
+</fieldset>
