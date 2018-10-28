@@ -40,9 +40,9 @@ Rails.application.config.after_initialize do
                                           :form => context,
                                           :name => 'mandates',
                                           :cardinality => :zero_to_many,
-                                          :template => 'subrecord_mandate',
+                                          :template => 'mandate',
                                           :template_erb => 'mandates/template',
-                                          :js_template_name => 'template_subrecord_mandate',
+                                          :js_template_name => 'template_mandate',
                                         })
       end
 
@@ -52,9 +52,9 @@ Rails.application.config.after_initialize do
                                           :form => context,
                                           :name => 'functions',
                                           :cardinality => :zero_to_many,
-                                          :template => 'subrecord_function',
+                                          :template => 'function',
                                           :template_erb => 'functions/template',
-                                          :js_template_name => 'template_subrecord_function',
+                                          :js_template_name => 'template_function',
                                         }) 
       end
 

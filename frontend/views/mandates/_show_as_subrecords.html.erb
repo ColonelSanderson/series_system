@@ -6,16 +6,29 @@
   <h3><%= I18n.t("mandate._plural") %></h3>
   <div class="subrecord-form-container">
     <div class="subrecord-form-fields">
-      <% mandates.each_with_index do | mandate, index | %>
-        <div class="row">
-          <div class="col-md-12 token-list">
-            <%= render_token :object => mandate['_resolved'],
-                             :label => mandate['_resolved']['title'],
-                             :type => "mandate",
-                             :uri => mandate['ref'] %>
-          </div>
-        </div>
-      <% end %>
+      <table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+          <th><%= I18n.t('mandate._singular') %></th>
+          <th><%= I18n.t('mandate.start_date') %></th>
+          <th><%= I18n.t('mandate.end_date') %></th>
+        </tr>
+        </thead>
+        <tbody>
+        <% mandates.each_with_index do | mandate, index | %>
+          <td>
+            <div class="col-xs-6 token-list">
+              <%= render_token :object => mandate['_resolved'],
+                               :label => mandate['_resolved']['title'],
+                               :type => "mandate",
+                               :uri => mandate['ref'] %>
+            </div>
+          </td>
+          <td><%= mandate['start_date'] %></td>
+          <td><%= mandate['end_date'] %></td>
+        <% end %>
+        </tbody>
+      </table>
     </div>
   </div>
 </section>

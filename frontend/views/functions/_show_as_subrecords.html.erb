@@ -6,16 +6,29 @@
   <h3><%= I18n.t("function._plural") %></h3>
   <div class="subrecord-form-container">
     <div class="subrecord-form-fields">
-      <% functions.each_with_index do | function, index | %>
-        <div class="row">
-          <div class="col-md-12 token-list">
-            <%= render_token :object => function['_resolved'],
-                             :label => function['_resolved']['title'],
-                             :type => "function",
-                             :uri => function['ref'] %>
-          </div>
-        </div>
-      <% end %>
+      <table class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <th><%= I18n.t('function._singular') %></th>
+            <th><%= I18n.t('function.start_date') %></th>
+            <th><%= I18n.t('function.end_date') %></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% functions.each_with_index do | function, index | %>
+            <td>
+              <div class="col-xs-6 token-list">
+              <%= render_token :object => function['_resolved'],
+                               :label => function['_resolved']['title'],
+                               :type => "function",
+                               :uri => function['ref'] %>
+              </div>
+            </td>
+            <td><%= function['start_date'] %></td>
+            <td><%= function['end_date'] %></td>
+          <% end %>
+        </tbody>
+      </table>
     </div>
   </div>
 </section>

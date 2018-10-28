@@ -6,6 +6,8 @@ en:
   mandate:
     title: Title
     function: Functions
+    start_date: Start Date
+    end_date: End Date
     _singular: Mandate
     _plural: Mandates
     _frontend:
@@ -23,6 +25,8 @@ en:
   function:
     title: Title
     mandates: Mandates
+    start_date: Start Date
+    end_date: End Date
     _singular: Function
     _plural: Functions
     _frontend:
