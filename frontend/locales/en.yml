@@ -8,6 +8,7 @@ en:
     function: Functions
     start_date: Start Date
     end_date: End Date
+    linked_agents: Linked Agents
     _singular: Mandate
     _plural: Mandates
     _frontend:
@@ -27,6 +28,7 @@ en:
     mandates: Mandates
     start_date: Start Date
     end_date: End Date
+    linked_agents: Linked Agents
     _singular: Function
     _plural: Functions
     _frontend:

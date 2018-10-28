@@ -26,6 +26,39 @@
         <% if not @function.mandates.blank? %>
           <%= render_aspace_partial :partial => "mandates/show_as_subrecords", :locals => {:mandates => @function.mandates, :section_id => "function_mandates_"} %>
         <% end %>
+
+        <% if not @function.linked_agents.blank? %>
+          <section id="linked_agents" class="subrecord-form-dummy">
+            <h3><%= I18n.t("function.linked_agents") %></h3>
+            <div class="subrecord-form-container">
+              <div class="subrecord-form-fields">
+                <table class="table table-bordered table-striped">
+                  <thead>
+                  <tr>
+                    <th class="col-xs-8"><%= I18n.t('agent_corporate_entity._singular') %></th>
+                    <th class="col-xs-2"><%= I18n.t('mandate.start_date') %></th>
+                    <th class="col-xs-2"><%= I18n.t('mandate.end_date') %></th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <% @function.linked_agents.each_with_index do | linked_agent, index | %>
+                    <td>
+                      <div class="col-xs-6 token-list">
+                        <%= render_token :object => linked_agent['_resolved'],
+                                         :label => linked_agent['_resolved']['title'],
+                                         :type => "agent_corporate_entity",
+                                         :uri => linked_agent['ref'] %>
+                      </div>
+                    </td>
+                    <td><%= linked_agent['start_date'] %></td>
+                    <td><%= linked_agent['end_date'] %></td>
+                  <% end %>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+        <% end %>
       <% end %>
     </div>
   </div>

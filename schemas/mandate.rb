@@ -26,6 +26,23 @@
           }
         }
       },
+      "linked_agents" => {
+        "type" => "array",
+        "items" => {
+          "type" => "object",
+          "subtype" => "ref",
+          "readonly" => "true",
+          "properties" => {
+            "ref" => {"type" => "JSONModel(:agent_corporate_entity) uri"},
+            "start_date" => {"type" => "date"},
+            "end_date" => {"type" => "date"},
+            "_resolved" => {
+              "type" => "object",
+              "readonly" => "true"
+            }
+          }
+        }
+      },
     },
 
     "additionalProperties" => false,
