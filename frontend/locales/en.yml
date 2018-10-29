@@ -43,6 +43,18 @@ en:
         updated: Function updated
         deleted: Function deleted
 
+  controlled_by:
+    section: Controlled By
+    agent: Corporate Entity
+    start_date: Start Date
+    end_date: End Date
+    _plural: Controlling Agencies
+    _singular: Controlling Agency
+    _frontend:
+      action:
+        add: Add Controlling Agency
+
   agent_corporate_entity:
     mandates: Mandates
     function: Functions
+    controls: Controls

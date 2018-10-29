@@ -1,0 +1,7 @@
+<% define_template "controlled_by" do |form| %>
+  <div class="subrecord-form-fields">
+    <%= render_aspace_partial :partial => "agents/linker", :locals => { form: form, multiplicity: 'one', allowed_types: ["agent_corporate_entity"] } %>
+    <%= form.label_and_date "start_date" %>
+    <%= form.label_and_date "end_date" %>
+  </div>
+<% end %>
