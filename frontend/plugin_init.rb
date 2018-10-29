@@ -10,7 +10,7 @@ Rails.application.config.after_initialize do
 
     def find_opts
       orig = find_opts_pre_series_system
-      orig.merge('resolve[]' => orig['resolve[]'] + ['mandates', 'functions'])
+      orig.merge('resolve[]' => orig['resolve[]'] + ['mandates', 'functions', 'controlled_by'])
     end
 
   end
@@ -33,6 +33,19 @@ Rails.application.config.after_initialize do
     alias_method :form_plugins_for_pre_series_system, :form_plugins_for
     def form_plugins_for(jsonmodel_type, context)
       result = form_plugins_for_pre_series_system(jsonmodel_type, context)
+
+      if SeriesSystemHelper::supports_controlled_by?(context.obj['jsonmodel_type'])
+        result << render_aspace_partial(:partial => "shared/subrecord_form",
+                                        :locals => {
+                                          :form => context,
+                                          :name => 'controlled_by',
+                                          :cardinality => :zero_to_many,
+                                          :template => 'controlled_by',
+                                          :template_erb => 'controlled_by/template',
+                                          :js_template_name => 'template_controlled_by',
+                                          :section_id => 'controlled_by_agents',
+                                        })
+      end
 
       if SeriesSystemHelper::supports_mandate?(context.obj['jsonmodel_type'])
         result << render_aspace_partial(:partial => "shared/subrecord_form",
@@ -68,6 +81,21 @@ Rails.application.config.after_initialize do
     def show_plugins_for(record, context)
       result = show_plugins_for_pre_series_system(record, context)
 
+      if record['jsonmodel_type'] == 'agent_corporate_entity'
+        result << render_aspace_partial(:partial => "search/embedded",
+                                        :locals => { :record => record,
+                                                     :filter_term => {"controlling_agency_uri_u_sstr" => record.uri}.to_json,
+                                                     :heading_text => I18n.t("agent_corporate_entity.controls")})
+      end
+
+
+      if SeriesSystemHelper::supports_controlled_by?(record['jsonmodel_type'])
+        result << render_aspace_partial(:partial => "controlled_by/show_as_subrecords",
+                                        :locals => { :controlled_by => record.controlled_by,
+                                                     :context => context,
+                                                     :section_id => 'controlled_by_agents' })
+      end
+
       if SeriesSystemHelper::supports_mandate?(record['jsonmodel_type'])
         if Array(record.mandates).length > 0
           result << render_aspace_partial(:partial => "mandates/show_as_subrecords",
@@ -93,6 +121,18 @@ Rails.application.config.after_initialize do
     alias_method :sidebar_plugins_for_pre_series_system, :sidebar_plugins_for
     def sidebar_plugins_for(record)
       result = sidebar_plugins_for_pre_series_system(record)
+
+      if record['jsonmodel_type'] == 'agent_corporate_entity'
+        if controller.action_name === "show"
+          result += "<li><a href='#search_embedded'>#{I18n.t("agent_corporate_entity.controls")}<span class='glyphicon glyphicon-chevron-right'></span></a></li>".html_safe
+        end
+      end
+
+      if SeriesSystemHelper::supports_controlled_by?(record['jsonmodel_type'])
+        if not controller.action_name === "show" or Array(record.controlled_by).length > 0
+          result += "<li><a href='#controlled_by_agents'>#{I18n.t("controlled_by.section")}<span class='glyphicon glyphicon-chevron-right'></span></a></li>".html_safe
+        end
+      end
 
       if SeriesSystemHelper::supports_mandate?(record['jsonmodel_type'])
         if not controller.action_name === "show" or Array(record.mandates).length > 0

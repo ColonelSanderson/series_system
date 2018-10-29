@@ -1,0 +1,35 @@
+<section id="controlled_by_agents" class="subrecord-form-dummy">
+  <h3><%= I18n.t("controlled_by.section") %></h3>
+  <div class="subrecord-form-container">
+    <div class="subrecord-form-fields">
+      <table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+          <th class="col-xs-8"><%= I18n.t('controlled_by.agent') %></th>
+          <th class="col-xs-2"><%= I18n.t('controlled_by.start_date') %></th>
+          <th class="col-xs-2"><%= I18n.t('controlled_by.end_date') %></th>
+        </tr>
+        </thead>
+        <tbody>
+        <% controlled_by.each_with_index do | agent, index | %>
+          <tr>
+            <td>
+              <% if agent['current'] %>
+                <div class="badge pull-right"><%= I18n.t('controlled_by.current') %></div>
+              <% end %>
+              <div class="col-xs-6 token-list">
+                <%= render_token :object => agent['_resolved'],
+                                 :label => agent['_resolved']['title'],
+                                 :type => "agent_corporate_entity",
+                                 :uri => agent['ref'] %>
+              </div>
+            </td>
+            <td><%= agent['start_date'] %></td>
+            <td><%= agent['end_date'] %></td>
+          </tr>
+        <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>

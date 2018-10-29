@@ -22,6 +22,12 @@ class IndexerCommon
       end
     }
 
+    indexer.add_document_prepare_hook {|doc, record|
+      if ['resource', 'archival_object'].include?(record['record']['jsonmodel_type'])
+        doc['controlling_agency_uri_u_sstr'] = ASUtils.wrap(record['record']['controlled_by']).map { |agency| agency['ref'] }
+      end
+    }
+
   end
 
 end
