@@ -42,6 +42,7 @@
                   </thead>
                   <tbody>
                   <% @function.linked_agents.each_with_index do | linked_agent, index | %>
+                  <tr>
                     <td>
                       <div class="col-xs-6 token-list">
                         <%= render_token :object => linked_agent['_resolved'],
@@ -52,6 +53,7 @@
                     </td>
                     <td><%= linked_agent['start_date'] %></td>
                     <td><%= linked_agent['end_date'] %></td>
+                  </tr>
                   <% end %>
                   </tbody>
                 </table>
