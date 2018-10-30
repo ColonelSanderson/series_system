@@ -5,6 +5,7 @@ en:
 
   mandate:
     title: Title
+    mandate_type: Type
     function: Functions
     start_date: Start Date
     end_date: End Date
@@ -46,3 +47,8 @@ en:
   agent_corporate_entity:
     mandates: Mandates
     function: Functions
+
+  enumerations:
+    mandate_type:
+      legislation: Legislation
+      not_legislation: Other

@@ -7,12 +7,15 @@ Sequel.migration do
       primary_key :id
 
       String :title
+      DynamicEnum :mandate_type_id
 
       Integer :lock_version, :default => 0, :null => false
       Integer :json_schema_version, :null => false
 
       apply_mtime_columns
     end
+
+    create_editable_enum('mandate_type', ['legislation','not_legislation'])
 
     create_table(:function) do
       primary_key :id
@@ -99,4 +102,5 @@ Sequel.migration do
   # drop table function;
   # drop table mandate;
   # drop table series_system_schema_info;
+  # delete the enum!
 end

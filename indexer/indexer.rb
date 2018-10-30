@@ -11,6 +11,7 @@ class IndexerCommon
       if record['record']['jsonmodel_type'] == 'mandate'
         doc['title'] = record['record']['title']
         doc['display_string'] = record['record']['title']
+        doc['mandate_type_u_ssort'] = record['record']['mandate_type']
       end
     }
 

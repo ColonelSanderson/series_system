@@ -2,6 +2,8 @@
 
 <%
   @show_multiselect_column = user_can?("delete_mandate_record")
+
+  add_column(I18n.t("mandate.mandate_type"), proc {|record| I18n.t("enumerations.mandate_type.#{record['mandate_type_u_ssort']}", :default => record['mandate_type_u_ssort'])}, :sortable => true, :sort_by => "mandate_type_u_ssort")
 %>
 
 <div class="row">
