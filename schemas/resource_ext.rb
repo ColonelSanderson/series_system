@@ -49,6 +49,11 @@
         },
         "start_date" => {"type" => "date"},
         "end_date" => {"type" => "date"},
+        "current" => {
+          "type" => "boolean",
+          "readonly" => "true",
+          "default" => "false",
+        },
         "_resolved" => {
           "type" => "object",
           "readonly" => "true"
