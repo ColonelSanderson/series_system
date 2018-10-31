@@ -1,2 +1,1 @@
-AgentCorporateEntity.include(Functions)
-AgentCorporateEntity.include(Mandates)
+AgentCorporateEntity.include(MandatesAgencies)

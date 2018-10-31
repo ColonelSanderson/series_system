@@ -5,7 +5,7 @@ module SeriesSystemHelper
   end
 
   def self.supports_function?(jsonmodel)
-    ['resource', 'archival_object', 'agent_corporate_entity'].include?(jsonmodel)
+    ['resource', 'archival_object'].include?(jsonmodel)
   end
 
 end

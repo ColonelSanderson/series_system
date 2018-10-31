@@ -43,6 +43,7 @@ Rails.application.config.after_initialize do
                                           :template => 'mandate',
                                           :template_erb => 'mandates/template',
                                           :js_template_name => 'template_mandate',
+                                          :section_id => "#{context.obj['jsonmodel_type']}_mandates_",
                                         })
       end
 
@@ -55,6 +56,7 @@ Rails.application.config.after_initialize do
                                           :template => 'function',
                                           :template_erb => 'functions/template',
                                           :js_template_name => 'template_function',
+                                          :section_id => "#{context.obj['jsonmodel_type']}_functions_",
                                         }) 
       end
 
