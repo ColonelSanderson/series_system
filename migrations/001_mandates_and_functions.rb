@@ -102,7 +102,7 @@ Sequel.migration do
 
       Date :start_date
       Date :end_date
-      
+
       apply_mtime_columns(false)
     end
 
