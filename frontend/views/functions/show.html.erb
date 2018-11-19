@@ -17,6 +17,10 @@
             <h3><%= I18n.t("function._frontend.section.basic_information") %></h3>
 
             <%= form.label_and_textfield "title" %>
+            <%= form.label_and_textfield "description" %>
+            <%= form.label_and_textfield "identifier" %>
+            <%= form.label_and_date "start_date" %>
+            <%= form.label_and_date "end_date" %>
             <%= display_audit_info(@function) %>
           </section>
         <% end %>
@@ -60,6 +64,10 @@
               </div>
             </div>
           </section>
+        <% end %>
+
+        <% if not @function.external_documents.length > 0 %>
+          <%= render_aspace_partial :partial => "external_documents/show", :locals => { :external_documents => @function.external_documents, :section_id => "function_external_documents_" } %>
         <% end %>
       <% end %>
     </div>

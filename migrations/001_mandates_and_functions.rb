@@ -21,6 +21,10 @@ Sequel.migration do
       primary_key :id
 
       String :title
+      String :description
+      String :identifier
+      Date :start_date
+      Date :end_date
 
       Integer :lock_version, :default => 0, :null => false
       Integer :json_schema_version, :null => false

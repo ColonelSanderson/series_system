@@ -43,8 +43,17 @@
           }
         }
       },
+      "identifier" => {"type" => "string", "ifmissing" => "error"},
+      "start_date" => {"type" => "date"},
+      "end_date" => {"type" => "date"},
+      "description" => {"type" => "string", "maxLength" => 16384},
+      "external_documents" => {
+        "type" => "array",
+        "items" => {
+          "type" => "JSONModel(:external_document) object"
+        }
+      }
     },
-
-    "additionalProperties" => false,
-  },
+    "additionalProperties" => false
+  }
 }
