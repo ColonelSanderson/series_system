@@ -18,7 +18,7 @@ class IndexerCommon
     indexer.add_document_prepare_hook {|doc, record|
       if record['record']['jsonmodel_type'] == 'function'
         doc['title'] = record['record']['title']
-        doc['display_string'] = `#{record.dig('record', 'identifier')}: #{record.dig('record', 'title')}`
+        doc['display_string'] = "#{record['record']['identifier']}: #{record['record']['title']}"
       end
     }
 

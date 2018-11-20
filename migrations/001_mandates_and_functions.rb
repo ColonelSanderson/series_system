@@ -22,8 +22,8 @@ Sequel.migration do
 
       String :title
       String :description
-      String :identifier
-      Date :start_date
+      String :identifier, :unique => true
+      Date :start_date, :null => false
       Date :end_date
 
       Integer :lock_version, :default => 0, :null => false
@@ -102,7 +102,7 @@ Sequel.migration do
 
       Date :start_date
       Date :end_date
-
+      
       apply_mtime_columns(false)
     end
 

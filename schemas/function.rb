@@ -44,9 +44,9 @@
         }
       },
       "identifier" => {"type" => "string", "ifmissing" => "error"},
-      "start_date" => {"type" => "date"},
+      "start_date" => {"type" => "date", "ifmissing" => "error"},
       "end_date" => {"type" => "date"},
-      "description" => {"type" => "string", "maxLength" => 16384},
+      "description" => {"type" => "string", "ifmissing" => "error", "maxLength" => 16384},
       "external_documents" => {
         "type" => "array",
         "items" => {

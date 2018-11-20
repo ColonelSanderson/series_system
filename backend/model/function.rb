@@ -14,10 +14,6 @@ class Function < Sequel::Model(:function)
                       :json_property => 'linked_agents',
                       :contains_references_to_types => proc {[AgentCorporateEntity]})
 
-                      define_relationship(:name => :function,
-                      :json_property => 'external_documents',
-                      :contains_references_to_types => proc {[ExternalDocument]})
-
   def self.handle_delete(ids_to_delete)
     self.db[:function_rlshp].filter(:function_id => ids_to_delete).delete
 
@@ -40,6 +36,7 @@ class Function < Sequel::Model(:function)
     validates_unique([:identifier], :message => "Identifier must be unique.")
     map_validation_to_json_property([:identifier], :identifier)
 
+    map_validation_to_json_property([:end_date], :end_date)
     super
   end
 end
