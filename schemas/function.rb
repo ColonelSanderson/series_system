@@ -14,7 +14,7 @@
           "subtype" => "ref",
           "properties" => {
             "ref" => {
-              "type" => "JSONModel(:mandates) uri",
+              "type" => "JSONModel(:mandate) uri",
               "ifmissing" => "error"
             },
             "start_date" => {"type" => "date"},

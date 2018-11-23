@@ -75,3 +75,6 @@ en:
     mandate_type:
       legislation: Legislation
       not_legislation: Other
+
+  validation_errors:
+    end_date_must_occur_after_start_date: 'End date must occur after start date.'
