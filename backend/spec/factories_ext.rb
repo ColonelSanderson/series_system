@@ -42,8 +42,8 @@ FactoryBot.define do
     end
 
     factory :json_mandate, class: JSONModel(:mandate) do
-      title { generate(:generic_title) }
       uri { generate(:url) }
+      title { generate(:generic_title) }
       mandate_type { generate(:mandate_type) }
       description { generate(:generic_description) }
       start_date { generate(:incremental_date) }

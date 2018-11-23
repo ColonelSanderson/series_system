@@ -10,9 +10,10 @@ class Function < Sequel::Model(:function)
                       json_property: 'mandates',
                       contains_references_to_types: proc { [Mandate] })
 
-  define_relationship(name: :function_agency,
-                      json_property: 'linked_agents',
-                      contains_references_to_types: proc { [AgentCorporateEntity] })
+  define_relationship(name: :top_container_function,
+                      json_property: 'top_container',
+                      contains_references_to_types: proc { [TopContainer] },
+                      is_array: false)
 
   def self.sequel_to_jsonmodel(objs, opts = {})
     jsons = super
