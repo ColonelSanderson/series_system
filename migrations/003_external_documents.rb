@@ -1,7 +1,7 @@
 require 'db/migrations/utils'
 
 Sequel.migration do
-  records_supporting_ext_docs = [:function]
+  records_supporting_ext_docs = [:function, :mandate]
 
   up do
     records_supporting_ext_docs.each do |record|
