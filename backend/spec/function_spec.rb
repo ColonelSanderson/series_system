@@ -46,7 +46,6 @@ describe 'Function controller' do
                              location: generate(:string) }]
     }
     function = create_function(opts)
-    # function.save
     JSONModel(:function).find(function.id).external_documents.length.should eq(1)
   end
 
@@ -75,10 +74,10 @@ describe 'Function controller' do
       create_function(title: f)
     end
     functions = JSONModel(:function).all(page: 1)['results']
-    functions.any? { |res| res.title == generate(:generic_title) }.should == false
+    functions.any? { |res| res.title == generate(:generic_title) }.should eq(false)
 
     function_names.each do |f|
-      functions.any? { |res| res.title == f }.should == true
+      functions.any? { |res| res.title == f }.should eq(true)
     end
   end
 
@@ -87,7 +86,6 @@ describe 'Function controller' do
     function_id = function.id
     JSONModel(:function).find(function_id).id.should eq(function_id)
     expect { function.delete }.to_not raise_error
-    # expect { JSONModel(:function).find(function.id) }.to raise_error(RecordNotFound)
-    JSONModel(:function).find(function_id).should eq(nil)
+    expect { JSONModel(:function).find(function.id) }.to raise_error(RecordNotFound)
   end
 end

@@ -40,7 +40,7 @@ class Function < Sequel::Model(:function)
   end
 
   def end_date_validation
-    if !:end_date['value'].nil? && :end_date['value'] < :start_date['value']
+    if end_date && end_date < start_date
       errors.add(:field, 'End date must occur after start date')
     end
   end
