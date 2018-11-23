@@ -8,26 +8,30 @@ Sequel.migration do
 
       String :title
       DynamicEnum :mandate_type_id
+      String :description
+      String :identifier, unique: true
+      Date :start_date, null: false
+      Date :end_date
 
-      Integer :lock_version, :default => 0, :null => false
-      Integer :json_schema_version, :null => false
+      Integer :lock_version, default: 0, null: false
+      Integer :json_schema_version, null: false
 
       apply_mtime_columns
     end
 
-    create_editable_enum('mandate_type', ['legislation','not_legislation'])
+    create_editable_enum('mandate_type', ['legislation', 'gazetted_notice', 'cabinet_handbook', 'directive', 'disposal_authorisation', 'rap'])
 
     create_table(:function) do
       primary_key :id
 
       String :title
       String :description
-      String :identifier, :unique => true
-      Date :start_date, :null => false
+      String :identifier, unique: true
+      Date :start_date, null: false
       Date :end_date
 
-      Integer :lock_version, :default => 0, :null => false
-      Integer :json_schema_version, :null => false
+      Integer :lock_version, default: 0, null: false
+      Integer :json_schema_version, null: false
 
       apply_mtime_columns
     end
@@ -38,7 +42,7 @@ Sequel.migration do
       Integer :function_id
 
       Integer :aspace_relationship_position
-      Integer :suppressed, :null => false, :default => 0
+      Integer :suppressed, null: false, default: 0
 
       Date :start_date
       Date :end_date
@@ -47,8 +51,8 @@ Sequel.migration do
     end
 
     alter_table(:mandate_function_rlshp) do
-      add_foreign_key([:mandate_id], :mandate, :key => :id)
-      add_foreign_key([:function_id], :function, :key => :id)
+      add_foreign_key([:mandate_id], :mandate, key: :id)
+      add_foreign_key([:function_id], :function, key: :id)
     end
 
     create_table(:mandate_agency_rlshp) do
@@ -57,7 +61,7 @@ Sequel.migration do
       Integer :agent_corporate_entity_id
 
       Integer :aspace_relationship_position
-      Integer :suppressed, :null => false, :default => 0
+      Integer :suppressed, null: false, default: 0
 
       Date :start_date
       Date :end_date
@@ -66,8 +70,8 @@ Sequel.migration do
     end
 
     alter_table(:mandate_agency_rlshp) do
-      add_foreign_key([:mandate_id], :mandate, :key => :id)
-      add_foreign_key([:agent_corporate_entity_id], :agent_corporate_entity, :key => :id)
+      add_foreign_key([:mandate_id], :mandate, key: :id)
+      add_foreign_key([:agent_corporate_entity_id], :agent_corporate_entity, key: :id)
     end
 
     create_table(:mandate_archival_record_rlshp) do
@@ -77,7 +81,7 @@ Sequel.migration do
       Integer :archival_object_id
 
       Integer :aspace_relationship_position
-      Integer :suppressed, :null => false, :default => 0
+      Integer :suppressed, null: false, default: 0
 
       Date :start_date
       Date :end_date
@@ -86,9 +90,9 @@ Sequel.migration do
     end
 
     alter_table(:mandate_archival_record_rlshp) do
-      add_foreign_key([:mandate_id], :mandate, :key => :id)
-      add_foreign_key([:resource_id], :resource, :key => :id)
-      add_foreign_key([:archival_object_id], :archival_object, :key => :id)
+      add_foreign_key([:mandate_id], :mandate, key: :id)
+      add_foreign_key([:resource_id], :resource, key: :id)
+      add_foreign_key([:archival_object_id], :archival_object, key: :id)
     end
 
     create_table(:function_archival_record_rlshp) do
@@ -98,18 +102,18 @@ Sequel.migration do
       Integer :archival_object_id
 
       Integer :aspace_relationship_position
-      Integer :suppressed, :null => false, :default => 0
+      Integer :suppressed, null: false, default: 0
 
       Date :start_date
       Date :end_date
-      
+
       apply_mtime_columns(false)
     end
 
     alter_table(:function_archival_record_rlshp) do
-      add_foreign_key([:function_id], :function, :key => :id)
-      add_foreign_key([:resource_id], :resource, :key => :id)
-      add_foreign_key([:archival_object_id], :archival_object, :key => :id)
+      add_foreign_key([:function_id], :function, key: :id)
+      add_foreign_key([:resource_id], :resource, key: :id)
+      add_foreign_key([:archival_object_id], :archival_object, key: :id)
     end
   end
 

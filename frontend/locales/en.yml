@@ -6,9 +6,18 @@ en:
   mandate:
     title: Title
     mandate_type: Type
-    function: Functions
+    functions: Functions
+    functions_tooltip: .
     start_date: Start Date
+    start_date_tooltip: The date that the mandate commenced, was implemented, or first implemented.
     end_date: End Date
+    end_date_tooltip: The date the mandate was abolished or when it ceased to exist.
+    description: Description
+    description_tooltip: The description of the mandate.
+    identifier: Identifier
+    identifier_tooltip: The unique number of the mandate within the system.
+    external_documents: External Documents
+    external_documents_tooltip: References to authorising or related documentation.
     linked_agents: Linked Agents
     _singular: Mandate
     _plural: Mandates
@@ -74,7 +83,11 @@ en:
   enumerations:
     mandate_type:
       legislation: Legislation
-      not_legislation: Other
+      gazetted_notice: Gazetted notice
+      cabinet_handbook: Cabinet handbook
+      directive: Directive
+      disposal_authorisation: Disposal authorisation
+      rap: RAP
 
   validation_errors:
     end_date_must_occur_after_start_date: 'End date must occur after start date.'

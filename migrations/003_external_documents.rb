@@ -1,7 +1,7 @@
 require 'db/migrations/utils'
 
 Sequel.migration do
-  records_supporting_ext_docs = [:function]
+  records_supporting_ext_docs = [:function, :mandate]
 
   up do
     records_supporting_ext_docs.each do |record|
@@ -27,8 +27,7 @@ Sequel.migration do
 
     alter_table(:function_agency_rlshp) do
       add_foreign_key([:function_id], :function, key: :id)
-      add_foreign_key([:agent_corporate_entity_id], :agent_corporate_entity,
-                      key: :id)
+      add_foreign_key([:agent_corporate_entity_id], :agent_corporate_entity, key: :id)
     end
   end
 end
