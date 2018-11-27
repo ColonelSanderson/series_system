@@ -33,15 +33,14 @@ class Function < Sequel::Model(:function)
 
   def validate
     validates_unique([:identifier], message: 'Identifier must be unique.')
-    map_validation_to_json_property([:identifier], :identifier)
-    map_validation_to_json_property([:end_date], :end_date)
     end_date_validation
     super
   end
 
   def end_date_validation
     if end_date && end_date < start_date
-      errors.add(:field, 'End date must occur after start date')
+      errors.add(:start_date, 'End date must occur after start date')
+      errors.add(:end_date, 'End date must occur after start date')
     end
   end
 end
