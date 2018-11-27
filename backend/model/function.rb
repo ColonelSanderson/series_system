@@ -14,12 +14,6 @@ class Function < Sequel::Model(:function)
                       json_property: 'linked_agents',
                       contains_references_to_types: proc { [AgentCorporateEntity] })
 
-  def self.handle_delete(ids_to_delete)
-    db[:function_agency_rlshp].filter(function_id: ids_to_delete).delete
-    db[:mandate_function_rlshp].filter(function_id: ids_to_delete).delete
-    super
-  end
-
   def self.sequel_to_jsonmodel(objs, opts = {})
     jsons = super
 
