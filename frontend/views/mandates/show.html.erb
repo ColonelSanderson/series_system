@@ -66,6 +66,10 @@
             </div>
           </section>
         <% end %>
+
+        <% if @mandate.external_documents.length > 0 %>
+          <%= render_aspace_partial :partial => "external_documents/show", :locals => { :external_documents => @mandate.external_documents, :section_id => "mandate_external_documents_" } %>
+        <% end %>
       <% end %>
     </div>
   </div>
