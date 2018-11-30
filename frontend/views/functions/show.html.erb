@@ -66,7 +66,7 @@
           </section>
         <% end %>
 
-        <% if not @function.external_documents.length > 0 %>
+        <% if @function.external_documents.length > 0 %>
           <%= render_aspace_partial :partial => "external_documents/show", :locals => { :external_documents => @function.external_documents, :section_id => "function_external_documents_" } %>
         <% end %>
       <% end %>
