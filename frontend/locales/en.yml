@@ -26,10 +26,20 @@ en:
 
   function:
     title: Title
+    title_tooltip: The name of the function.
     mandates: Mandates
+    mandates_tooltip: The legislation or other authoritative instrument that provides authorisation for the establishment or operation of the function.
     start_date: Start Date
+    start_date_tooltip: The date that the function commenced, was implemented, or first undertaken.
     end_date: End Date
+    end_date_tooltip: The date the function was abolished or when it ceased to be performed.
+    description: Description
+    description_tooltip: The description of the function.
+    identifier: Identifier
+    identifier_tooltip: The unique number of the function within the system.
     linked_agents: Linked Agents
+    external_documents: External Documents
+    external_documents_tooltip: References to authorising or related documentation.
     _singular: Function
     _plural: Functions
     _frontend:
@@ -65,3 +75,6 @@ en:
     mandate_type:
       legislation: Legislation
       not_legislation: Other
+
+  validation_errors:
+    end_date_must_occur_after_start_date: 'End date must occur after start date.'

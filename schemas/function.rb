@@ -14,7 +14,7 @@
           "subtype" => "ref",
           "properties" => {
             "ref" => {
-              "type" => "JSONModel(:mandates) uri",
+              "type" => "JSONModel(:mandate) uri",
               "ifmissing" => "error"
             },
             "start_date" => {"type" => "date"},
@@ -43,8 +43,17 @@
           }
         }
       },
+      "identifier" => {"type" => "string", "ifmissing" => "error"},
+      "start_date" => {"type" => "date", "ifmissing" => "error"},
+      "end_date" => {"type" => "date"},
+      "description" => {"type" => "string", "ifmissing" => "error", "maxLength" => 16384},
+      "external_documents" => {
+        "type" => "array",
+        "items" => {
+          "type" => "JSONModel(:external_document) object"
+        }
+      }
     },
-
-    "additionalProperties" => false,
-  },
+    "additionalProperties" => false
+  }
 }

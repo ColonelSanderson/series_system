@@ -43,9 +43,8 @@
             }
           }
         }
-      },
+      }
     },
-
     "additionalProperties" => false,
   },
 }
