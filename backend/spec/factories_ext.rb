@@ -10,7 +10,7 @@ FactoryBot.define do
   to_create{|instance| instance.save}
 
   sequence(:incremental_date) { |n| Time.at(Time.now.to_i + (n * 3600 * 24)).to_s.sub(/\s.*/, '') }
-  sequence(:mandate_type) { |n| 'legislation' }
+  sequence(:mandate_type) { sample(JSONModel(:mandate).schema['properties']['mandate_type']) }
 
   if defined? ASModel
     factory :function do
@@ -26,6 +26,10 @@ FactoryBot.define do
       title { generate(:generic_title) }
       uri { generate(:url) }
       mandate_type { generate(:mandate_type) }
+      description { generate(:generic_description) }
+      identifier { generate(:string) }
+      start_date { generate(:incremental_date) }
+      end_date { generate(:incremental_date) }
     end
 
     factory :json_function, class: JSONModel(:function) do
@@ -41,6 +45,10 @@ FactoryBot.define do
       title { generate(:generic_title) }
       uri { generate(:url) }
       mandate_type { generate(:mandate_type) }
+      description { generate(:generic_description) }
+      start_date { generate(:incremental_date) }
+      end_date { generate(:incremental_date) }
+      identifier { generate(:string) }
     end
   end
 end

@@ -18,7 +18,10 @@
 
             <%= form.label_and_textfield "title" %>
             <%= form.label_and_select "mandate_type", form.possible_options_for("mandate_type", true) %>
-
+            <%= form.label_and_textarea "description" %>
+            <%= form.label_and_textfield "identifier" %>
+            <%= form.label_and_date "start_date" %>
+            <%= form.label_and_date "end_date" %>
             <%= display_audit_info(@mandate) %>
           </section>
         <% end %>
@@ -62,6 +65,10 @@
               </div>
             </div>
           </section>
+        <% end %>
+
+        <% if @mandate.external_documents.length > 0 %>
+          <%= render_aspace_partial :partial => "external_documents/show", :locals => { :external_documents => @mandate.external_documents, :section_id => "mandate_external_documents_" } %>
         <% end %>
       <% end %>
     </div>
