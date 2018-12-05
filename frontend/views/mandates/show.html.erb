@@ -70,6 +70,10 @@
         <% if @mandate.external_documents.length > 0 %>
           <%= render_aspace_partial :partial => "external_documents/show", :locals => { :external_documents => @mandate.external_documents, :section_id => "mandate_external_documents_" } %>
         <% end %>
+
+        <% if @mandate.location %>
+          <%= render_aspace_partial :partial => "locations/show_as_subrecords", :locals => { :location => @mandate.location } %>
+        <% end %>
       <% end %>
     </div>
   </div>

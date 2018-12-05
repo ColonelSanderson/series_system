@@ -29,8 +29,10 @@ class IndexerCommon
     end
 
     indexer.add_document_prepare_hook do |doc, record|
-      if ['function', 'mandate'].include?(doc['primary_type']) && record['record'] && record['record'].length > 0
-        doc['location_uris'] = record['record']['location']
+      if ['function', 'mandate'].include?(doc['primary_type']) && record['record'] && record['record'].length > 0 &&
+         record['record']['location']
+        doc['location_uris'] ||= []
+        doc['location_uris'] << record['record']['location']['ref']
       end
     end
 
