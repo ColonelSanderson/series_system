@@ -12,6 +12,9 @@
       <%= form.label_and_textfield "identifier" %>
       <%= form.label_and_date "start_date" %>
       <%= form.label_and_date "end_date" %>
+      <% form.push('location', form.obj['location'] || {}) do %>
+        <%= render_aspace_partial :partial => "locations/linker", :locals => { :form => form, multiplicity: "one" }%>
+      <% end %>
     </section>
 <% end %>
 
@@ -19,7 +22,4 @@
 
   <%= render_aspace_partial :partial => "shared/subrecord_form", :locals => {:form => form, :name => "mandates", :template => "mandate"} %>
   <%= render_aspace_partial :partial => "shared/subrecord_form", :locals => {:form => form, :name => "external_documents"} %>
-  <% form.push('location', form.obj['location'] || {}) do %>
-    <%= render_aspace_partial :partial => "locations/linker", :locals => { :form => form, multiplicity: "one" }%>
-  <% end %>
 </fieldset>

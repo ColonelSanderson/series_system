@@ -1,0 +1,17 @@
+<%= setup_context :location => @location, :suppress_breadcrumb => true %>
+
+<section id="location" class="subrecord-form-dummy">
+  <h3><%= I18n.t("location._singular") %></h3>
+  <div class="subrecord-form-container">
+    <div class="subrecord-form-fields">
+      <div class="row">
+        <div class="col-xs-6 token-list">
+          <%= render_token object: location['_resolved'],
+                           label: location['_resolved']['title'],
+                           type: "location",
+                           uri: location['ref'] %>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

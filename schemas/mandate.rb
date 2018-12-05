@@ -53,6 +53,17 @@
         "items" => {
           "type" => "JSONModel(:external_document) object"
         }
+      },
+      "location" => {
+          "type" => "object",
+          "subtype" => "ref",
+          "properties" => {
+              "ref" => {"type" => "JSONModel(:location) uri"},
+              "_resolved" => {
+                  "type" => "object",
+                  "readonly" => "true"
+              }
+          }
       }
     },
     "additionalProperties" => false
