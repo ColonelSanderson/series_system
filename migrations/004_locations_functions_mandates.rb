@@ -10,12 +10,11 @@ Sequel.migration do
       add_unique_constraint(:title, :name => "mandate_name_uniq")
     end
 
-    create_table(:location_rlshp) do
+    create_table(:top_function_rlshp) do
       primary_key :id
 
-      Integer :location_id
-      Integer :function_id, :null => true
-      Integer :mandate_id, :null => true
+      Integer :top_container_id
+      Integer :function_id
       Integer :aspace_relationship_position
 
       Integer :suppressed, :null => false, :default => 0
