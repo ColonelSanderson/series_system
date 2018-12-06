@@ -26,7 +26,7 @@ Sequel.migration do
     alter_table(:location_rlshp) do
       add_foreign_key([:location_id], :location, :key => :id)
       add_foreign_key([:function_id], :function, :key => :id)
-      add_foreign_key([:mandate_id], :function, :key => :id)
+      add_foreign_key([:mandate_id], :mandate, :key => :id)
     end
   end
 end

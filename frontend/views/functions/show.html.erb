@@ -21,6 +21,9 @@
             <%= form.label_and_textfield "identifier" %>
             <%= form.label_and_date "start_date" %>
             <%= form.label_and_date "end_date" %>
+            <% if @function.location %>
+              <%= render_aspace_partial :partial => "locations/show_as_subrecords", :locals => { :location => @function.location } %>
+            <% end %>
             <%= display_audit_info(@function) %>
           </section>
         <% end %>
@@ -70,9 +73,6 @@
           <%= render_aspace_partial :partial => "external_documents/show", :locals => { :external_documents => @function.external_documents, :section_id => "function_external_documents_" } %>
         <% end %>
 
-        <% if @function.location %>
-          <%= render_aspace_partial :partial => "locations/show_as_subrecords", :locals => { :location => @function.location } %>
-        <% end %>
       <% end %>
     </div>
   </div>
