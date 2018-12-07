@@ -28,3 +28,8 @@
 
 <%= javascript_include_tag("subrecord.crud") %>
 <%= javascript_include_tag("form") %>
+<script>
+    $(document).ready(function() {
+        $(".linker:not(.initialised)").linker();
+    });
+</script>

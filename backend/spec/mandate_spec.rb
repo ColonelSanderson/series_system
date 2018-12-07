@@ -93,4 +93,14 @@ describe 'Mandate controller' do
     expect { mandate.delete }.to_not raise_error
     expect { JSONModel(:mandate).find(mandate.id) }.to raise_error(RecordNotFound)
   end
+
+  it 'Should successfully create and return a mandate with a location' do
+    opts = {
+      location: {
+        ref: create(:json_location).uri
+      }
+    }
+    mandate = create_mandate(opts)
+    expect(JSONModel(:mandate).find(mandate.id)[:location]).to include("ref" => opts[:location][:ref])
+  end
 end

@@ -89,5 +89,8 @@ en:
       disposal_authorisation: Disposal authorisation
       rap: RAP
 
+  location:
+    _singular: Location
+
   validation_errors:
     end_date_must_occur_after_start_date: 'End date must occur after start date.'

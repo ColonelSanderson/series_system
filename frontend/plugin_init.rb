@@ -10,7 +10,7 @@ Rails.application.config.after_initialize do
 
     def find_opts
       orig = find_opts_pre_series_system
-      orig.merge('resolve[]' => orig['resolve[]'] + ['mandates', 'functions', 'controlled_by'])
+      orig.merge('resolve[]' => orig['resolve[]'] + ['mandates', 'functions', 'controlled_by', 'location'])
     end
 
   end

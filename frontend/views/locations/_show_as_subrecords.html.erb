@@ -1,0 +1,11 @@
+<div class="form-group">
+  <label class="col-sm-2 control-label">
+    <%= I18n.t("location._singular") %>
+  </label>
+  <div class="col-xs-9 token-list">
+    <%= render_token object: location['_resolved'],
+                     label: location['_resolved']['title'],
+                     type: "location",
+                     uri: location['ref'] %>
+  </div>
+</div>

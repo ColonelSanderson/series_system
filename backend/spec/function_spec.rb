@@ -88,4 +88,14 @@ describe 'Function controller' do
     expect { function.delete }.to_not raise_error
     expect { JSONModel(:function).find(function.id) }.to raise_error(RecordNotFound)
   end
+
+  it 'Should successfully create and return a function with a location' do
+    opts = {
+      location: {
+        ref: create(:json_location).uri
+      }
+    }
+    function = create_function(opts)
+    expect(JSONModel(:function).find(function.id)[:location]).to include("ref" => opts[:location][:ref])
+  end
 end
