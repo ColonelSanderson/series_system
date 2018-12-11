@@ -1,7 +1,7 @@
 require_relative './factories_ext'
 require 'spec_helper'
 
-describe 'Function controller' do
+describe 'series_system function controller' do
   def create_function(opts = {})
     create(:json_function, opts)
   end
@@ -47,17 +47,6 @@ describe 'Function controller' do
     }
     function = create_function(opts)
     JSONModel(:function).find(function.id).external_documents.length.should eq(1)
-  end
-
-  it 'lets you create a function with a linked agent' do
-    function = nil
-    opts = {
-      linked_agents: [{
-        ref: create(:json_agent_corporate_entity).uri
-      }]
-    }
-    expect { function = create_function(opts) }.to_not raise_error
-    JSONModel(:function).find(function.id).linked_agents.length.should eq(1)
   end
 
   it 'lets you create a function with a mandate' do

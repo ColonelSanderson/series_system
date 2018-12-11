@@ -1,7 +1,7 @@
 require_relative './factories_ext'
 require 'spec_helper'
 
-describe 'Location controller' do
+describe 'series_system location controller' do
   it 'Should not allow the attachment of multiple locations to a single object' do
     opts = {
       location: [
