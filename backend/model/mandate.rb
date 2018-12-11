@@ -11,13 +11,15 @@ class Mandate < Sequel::Model(:mandate)
                       contains_references_to_types: proc { [Function] })
 
   define_relationship(name: :mandate_agency,
-                      json_property: 'linked_agents',
                       contains_references_to_types: proc { [AgentCorporateEntity] })
 
   define_relationship(name: :location,
                       json_property: 'location',
                       contains_references_to_types: proc { [Location] },
                       is_array: false)
+
+  define_relationship(name: :mandate_archival_record,
+                      contains_references_to_types: proc { [ArchivalObject] })
 
   def validate
     validates_unique([:identifier], message: 'Identifier must be unique.')

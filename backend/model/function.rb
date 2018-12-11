@@ -11,13 +11,15 @@ class Function < Sequel::Model(:function)
                       contains_references_to_types: proc { [Mandate] })
 
   define_relationship(name: :function_agency,
-                      json_property: 'linked_agents',
                       contains_references_to_types: proc { [AgentCorporateEntity] })
 
   define_relationship(name: :location,
                       json_property: 'location',
                       contains_references_to_types: proc { [Location] },
                       is_array: false)
+
+  define_relationship(name: :function_archival_record,
+                      contains_references_to_types: proc { [ArchivalObject] })
 
   def self.sequel_to_jsonmodel(objs, opts = {})
     jsons = super
