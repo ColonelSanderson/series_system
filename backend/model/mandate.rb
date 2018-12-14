@@ -19,7 +19,7 @@ class Mandate < Sequel::Model(:mandate)
                       is_array: false)
 
   define_relationship(name: :mandate_archival_record,
-                      contains_references_to_types: proc { [ArchivalObject] })
+                      contains_references_to_types: proc { [Resource, ArchivalObject] })
 
   def validate
     validates_unique([:identifier], message: 'Identifier must be unique.')
