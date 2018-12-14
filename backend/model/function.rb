@@ -19,7 +19,7 @@ class Function < Sequel::Model(:function)
                       is_array: false)
 
   define_relationship(name: :function_archival_record,
-                      contains_references_to_types: proc { [ArchivalObject] })
+                      contains_references_to_types: proc { [Resource, ArchivalObject] })
 
   def self.sequel_to_jsonmodel(objs, opts = {})
     jsons = super
