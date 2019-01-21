@@ -94,3 +94,6 @@ en:
 
   validation_errors:
     end_date_must_occur_after_start_date: 'End date must occur after start date.'
+
+  search_sorting:
+    mandate_type_u_ssort: Mandate type
