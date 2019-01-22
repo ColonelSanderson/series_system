@@ -80,4 +80,9 @@ class MandatesController < ApplicationController
     redirect_to(:controller => :mandates, :action => :index, :deleted_uri => mandate.uri)
   end
 
+
+  def current_record
+    @mandate
+  end
+
 end

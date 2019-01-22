@@ -9,9 +9,7 @@
       <table class="table table-bordered table-striped">
         <thead>
           <tr>
-            <th class="col-xs-8"><%= I18n.t('function._singular') %></th>
-            <th class="col-xs-2"><%= I18n.t('function.start_date') %></th>
-            <th class="col-xs-2"><%= I18n.t('function.end_date') %></th>
+            <th class="col-xs-12"><%= I18n.t('function._singular') %></th>
           </tr>
         </thead>
         <tbody>
@@ -24,8 +22,6 @@
                                :uri => function['ref'] %>
               </div>
             </td>
-            <td><%= function['start_date'] %></td>
-            <td><%= function['end_date'] %></td>
           <% end %>
         </tbody>
       </table>

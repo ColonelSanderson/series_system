@@ -1,3 +1,2 @@
 Resource.include(FunctionsArchivalRecords)
 Resource.include(MandatesArchivalRecords)
-Resource.include(ControlledByAgent)

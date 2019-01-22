@@ -80,4 +80,9 @@ class FunctionsController < ApplicationController
     redirect_to(:controller => :functions, :action => :index, :deleted_uri => function.uri)
   end
 
+
+  def current_record
+    @function
+  end
+
 end

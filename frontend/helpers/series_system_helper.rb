@@ -8,8 +8,4 @@ module SeriesSystemHelper
     ['resource', 'archival_object', 'agent_corporate_entity'].include?(jsonmodel)
   end
 
-  def self.supports_controlled_by?(jsonmodel)
-    ['resource'].include?(jsonmodel)
-  end
-
 end

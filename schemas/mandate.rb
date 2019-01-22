@@ -8,10 +8,13 @@
       "uri" => {"type" => "string", "required" => false},
       "title" => {"type" => "string", "minLength" => 1, "maxLength" => 16384, "ifmissing" => "error"},
       "mandate_type" => {"type" => "string", "dynamic_enum" => "mandate_type", "ifmissing" => "error"},
-      "identifier" => {"type" => "string", "ifmissing" => "error"},
-      "start_date" => {"type" => "date", "ifmissing" => "error"},
-      "end_date" => {"type" => "date"},
-      "description" => {"type" => "string", "ifmissing" => "error", "maxLength" => 16384},
+      "identifier" => {"type" => "string"},
+      "publish" => {"type" => "boolean"},
+      "note" => {"type" => "string", "maxLength" => 16384},
+
+      "date" => {"type" => "JSONModel(:date) object"},
+      "external_ids" => {"type" => "array", "items" => {"type" => "JSONModel(:external_id) object"}},
+
       "functions" => {
         "type" => "array",
         "items" => {
@@ -31,40 +34,6 @@
           }
         }
       },
-      "linked_agents" => {
-        "type" => "array",
-        "items" => {
-          "type" => "object",
-          "subtype" => "ref",
-          "readonly" => "true",
-          "properties" => {
-            "ref" => {"type" => "JSONModel(:agent_corporate_entity) uri"},
-            "start_date" => {"type" => "date"},
-            "end_date" => {"type" => "date"},
-            "_resolved" => {
-              "type" => "object",
-              "readonly" => "true"
-            }
-          }
-        }
-      },
-      "external_documents" => {
-        "type" => "array",
-        "items" => {
-          "type" => "JSONModel(:external_document) object"
-        }
-      },
-      "location" => {
-          "type" => "object",
-          "subtype" => "ref",
-          "properties" => {
-              "ref" => {"type" => "JSONModel(:location) uri"},
-              "_resolved" => {
-                  "type" => "object",
-                  "readonly" => "true"
-              }
-          }
-      }
     },
     "additionalProperties" => false
   }

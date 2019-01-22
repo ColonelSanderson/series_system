@@ -9,9 +9,7 @@
       <table class="table table-bordered table-striped">
         <thead>
         <tr>
-          <th class="col-xs-8"><%= I18n.t('mandate._singular') %></th>
-          <th class="col-xs-2"><%= I18n.t('mandate.start_date') %></th>
-          <th class="col-xs-2"><%= I18n.t('mandate.end_date') %></th>
+          <th class="col-xs-12"><%= I18n.t('mandate._singular') %></th>
         </tr>
         </thead>
         <tbody>
@@ -24,8 +22,6 @@
                                :uri => mandate['ref'] %>
             </div>
           </td>
-          <td><%= mandate['start_date'] %></td>
-          <td><%= mandate['end_date'] %></td>
         <% end %>
         </tbody>
       </table>

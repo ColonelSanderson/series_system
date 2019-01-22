@@ -6,24 +6,18 @@ en:
   mandate:
     title: Title
     mandate_type: Type
+    reference_number: Reference Number
+    note: Note
+    date: Date
     functions: Functions
-    functions_tooltip: .
-    start_date: Start Date
-    start_date_tooltip: The date that the mandate commenced, was implemented, or first implemented.
-    end_date: End Date
-    end_date_tooltip: The date the mandate was abolished or when it ceased to exist.
-    description: Description
-    description_tooltip: The description of the mandate.
-    identifier: Identifier
-    identifier_tooltip: The unique number of the mandate within the system.
-    external_documents: External Documents
-    external_documents_tooltip: References to authorising or related documentation.
-    linked_agents: Linked Agents
+    external_ids: External IDs
+    publish: Publish?
     _singular: Mandate
     _plural: Mandates
     _frontend:
       section:
         basic_information: Basic Information
+        date: Date
       action:
         create: Create Mandate
         save: Save Mandate
@@ -38,17 +32,6 @@ en:
     title_tooltip: The name of the function.
     mandates: Mandates
     mandates_tooltip: The legislation or other authoritative instrument that provides authorisation for the establishment or operation of the function.
-    start_date: Start Date
-    start_date_tooltip: The date that the function commenced, was implemented, or first undertaken.
-    end_date: End Date
-    end_date_tooltip: The date the function was abolished or when it ceased to be performed.
-    description: Description
-    description_tooltip: The description of the function.
-    identifier: Identifier
-    identifier_tooltip: The unique number of the function within the system.
-    linked_agents: Linked Agents
-    external_documents: External Documents
-    external_documents_tooltip: References to authorising or related documentation.
     _singular: Function
     _plural: Functions
     _frontend:
@@ -63,37 +46,14 @@ en:
         updated: Function updated
         deleted: Function deleted
 
-  controlled_by:
-    section: Controlled By
-    agent: Agency
-    start_date: Start Date
-    end_date: End Date
-    current: Current
-    _plural: Controlling Agencies
-    _singular: Controlling Agency
-    _frontend:
-      action:
-        add: Add Controlling Agency
-
   agent_corporate_entity:
     mandates: Mandates
     function: Functions
-    controls: Controls
 
   enumerations:
     mandate_type:
       legislation: Legislation
-      gazetted_notice: Gazetted notice
-      cabinet_handbook: Cabinet handbook
-      directive: Directive
-      disposal_authorisation: Disposal authorisation
-      rap: RAP
-
-  location:
-    _singular: Location
-
-  validation_errors:
-    end_date_must_occur_after_start_date: 'End date must occur after start date.'
+      regulation: Regulation
 
   search_sorting:
     mandate_type_u_ssort: Mandate type

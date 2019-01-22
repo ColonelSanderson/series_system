@@ -17,13 +17,7 @@
             <h3><%= I18n.t("function._frontend.section.basic_information") %></h3>
 
             <%= form.label_and_textfield "title" %>
-            <%= form.label_and_textarea "description" %>
-            <%= form.label_and_textfield "identifier" %>
-            <%= form.label_and_date "start_date" %>
-            <%= form.label_and_date "end_date" %>
-            <% if @function.location %>
-              <%= render_aspace_partial :partial => "locations/show_as_subrecords", :locals => { :location => @function.location } %>
-            <% end %>
+
             <%= display_audit_info(@function) %>
           </section>
         <% end %>
@@ -34,45 +28,7 @@
           <%= render_aspace_partial :partial => "mandates/show_as_subrecords", :locals => {:mandates => @function.mandates, :section_id => "function_mandates_"} %>
         <% end %>
 
-        <% if not @function.linked_agents.blank? %>
-          <section id="linked_agents" class="subrecord-form-dummy">
-            <h3><%= I18n.t("function.linked_agents") %></h3>
-            <div class="subrecord-form-container">
-              <div class="subrecord-form-fields">
-                <table class="table table-bordered table-striped">
-                  <thead>
-                  <tr>
-                    <th class="col-xs-8"><%= I18n.t('agent_corporate_entity._singular') %></th>
-                    <th class="col-xs-2"><%= I18n.t('mandate.start_date') %></th>
-                    <th class="col-xs-2"><%= I18n.t('mandate.end_date') %></th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                  <% @function.linked_agents.each_with_index do | linked_agent, index | %>
-                  <tr>
-                    <td>
-                      <div class="col-xs-6 token-list">
-                        <%= render_token :object => linked_agent['_resolved'],
-                                         :label => linked_agent['_resolved']['title'],
-                                         :type => "agent_corporate_entity",
-                                         :uri => linked_agent['ref'] %>
-                      </div>
-                    </td>
-                    <td><%= linked_agent['start_date'] %></td>
-                    <td><%= linked_agent['end_date'] %></td>
-                  </tr>
-                  <% end %>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </section>
-        <% end %>
-
-        <% if @function.external_documents.length > 0 %>
-          <%= render_aspace_partial :partial => "external_documents/show", :locals => { :external_documents => @function.external_documents, :section_id => "function_external_documents_" } %>
-        <% end %>
-
+        <%= show_plugins_for(@function, readonly) %>
       <% end %>
     </div>
   </div>

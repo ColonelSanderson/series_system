@@ -9,19 +9,17 @@
       </h3>
       <%= form.label_and_textfield "title" %>
       <%= form.label_and_select "mandate_type", form.possible_options_for("mandate_type", true) %>
-      <%= form.label_and_textarea "description" %>
-      <%= form.label_and_textfield "identifier" %>
-      <%= form.label_and_date "start_date" %>
-      <%= form.label_and_date "end_date" %>
-      <% form.push('location', form.obj['location'] || {}) do %>
-        <%= render_aspace_partial :partial => "locations/linker", :locals => { :form => form, multiplicity: "one" }%>
-      <% end %>
+      <%= form.label_and_textfield "reference_number" %>
+      <%= form.label_and_boolean "publish" %>
+      <%= form.label_and_textarea "note" %>
     </section>
   <% end %>
 
   <% form.emit_template("mandate") %>
 
+  <%= render_aspace_partial :partial => "shared/subrecord_form", :locals => {:form => form, :name => "date", :cardinality => :zero_to_one, :template_erb => "dates/template", :heading_text => I18n.t("date._singular")} %>
   <%= render_aspace_partial :partial => "shared/subrecord_form", :locals => {:form => form, :name => "functions", :template => "function"} %>
-  <%= render_aspace_partial :partial => "shared/subrecord_form", :locals => {:form => form, :name => "external_documents"} %>
+  <%= render_aspace_partial :partial => "external_ids/edit", :locals => {:form => form, :section_id => "external_ids"} %>
 
+  <%= form_plugins_for("mandate", form) %>
 </fieldset>

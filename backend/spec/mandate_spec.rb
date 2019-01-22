@@ -12,24 +12,8 @@ describe 'series_system mandate controller' do
     JSONModel(:mandate).find(mandate.id).title.should eq(opts[:title])
   end
 
-  it 'throws an error when `end_date` < `start_date`' do
-    opts = { end_date: generate(:incremental_date),
-             start_date: generate(:incremental_date) }
-    expect { create_mandate(opts) }.to raise_error(JSONModel::ValidationException)
-  end
-
-  it 'does not let you create a mandate without a identifier' do
-    opts = { identifier: nil }
-    expect { create_mandate(opts) }.to raise_error(JSONModel::ValidationException)
-  end
-
   it 'does not let you create a mandate without a title' do
     opts = { title: nil }
-    expect { create_mandate(opts) }.to raise_error(JSONModel::ValidationException)
-  end
-
-  it "doesn't let you create a mandate without a start_date" do
-    opts = { start_date: nil }
     expect { create_mandate(opts) }.to raise_error(JSONModel::ValidationException)
   end
 
@@ -43,15 +27,6 @@ describe 'series_system mandate controller' do
     mandate.title = 'updated mandate'
     mandate.save
     JSONModel(:mandate).find(mandate.id).title.should eq('updated mandate')
-  end
-
-  it 'lets you create a mandate with an `external_document`' do
-    opts = {
-      external_documents: [{ title: generate(:generic_title),
-                             location: generate(:string) }]
-    }
-    mandate = create_mandate(opts)
-    JSONModel(:mandate).find(mandate.id).external_documents.length.should eq(1)
   end
 
   it 'lets you create a mandate with a function' do
@@ -81,15 +56,5 @@ describe 'series_system mandate controller' do
     JSONModel(:mandate).find(mandate_id).id.should eq(mandate_id)
     expect { mandate.delete }.to_not raise_error
     expect { JSONModel(:mandate).find(mandate.id) }.to raise_error(RecordNotFound)
-  end
-
-  it 'Should successfully create and return a mandate with a location' do
-    opts = {
-      location: {
-        ref: create(:json_location).uri
-      }
-    }
-    mandate = create_mandate(opts)
-    expect(JSONModel(:mandate).find(mandate.id)[:location]).to include("ref" => opts[:location][:ref])
   end
 end
