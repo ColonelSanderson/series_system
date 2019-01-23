@@ -50,6 +50,9 @@ en:
     mandates: Mandates
     function: Functions
 
+  date:
+    inferred_date_source: Inferred source
+
   enumerations:
     mandate_type:
       legislation: Legislation
