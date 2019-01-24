@@ -135,9 +135,6 @@ Sequel.migration do
       Integer :aspace_relationship_position
       Integer :suppressed, null: false, default: 0
 
-      Date :start_date
-      Date :end_date
-
       apply_mtime_columns(false)
     end
 
@@ -169,6 +166,7 @@ Sequel.migration do
     drop_table(:mandate_function_rlshp)
     drop_table(:mandate_agency_rlshp)
     drop_table(:mandate_archival_record_rlshp)
+    drop_table(:function_agency_rlshp)
     drop_table(:function_archival_record_rlshp)
 
     # Mandates
