@@ -39,8 +39,12 @@
           <%= render_aspace_partial :partial => "mandates/show_as_subrecords", :locals => {:mandates => @function.mandates, :section_id => "function_mandates_"} %>
         <% end %>
 
+        <%= render_aspace_partial :partial => "search/embedded", :locals => { :record => @function, :filter_term => {"function_uris_u_sstr" => @function.uri}.to_json, :heading_text => I18n.t("function.linked_records")} %>
+
         <%= show_plugins_for(@function, readonly) %>
       <% end %>
     </div>
   </div>
 </div>
+
+<%= javascript_include_tag("embedded_search.js") %>

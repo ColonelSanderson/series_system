@@ -40,8 +40,12 @@
           <%= render_aspace_partial :partial => "external_ids/show", :locals => { :external_ids => @mandate.external_ids, :context => readonly, :section_id => "mandate_external_ids_" } %>
         <% end %>
 
+        <%= render_aspace_partial :partial => "search/embedded", :locals => { :record => @function, :filter_term => {"mandate_uris_u_sstr" => @mandate.uri}.to_json, :heading_text => I18n.t("mandate.linked_records")} %>
+
         <%= show_plugins_for(@mandate, readonly) %>
       <% end %>
     </div>
   </div>
 </div>
+
+<%= javascript_include_tag("embedded_search.js") %>

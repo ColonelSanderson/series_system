@@ -12,6 +12,7 @@ en:
     functions: Functions
     external_ids: External IDs
     publish: Publish?
+    linked_records: Linked Records
     _singular: Mandate
     _plural: Mandates
     _frontend:
@@ -35,6 +36,7 @@ en:
     publish: Publish?
     mandates: Mandates
     mandates_tooltip: The legislation or other authoritative instrument that provides authorisation for the establishment or operation of the function.
+    linked_records: Linked Records
     _singular: Function
     _plural: Functions
     _frontend:
