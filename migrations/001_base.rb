@@ -198,13 +198,15 @@ Sequel.migration do
 
     drop_table(:mandate)
 
-    ['function_source', 'mandate_type'].each do |enum_name|
+    ['function_source', 'mandate_type', 'function_preferred_term_relator',
+    'function_nonpreferred_term_relator', 'function_synonym_relator'].each do |enum_name|
       mandate_type_enum = self[:enumeration].filter(:name => enum_name)
       self[:enumeration_value].filter(:enumeration_id => mandate_type_enum.select(:id)).delete
       mandate_type_enum.delete
     end
 
     # Functions
+    drop_table(:related_function_rlshp)
     drop_table(:function_synonym)
     drop_table(:function)
   end
