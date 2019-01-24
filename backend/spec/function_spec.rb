@@ -1,7 +1,7 @@
 require_relative './factories_ext'
 require 'spec_helper'
 
-describe 'series_system function controller' do
+describe 'series_system function' do
   def create_function(opts = {})
     create(:json_function, opts)
   end

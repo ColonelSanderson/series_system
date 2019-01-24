@@ -1,7 +1,7 @@
 require_relative './factories_ext'
 require 'spec_helper'
 
-describe 'series_system mandate controller' do
+describe 'series_system mandate' do
   def create_mandate(opts = {})
     create(:json_mandate, opts)
   end
