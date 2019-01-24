@@ -4,5 +4,6 @@
                :record => @function,
                :plusone => :submit
            }) do |sidebar| %>
+  <%= sidebar.render_for_view_and_edit(:subrecord_type => 'date', :property => 'date') %>
   <%= sidebar.render_for_view_and_edit(:subrecord_type => 'mandate', :property => 'mandates') %>
 <% end %>

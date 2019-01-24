@@ -8,12 +8,17 @@
         <%= link_to_help :topic => "function_basic_information" %>
       </h3>
       <%= form.label_and_textfield "title" %>
+      <%= form.label_and_select "source", form.possible_options_for("source", true) %>
+      <%= form.label_and_textarea "note" %>
+      <%= form.label_and_boolean "publish" %>
     </section>
   <% end %>
 
   <% form.emit_template("function") %>
 
+  <%= render_aspace_partial :partial => "shared/subrecord_form", :locals => {:form => form, :name => "date", :cardinality => :zero_to_one, :template_erb => "dates/template", :heading_text => I18n.t("date._singular")} %>
   <%= render_aspace_partial :partial => "shared/subrecord_form", :locals => {:form => form, :name => "mandates", :template => "mandate"} %>
+  <%#= render_aspace_partial :partial => "shared/subrecord_form", :locals => {:form => form, :name => "related_functions", :template_erb => "related_functions/template"} %>
 
   <%= form_plugins_for("function", form) %>
 </fieldset>

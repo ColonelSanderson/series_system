@@ -17,12 +17,19 @@
             <h3><%= I18n.t("function._frontend.section.basic_information") %></h3>
 
             <%= form.label_and_textfield "title" %>
+            <%= form.label_and_select "source", form.possible_options_for("source", true) %>
+            <%= form.label_and_textarea "note" %>
+            <%= form.label_and_boolean "publish" %>
 
             <%= display_audit_info(@function) %>
           </section>
         <% end %>
 
         <%= readonly.emit_template "function" %>
+
+        <% if not @function.date.blank? %>
+          <%= render_aspace_partial :partial => "dates/show", :locals => { :dates =>[@function["date"]], :section_id => "mandate_date_", :section_title => I18n.t("mandate.date") } %>
+        <% end %>
 
         <% if not @function.mandates.blank? %>
           <%= render_aspace_partial :partial => "mandates/show_as_subrecords", :locals => {:mandates => @function.mandates, :section_id => "function_mandates_"} %>

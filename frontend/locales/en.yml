@@ -30,6 +30,9 @@ en:
   function:
     title: Title
     title_tooltip: The name of the function.
+    source: Source
+    note: Note
+    publish: Publish?
     mandates: Mandates
     mandates_tooltip: The legislation or other authoritative instrument that provides authorisation for the establishment or operation of the function.
     _singular: Function
@@ -54,6 +57,9 @@ en:
     mandate_type:
       legislation: Legislation
       regulation: Regulation
+    function_source:
+      agift: AGIFT
+      qsa_specific: QSA-specific
 
   search_sorting:
     mandate_type_u_ssort: Mandate type
