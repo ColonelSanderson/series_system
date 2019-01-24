@@ -38,9 +38,9 @@ Sequel.migration do
 
     create_editable_enum('function_source', ['agift', 'qsa_specific'])
 
-    create_enum("function_preferred_term_relator", ["has_preferred_term", "preferred_term_of"])
-    create_enum("function_nonpreferred_term_relator", ["has_nonpreferred_term", "nonpreferred_term_of"])
-    create_enum("function_synonym_relator", ["synonym_of"])
+    create_enum("function_preferred_term_relator", ["has_preferred_term_of", "is_preferred_term_of"])
+    create_enum("function_nonpreferred_term_relator", ["has_nonpreferred_term_of", "is_nonpreferred_term_of"])
+    create_enum("function_synonym_relator", ["is_synonym_of"])
 
     create_table(:related_function_rlshp) do
       primary_key :id

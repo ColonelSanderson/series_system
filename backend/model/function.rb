@@ -31,7 +31,7 @@ class Function < Sequel::Model(:function)
                                       include DynamicEnums
                                       uses_enums({
                                                    :property => 'relator',
-                                                   :uses_enum => ['function_preferred_term_relator', 'function_nonpreferred_term_relator', 'function_synonym_relationship']
+                                                   :uses_enum => ['function_preferred_term_relator', 'function_nonpreferred_term_relator', 'function_synonym_relator']
                                                  })
                                     end
                                   })
