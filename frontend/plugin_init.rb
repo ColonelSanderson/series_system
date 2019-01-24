@@ -28,7 +28,7 @@ Rails.application.config.after_initialize do
     Plugins::PluginSubRecord.new(
       'series_system',
       'functions',
-      ['resource', 'archival_object'],
+      ['resource', 'archival_object', 'agent_corporate_entity'],
       {
         template_name: 'function',
         js_edit_template_name: 'template_function',
