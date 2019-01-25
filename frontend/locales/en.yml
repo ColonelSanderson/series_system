@@ -12,6 +12,8 @@ en:
     external_ids: External IDs
     publish: Publish?
     linked_records: Linked Records
+    commencement_date: Commencement Date
+    termination_date: Termination Date
     _singular: Mandate
     _plural: Mandates
     _frontend:
@@ -36,6 +38,8 @@ en:
     mandates: Mandates
     mandates_tooltip: The legislation or other authoritative instrument that provides authorisation for the establishment or operation of the function.
     linked_records: Linked Records
+    commencement_date: Commencement Date
+    termination_date: Termination Date
     _singular: Function
     _plural: Functions
     _frontend:
@@ -98,3 +102,5 @@ en:
 
   search_sorting:
     mandate_type_u_ssort: Mandate type
+    commencement_date_u_sortdate: Commencement Date
+    termination_date_u_sortdate: Termination Date
