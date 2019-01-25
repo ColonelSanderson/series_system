@@ -23,4 +23,29 @@ class Mandate < Sequel::Model(:mandate)
                     :corresponding_to_association => :date,
                     :is_array => false)
 
+  def self.sequel_to_jsonmodel(objs, opts = {})
+    jsons = super
+
+    jsons.zip(objs).each do |json, obj|
+      json['display_string'] = obj.display_string
+    end
+
+    jsons
+  end
+
+  def display_string
+    mandate_type_i18n = I18n.t("enumerations.mandate_type.#{mandate_type}", :default => mandate_type)
+    date_range = if date.nil?
+                   ""
+                 elsif date.expression
+                   "[#{date.expression}]"
+                 elsif date.begin || date.end
+                   "[#{date.begin} - #{date.end}]"
+                 else
+                   ""
+                 end
+
+    "#{mandate_type_i18n} -  #{title} #{date_range}".strip
+  end
+
 end

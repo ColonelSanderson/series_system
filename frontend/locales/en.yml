@@ -8,7 +8,6 @@ en:
     mandate_type: Type
     reference_number: Reference Number
     note: Note
-    date: Date
     functions: Functions
     external_ids: External IDs
     publish: Publish?

@@ -11,6 +11,8 @@
       "note" => {"type" => "string", "maxLength" => 16384},
       "publish" => {"type" => "boolean"},
 
+      "display_string" => {"type" => "string", "readonly" => true},
+
       "date" => {"type" => "JSONModel(:date) object"},
 
       "related_functions" => {

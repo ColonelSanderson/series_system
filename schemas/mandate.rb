@@ -12,6 +12,8 @@
       "publish" => {"type" => "boolean"},
       "note" => {"type" => "string", "maxLength" => 16384},
 
+      "display_string" => {"type" => "string", "readonly" => true},
+
       "date" => {"type" => "JSONModel(:date) object"},
       "external_ids" => {"type" => "array", "items" => {"type" => "JSONModel(:external_id) object"}},
 

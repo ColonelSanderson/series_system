@@ -36,4 +36,28 @@ class Function < Sequel::Model(:function)
                                     end
                                   })
 
+  def self.sequel_to_jsonmodel(objs, opts = {})
+    jsons = super
+
+    jsons.zip(objs).each do |json, obj|
+      json['display_string'] = obj.display_string
+    end
+
+    jsons
+  end
+
+  def display_string
+    date_range = if date.nil?
+                    ""
+                 elsif date.expression
+                   "[#{date.expression}]"
+                 elsif date.begin || date.end
+                   "[#{date.begin} - #{date.end}]"
+                 else
+                   ""
+                 end
+
+    "#{title} #{date_range}".strip
+  end
+
 end

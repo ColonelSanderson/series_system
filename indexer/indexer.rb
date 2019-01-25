@@ -10,7 +10,7 @@ class IndexerCommon
     indexer.add_document_prepare_hook do |doc, record|
       if record['record']['jsonmodel_type'] == 'mandate'
         doc['title'] = record['record']['title']
-        doc['display_string'] = record['record']['title']
+        doc['display_string'] = record['record']['display_string']
         doc['mandate_type_u_ssort'] = record['record']['mandate_type']
       end
     end
@@ -18,7 +18,7 @@ class IndexerCommon
     indexer.add_document_prepare_hook do |doc, record|
       if record['record']['jsonmodel_type'] == 'function'
         doc['title'] = record['record']['title']
-        doc['display_string'] = record['record']['title']
+        doc['display_string'] = record['record']['display_string']
       end
     end
 
@@ -30,5 +30,4 @@ class IndexerCommon
     end
 
   end
-
 end
