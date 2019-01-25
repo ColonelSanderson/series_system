@@ -14,14 +14,16 @@
         </thead>
         <tbody>
           <% functions.each_with_index do | function, index | %>
-            <td>
-              <div class="col-xs-6 token-list">
-              <%= render_token :object => function['_resolved'],
-                               :label => function['_resolved']['title'],
-                               :type => "function",
-                               :uri => function['ref'] %>
-              </div>
-            </td>
+            <tr>
+              <td>
+                <div class="col-xs-6 token-list">
+                <%= render_token :object => function['_resolved'],
+                                 :label => function['_resolved']['title'],
+                                 :type => "function",
+                                 :uri => function['ref'] %>
+                </div>
+              </td>
+            </tr>
           <% end %>
         </tbody>
       </table>
