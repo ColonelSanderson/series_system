@@ -104,3 +104,8 @@ en:
     mandate_type_u_ssort: Mandate type
     commencement_date_u_sortdate: Commencement Date
     termination_date_u_sortdate: Termination Date
+
+  advanced_search:
+    date:
+      commencement_date: Commencement Date
+      termination_date: Termination Date

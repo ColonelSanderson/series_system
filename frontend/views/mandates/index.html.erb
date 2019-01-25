@@ -2,7 +2,9 @@
 
 <%
   @show_multiselect_column = user_can?("delete_mandate_record")
+  @no_title = true
 
+  add_column(I18n.t("mandate.title"), proc {|record| record['mandate_title__u_sstr'] ? record['mandate_title__u_sstr'][0] : nil}, :sortable => true, :sort_by => "title_sort")
   add_column(I18n.t("mandate.mandate_type"), proc {|record| I18n.t("enumerations.mandate_type.#{record['mandate_type_u_ssort']}", :default => record['mandate_type_u_ssort'])}, :sortable => true, :sort_by => "mandate_type_u_ssort")
   add_column(I18n.t("mandate.commencement_date"), proc {|record| record['commencement_date_u_sstr'] ? record['commencement_date_u_sstr'][0] : nil}, :sortable => true, :sort_by => "commencement_date_u_sortdate")
   add_column(I18n.t("mandate.termination_date"), proc {|record| record['termination_date_u_sstr'] ? record['termination_date_u_sstr'][0] : nil}, :sortable => true, :sort_by => "termination_date_u_sortdate")

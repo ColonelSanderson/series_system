@@ -9,8 +9,11 @@ class IndexerCommon
 
     indexer.add_document_prepare_hook do |doc, record|
       if record['record']['jsonmodel_type'] == 'mandate'
-        doc['title'] = record['record']['title']
         doc['display_string'] = record['record']['display_string']
+
+        doc.delete('title')
+        doc['mandate_title__u_sstr'] = record['record']['title']
+        doc['title_sort'] = record['record']['title']
         doc['mandate_type_u_ssort'] = record['record']['mandate_type']
 
         doc['commencement_date_u_sortdate'] = IndexerCommon.extract_commencement_date_for_search(record['record']['date'])
@@ -22,8 +25,11 @@ class IndexerCommon
 
     indexer.add_document_prepare_hook do |doc, record|
       if record['record']['jsonmodel_type'] == 'function'
-        doc['title'] = record['record']['title']
         doc['display_string'] = record['record']['display_string']
+
+        doc.delete('title')
+        doc['function_title__u_sstr'] = record['record']['title']
+        doc['title_sort'] = record['record']['title']
 
         doc['commencement_date_u_sortdate'] = IndexerCommon.extract_commencement_date_for_search(record['record']['date'])
         doc['commencement_date_u_sstr'] = IndexerCommon.extract_commencement_date_for_display(record['record']['date'])

@@ -2,7 +2,9 @@
 
 <%
   @show_multiselect_column = user_can?("delete_function_record")
+  @no_title = true
 
+  add_column(I18n.t("function.title"), proc {|record| record['function_title__u_sstr'] ? record['function_title__u_sstr'][0] : nil}, :sortable => true, :sort_by => "title_sort")
   add_column(I18n.t("function.commencement_date"), proc {|record| record['commencement_date_u_sstr'] ? record['commencement_date_u_sstr'][0] : nil}, :sortable => true, :sort_by => "commencement_date_u_sortdate")
   add_column(I18n.t("function.termination_date"), proc {|record| record['termination_date_u_sstr'] ? record['termination_date_u_sstr'][0] : nil}, :sortable => true, :sort_by => "termination_date_u_sortdate")
 %>

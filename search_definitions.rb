@@ -1,0 +1,2 @@
+AdvancedSearch.define_field(:name => 'commencement_date', :type => :date, :visibility => [:staff], :solr_field => 'commencement_date_u_sortdate')
+AdvancedSearch.define_field(:name => 'termination_date', :type => :date, :visibility => [:staff], :solr_field => 'termination_date_u_sortdate')
