@@ -19,7 +19,7 @@ Rails.application.config.after_initialize do
       {
         template_name: 'mandate_rlshp',
         js_edit_template_name: 'template_mandate_rlshp',
-        template_erb: "mandate/template",
+        template_erb: "mandates/template",
         sidebar_label: I18n.t('mandate._plural'),
       }
     )
@@ -33,7 +33,7 @@ Rails.application.config.after_initialize do
       {
         template_name: 'function_rlshp',
         js_edit_template_name: 'template_function_rlshp',
-        template_erb: "function/template",
+        template_erb: "functions/template",
         sidebar_label: I18n.t('function._plural'),
       }
     )
