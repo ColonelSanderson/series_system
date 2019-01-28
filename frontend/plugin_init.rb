@@ -17,8 +17,9 @@ Rails.application.config.after_initialize do
       'mandates',
       ['resource', 'archival_object', 'agent_corporate_entity'],
       {
-        template_name: 'mandate',
-        js_edit_template_name: 'template_mandate',
+        template_name: 'mandate_rlshp',
+        js_edit_template_name: 'template_mandate_rlshp',
+        template_erb: "mandate/template",
         sidebar_label: I18n.t('mandate._plural'),
       }
     )
@@ -30,8 +31,9 @@ Rails.application.config.after_initialize do
       'functions',
       ['resource', 'archival_object', 'agent_corporate_entity'],
       {
-        template_name: 'function',
-        js_edit_template_name: 'template_function',
+        template_name: 'function_rlshp',
+        js_edit_template_name: 'template_function_rlshp',
+        template_erb: "function/template",
         sidebar_label: I18n.t('function._plural'),
       }
     )

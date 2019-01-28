@@ -1,4 +1,13 @@
+<!-- Series System plugin javascript -->
 <%= javascript_include_tag "#{AppConfig[:frontend_prefix]}assets/series-system.js" %>
+
+<% begin %>
+  <% if current_record && SeriesSystemHelper.supports_function?(current_record['jsonmodel_type']) %>
+    <!-- Allow functions to be created inline -->
+    <%= javascript_include_tag("related_functions.crud.js") %>
+  <% end %>
+<% rescue %>
+<% end %>
 
 <script type="text/template" id="seriesSystemBrowseActions">
   <li class="divider"></li>
