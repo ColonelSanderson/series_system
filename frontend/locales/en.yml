@@ -84,7 +84,7 @@ en:
     mandates: Mandates
     function: Functions
 
-  date:
+  date_fields:
     inferred_date_source: Inferred source
 
   enumerations:
