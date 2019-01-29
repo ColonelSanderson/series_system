@@ -83,4 +83,18 @@ describe 'series_system agent_corporate_entity_ext' do
       expect JSONModel(:agent_corporate_entity).find(agent.id).mandates.length.should eq(0)
     end
   end
+
+
+  describe 'agency categories' do
+
+    it 'allows an agent corporate to be created with a category' do
+      agent = create(:json_agent_corporate_entity,
+                     :agency_category => 'LOC')
+
+      expect JSONModel(:agent_corporate_entity).find(agent.id).agency_category.should eq('LOC')
+    end
+
+  end
+
+
 end

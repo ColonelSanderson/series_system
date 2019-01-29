@@ -93,6 +93,14 @@ en:
     inferred_date_source: Inferred source
     inferred_date_source_placeholder: The inferred source of the date
 
+  enumeration_names:
+    agency_category: Agency Category
+    function_nonpreferred_term_relator: Function Nonpreferred Term Relator
+    function_preferred_term_relator: Function Preferred Term Relator
+    function_source: Function Source
+    function_synonym_relator: Function Synonym Relator
+    mandate_type: Mandate Type
+
   enumerations:
     mandate_type:
       legislation: Legislation
@@ -108,6 +116,10 @@ en:
       is_preferred_term_of: is preferred term of
     function_synonym_relator:
       synonym_of: is synonym of
+
+  search_results:
+    filter:
+      agency_category_u_sstr: Agency Category
 
   search_sorting:
     mandate_type_u_ssort: Mandate type
@@ -131,3 +143,6 @@ en:
   function_rlshp:
     start_date: Commencement Date
     end_date: Termination Date
+
+  series_system_agency:
+    agency_category: Agency Category

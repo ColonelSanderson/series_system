@@ -40,6 +40,13 @@ class IndexerCommon
     end
 
     indexer.add_document_prepare_hook do |doc, record|
+      if ['agent_corporate_entity'].include?(record['record']['jsonmodel_type'])
+        doc['agency_category_u_sstr'] = record['record']['agency_category']
+      end
+    end
+
+
+    indexer.add_document_prepare_hook do |doc, record|
       if ['resource', 'archival_object', 'agent_corporate_entity'].include?(record['record']['jsonmodel_type'])
         doc['mandate_uris_u_sstr'] = ASUtils.wrap(record['record']['mandates']).collect{|m| m['ref']}
         doc['function_uris_u_sstr'] = ASUtils.wrap(record['record']['functions']).collect{|f| f['ref']}

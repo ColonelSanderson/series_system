@@ -1,0 +1,29 @@
+en:
+  enumerations:
+    agency_category:
+      COI: Commission of Inquiry
+      CWLTH: Commonwealth government authority
+      COR: Correctional facility
+      DEPT: Department
+      CRT: District Court
+      LAN: Land Court
+      DST: District Office
+      REG: Registry
+      EDF: Educational facility
+      EXEC: Executive Council
+      GOC: Government-owned corporation
+      GOV: Governor
+      LOC: Local government authority
+      MAG: Magistrates Court
+      MIN: Ministerial Office
+      NSW: New South Wales government authority
+      OTHER: Other agency type
+      RES: Residential care facility
+      STAT: Statutory authority
+      SUP: Supreme Court
+      TRB: Tribunal
+      FIRM: Commercial entity
+      LEESA: Law Enforcement/Emergency Services agency
+      BUSU: Business Unit/Area or Division
+      COM: Commission
+      UNP: Unprocessed

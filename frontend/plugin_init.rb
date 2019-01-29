@@ -52,4 +52,11 @@ Rails.application.config.after_initialize do
   JSONModel(:function)
   JSONModel(:mandate)
 
+
+  # Show a new search facet for our category
+  Plugins.add_search_facets(:agent_corporate_entity, "agency_category_u_sstr")
+
+  Plugins.add_facet_group_i18n("agency_category_u_sstr",
+                               proc {|facet| "enumerations.agency_category.#{facet}" })
+
 end
