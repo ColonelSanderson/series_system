@@ -6,6 +6,7 @@ Rails.application.config.after_initialize do
 
   Plugins.add_resolve_field('mandates')
   Plugins.add_resolve_field('functions')
+  Plugins.add_resolve_field('related_functions')
 
   Plugins.register_edit_role_for_type('mandate', 'update_mandate_record')
   Plugins.register_edit_role_for_type('function', 'update_function_record')
@@ -16,8 +17,9 @@ Rails.application.config.after_initialize do
       'mandates',
       ['resource', 'archival_object', 'agent_corporate_entity'],
       {
-        template_name: 'mandate',
-        js_edit_template_name: 'template_mandate',
+        template_name: 'mandate_rlshp',
+        js_edit_template_name: 'template_mandate_rlshp',
+        template_erb: "mandates/template",
         sidebar_label: I18n.t('mandate._plural'),
       }
     )
@@ -27,10 +29,11 @@ Rails.application.config.after_initialize do
     Plugins::PluginSubRecord.new(
       'series_system',
       'functions',
-      ['resource', 'archival_object'],
+      ['resource', 'archival_object', 'agent_corporate_entity'],
       {
-        template_name: 'function',
-        js_edit_template_name: 'template_function',
+        template_name: 'function_rlshp',
+        js_edit_template_name: 'template_function_rlshp',
+        template_erb: "functions/template",
         sidebar_label: I18n.t('function._plural'),
       }
     )

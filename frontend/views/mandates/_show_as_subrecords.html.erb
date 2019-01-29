@@ -14,14 +14,16 @@
         </thead>
         <tbody>
         <% mandates.each_with_index do | mandate, index | %>
-          <td>
-            <div class="col-xs-6 token-list">
-              <%= render_token :object => mandate['_resolved'],
-                               :label => mandate['_resolved']['title'],
-                               :type => "mandate",
-                               :uri => mandate['ref'] %>
-            </div>
-          </td>
+          <tr>
+            <td>
+              <div class="col-xs-6 token-list">
+                <%= render_token :object => mandate['_resolved'],
+                                 :label => mandate['_resolved']['display_string'],
+                                 :type => "mandate",
+                                 :uri => mandate['ref'] %>
+              </div>
+            </td>
+          </tr>
         <% end %>
         </tbody>
       </table>

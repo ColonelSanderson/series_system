@@ -7,6 +7,20 @@
     "properties" => {
       "uri" => {"type" => "string", "required" => false},
       "title" => {"type" => "string", "minLength" => 1, "maxLength" => 16384, "ifmissing" => "error"},
+      "source" => {"type" => "string", "dynamic_enum" => "function_source"},
+      "note" => {"type" => "string", "maxLength" => 16384},
+      "publish" => {"type" => "boolean"},
+
+      "display_string" => {"type" => "string", "readonly" => true},
+
+      "date" => {"type" => "JSONModel(:date) object"},
+
+      "related_functions" => {
+        "type" => "array",
+        "items" => {"type" => [{"type" => "JSONModel(:function_synonym_relationship) object"},
+                               {"type" => "JSONModel(:function_preferred_term_relationship) object"},
+                               {"type" => "JSONModel(:function_nonpreferred_term_relationship) object"}]},
+      },
 
       "mandates" => {
         "type" => "array",

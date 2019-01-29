@@ -1,0 +1,31 @@
+<section id="function_related_functions_" class="subrecord-form-dummy">
+  <h3><%= I18n.t("related_function._plural") %></h3>
+
+  <div class="subrecord-form-container">
+    <div class="subrecord-form-fields">
+      <table class="table table-striped table-bordered table-condensed table-hover token-list">
+        <thead>
+        <tr>
+          <th class="col-xs-3"><%= I18n.t("related_function.relator") %></th>
+          <th class="col-xs-9"><%= I18n.t("function._singular") %></th>
+        </tr>
+        </thead>
+        <tbody>
+        <% related_functions.each_with_index do | related_function, index | %>
+          <tr>
+            <td>
+              <%= I18n.t("#{related_function['jsonmodel_type']}._singular", :default => related_function['jsonmodel_type']) %>
+            </td>
+            <td>
+              <%= render_token :object => related_function["_resolved"],
+                               :label => related_function["_resolved"]["display_string"],
+                               :type => "function",
+                               :uri => related_function["ref"] %>
+            </td>
+          </tr>
+        <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
