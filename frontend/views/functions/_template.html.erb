@@ -1,5 +1,7 @@
 <% define_template "function_rlshp", jsonmodel_definition(:function) do |form| %>
   <div class="subrecord-form-fields">
     <%= render_aspace_partial :partial => "functions/linker", :locals => { :form => form }%>
+    <%= form.label_and_date "start_date" %>
+    <%= form.label_and_date "end_date" %>
   </div>
 <% end %>

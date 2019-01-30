@@ -123,3 +123,11 @@ en:
     date:
       commencement_date: Commencement Date
       termination_date: Termination Date
+
+  mandate_rlshp:
+    start_date: Start Date
+    end_date: End Date
+
+  function_rlshp:
+    start_date: Start Date
+    end_date: End Date

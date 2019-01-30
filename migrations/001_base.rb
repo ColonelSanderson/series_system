@@ -81,6 +81,9 @@ Sequel.migration do
       Integer :mandate_id
       Integer :function_id
 
+      Date :start_date
+      Date :end_date
+
       Integer :aspace_relationship_position
       Integer :suppressed, null: false, default: 0
 
@@ -96,6 +99,9 @@ Sequel.migration do
       primary_key :id
       Integer :mandate_id
       Integer :agent_corporate_entity_id
+
+      Date :start_date
+      Date :end_date
 
       Integer :aspace_relationship_position
       Integer :suppressed, null: false, default: 0
@@ -113,6 +119,9 @@ Sequel.migration do
       Integer :mandate_id
       Integer :resource_id
       Integer :archival_object_id
+
+      Date :start_date
+      Date :end_date
 
       Integer :aspace_relationship_position
       Integer :suppressed, null: false, default: 0
@@ -132,6 +141,9 @@ Sequel.migration do
       Integer :resource_id
       Integer :archival_object_id
 
+      Date :start_date
+      Date :end_date
+
       Integer :aspace_relationship_position
       Integer :suppressed, null: false, default: 0
 
@@ -148,6 +160,9 @@ Sequel.migration do
       primary_key :id
       Integer :function_id
       Integer :agent_corporate_entity_id
+
+      Date :start_date
+      Date :end_date
 
       Integer :aspace_relationship_position
       Integer :suppressed, null: false, default: 0
