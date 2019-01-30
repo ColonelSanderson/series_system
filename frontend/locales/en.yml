@@ -125,9 +125,9 @@ en:
       termination_date: Termination Date
 
   mandate_rlshp:
-    start_date: Start Date
-    end_date: End Date
+    start_date: Commencement Date
+    end_date: Termination Date
 
   function_rlshp:
-    start_date: Start Date
-    end_date: End Date
+    start_date: Commencement Date
+    end_date: Termination Date
