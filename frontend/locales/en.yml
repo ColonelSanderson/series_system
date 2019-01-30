@@ -86,6 +86,9 @@ en:
     mandates: Mandates
     function: Functions
 
+  date_fields:
+    inferred_date_source: Inferred source
+    inferred_date_source_placeholder: The inferred source of the date
   enumerations:
     mandate_type:
       legislation: Legislation
