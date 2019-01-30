@@ -107,6 +107,11 @@ en:
     commencement_date_u_sortdate: Commencement Date
     termination_date_u_sortdate: Termination Date
 
+  search_results:
+    filter:
+      function_source_u_sstr: Function Source
+      mandate_type_u_ssort: Mandate Type
+
   advanced_search:
     date:
       commencement_date: Commencement Date

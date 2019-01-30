@@ -30,6 +30,7 @@ class IndexerCommon
         doc.delete('title')
         doc['function_title__u_sstr'] = record['record']['title']
         doc['title_sort'] = record['record']['title']
+        doc['function_source_u_sstr'] = record['record']['source']
 
         doc['commencement_date_u_sortdate'] = IndexerCommon.extract_commencement_date_for_search(record['record']['date'])
         doc['commencement_date_u_sstr'] = IndexerCommon.extract_commencement_date_for_display(record['record']['date'])
@@ -48,7 +49,7 @@ class IndexerCommon
   end
 
   def self.extract_commencement_date_for_search(date)
-    return nil unless date['begin']
+    return nil unless date && date['begin']
 
     # Format YYYY-MM-DD as YYYY-MM-DDT00:00:00Z
     if date['begin'] =~ /\d{4}\-\d{2}\-\d{2}/
@@ -69,11 +70,13 @@ class IndexerCommon
   end
 
   def self.extract_commencement_date_for_display(date)
+    return nil unless date
+
     date['begin']
   end
 
   def self.extract_termination_date_for_search(date)
-    return nil unless date['end']
+    return nil unless date && date['end']
 
     # Format YYYY-MM-DD as YYYY-MM-DDT00:00:00Z
     if date['end'] =~ /\d{4}\-\d{2}\-\d{2}/
@@ -96,6 +99,8 @@ class IndexerCommon
   end
 
   def self.extract_termination_date_for_display(date)
+    return nil unless date
+
     date['end']
   end
 end

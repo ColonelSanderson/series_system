@@ -39,6 +39,14 @@ Rails.application.config.after_initialize do
     )
   )
 
+  Plugins.add_search_facets(:mandate, "mandate_type_u_ssort")
+  Plugins.add_facet_group_i18n("mandate_type_u_ssort",
+                               proc {|facet| "enumerations.mandate_type.#{facet}" })
+
+  Plugins.add_search_facets(:function, "function_source_u_sstr")
+  Plugins.add_facet_group_i18n("function_source_u_sstr",
+                               proc {|facet| "enumerations.function_source.#{facet}" })
+
   # force load our JSONModels so the are registered rather than lazy initialised
   # we need this for parse_reference to work
   JSONModel(:function)
