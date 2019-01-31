@@ -26,6 +26,12 @@ Permission.define("delete_mandate_record",
                   :implied_by => 'manage_mandate_record',
                   :level => "global")
 
+require_relative '../lib/relationship_rules'
+RelationshipRules.instance.bootstrap!
+
+require_relative '../lib/validations'
+include SeriesSystemValidations
+
 begin
   History.register_model(Mandate)
   History.register_model(Function)

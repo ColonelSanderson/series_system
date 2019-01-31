@@ -32,15 +32,9 @@
           <%= render_aspace_partial :partial => "dates/show", :locals => { :dates =>[@mandate["date"]], :section_id => "mandate_date_", :section_title => I18n.t("mandate.date") } %>
         <% end %>
 
-        <% if not @mandate.functions.blank? %>
-          <%= render_aspace_partial :partial => "functions/show_as_subrecords", :locals => {:functions => @mandate.functions, :section_id => "mandate_functions_"} %>
-        <% end %>
-
         <% if @mandate.external_ids.length > 0 && show_external_ids? %>
           <%= render_aspace_partial :partial => "external_ids/show", :locals => { :external_ids => @mandate.external_ids, :context => readonly, :section_id => "mandate_external_ids_" } %>
         <% end %>
-
-        <%= render_aspace_partial :partial => "search/embedded", :locals => { :record => @function, :filter_term => {"mandate_uris_u_sstr" => @mandate.uri}.to_json, :heading_text => I18n.t("mandate.linked_records")} %>
 
         <%= show_plugins_for(@mandate, readonly) %>
       <% end %>

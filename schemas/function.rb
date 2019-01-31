@@ -14,33 +14,6 @@
       "display_string" => {"type" => "string", "readonly" => true},
 
       "date" => {"type" => "JSONModel(:date) object"},
-
-      "related_functions" => {
-        "type" => "array",
-        "items" => {"type" => [{"type" => "JSONModel(:function_synonym_relationship) object"},
-                               {"type" => "JSONModel(:function_preferred_term_relationship) object"},
-                               {"type" => "JSONModel(:function_nonpreferred_term_relationship) object"}]},
-      },
-
-      "mandates" => {
-        "type" => "array",
-        "items" => {
-          "type" => "object",
-          "subtype" => "ref",
-          "properties" => {
-            "ref" => {
-              "type" => "JSONModel(:mandate) uri",
-              "ifmissing" => "error"
-            },
-            "start_date" => {"type" => "date"},
-            "end_date" => {"type" => "date"},
-            "_resolved" => {
-              "type" => "object",
-              "readonly" => "true"
-            }
-          }
-        }
-      },
     },
     "additionalProperties" => false
   }

@@ -1,6 +1,3 @@
-ArchivalObject.include(FunctionsArchivalRecords)
-ArchivalObject.include(MandatesArchivalRecords)
-
 class ArchivalObject
 
   auto_generate :property => :ref_id,

@@ -54,14 +54,6 @@ describe 'series_system mandate controller' do
     external_id['source'].should eq(opts[:external_ids][0][:source])
   end
 
-  it 'lets you create a mandate with a function' do
-    function = create(:json_function, {})
-    mandate = nil
-    opts = { functions: [{ ref: function.uri }] }
-    expect { mandate = create_mandate(opts) }.to_not raise_error
-    JSONModel(:mandate).find(mandate.id).functions.length.should eq(1)
-  end
-
   it 'can give a list of all mandates' do
     mandate_names = ['mandate 1', 'mandate 2', 'mandate 3']
     mandate_names.each do |f|
@@ -83,14 +75,4 @@ describe 'series_system mandate controller' do
     expect { JSONModel(:mandate).find(mandate.id) }.to raise_error(RecordNotFound)
   end
 
-  it 'deletes the mandate correctly when linked to a function' do
-    function = create(:json_function, {})
-    mandate = create_mandate({ functions: [{ ref: function.uri }] })
-    mandate_id = mandate.id
-    JSONModel(:mandate).find(mandate_id).id.should eq(mandate_id)
-    JSONModel(:function).find(function.id).mandates.should_not be_empty
-    expect { mandate.delete }.to_not raise_error
-    expect { JSONModel(:mandate).find(mandate.id) }.to raise_error(RecordNotFound)
-    JSONModel(:function).find(function.id).mandates.should be_empty
-  end
 end

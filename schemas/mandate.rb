@@ -16,26 +16,6 @@
 
       "date" => {"type" => "JSONModel(:date) object"},
       "external_ids" => {"type" => "array", "items" => {"type" => "JSONModel(:external_id) object"}},
-
-      "functions" => {
-        "type" => "array",
-        "items" => {
-          "type" => "object",
-          "subtype" => "ref",
-          "properties" => {
-            "ref" => {
-              "type" => "JSONModel(:function) uri",
-              "ifmissing" => "error"
-            },
-            "start_date" => {"type" => "date"},
-            "end_date" => {"type" => "date"},
-            "_resolved" => {
-              "type" => "object",
-              "readonly" => "true"
-            }
-          }
-        }
-      },
     },
     "additionalProperties" => false
   }

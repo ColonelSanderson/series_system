@@ -35,72 +35,6 @@ describe 'series_system function controller' do
     JSONModel(:function).find(function.id).title.should eq('updated function')
   end
 
-  it 'lets you create a function with a mandate' do
-    mandate = create(:json_mandate, {})
-    function = nil
-    opts = { mandates: [{ ref: mandate.uri }] }
-    expect { function = create_function(opts) }.to_not raise_error
-    JSONModel(:function).find(function.id).mandates.length.should eq(1)
-    JSONModel(:mandate).find(mandate.id).functions.length.should eq(1)
-  end
-
-  it 'lets you link a function as a synonym of another function' do
-    function_a = create(:json_function, {})
-    function_b = create(:json_function, {})
-
-    relationship = JSONModel(:function_synonym_relationship).new
-    relationship.ref = function_b.uri
-    relationship.relator = 'is_synonym_of'
-
-    function_a.related_functions = [ relationship.to_hash ]
-    expect { function_a.save }.to_not raise_error
-
-    JSONModel(:function).find(function_a.id).related_functions.length.should eq(1)
-    JSONModel(:function).find(function_a.id).related_functions.first['relator'].should eq('is_synonym_of')
-    JSONModel(:function).find(function_a.id).related_functions.first['ref'].should eq(function_b.uri)
-    JSONModel(:function).find(function_b.id).related_functions.length.should eq(1)
-    JSONModel(:function).find(function_b.id).related_functions.first['relator'].should eq('is_synonym_of')
-    JSONModel(:function).find(function_b.id).related_functions.first['ref'].should eq(function_a.uri)
-  end
-
-  it 'lets you link a function as a preferred term of another function' do
-    function_a = create(:json_function, {})
-    function_b = create(:json_function, {})
-
-    relationship = JSONModel(:function_preferred_term_relationship).new
-    relationship.ref = function_b.uri
-    relationship.relator = 'has_preferred_term_of'
-
-    function_a.related_functions = [ relationship.to_hash ]
-    expect { function_a.save }.to_not raise_error
-
-    JSONModel(:function).find(function_a.id).related_functions.length.should eq(1)
-    JSONModel(:function).find(function_a.id).related_functions.first['relator'].should eq('has_preferred_term_of')
-    JSONModel(:function).find(function_a.id).related_functions.first['ref'].should eq(function_b.uri)
-    JSONModel(:function).find(function_b.id).related_functions.length.should eq(1)
-    JSONModel(:function).find(function_b.id).related_functions.first['relator'].should eq('is_preferred_term_of')
-    JSONModel(:function).find(function_b.id).related_functions.first['ref'].should eq(function_a.uri)
-  end
-
-  it 'lets you link a function as a non-preferred term of another function' do
-    function_a = create(:json_function, {})
-    function_b = create(:json_function, {})
-
-    relationship = JSONModel(:function_nonpreferred_term_relationship).new
-    relationship.ref = function_b.uri
-    relationship.relator = 'has_nonpreferred_term_of'
-
-    function_a.related_functions = [ relationship.to_hash ]
-    expect { function_a.save }.to_not raise_error
-
-    JSONModel(:function).find(function_a.id).related_functions.length.should eq(1)
-    JSONModel(:function).find(function_a.id).related_functions.first['relator'].should eq('has_nonpreferred_term_of')
-    JSONModel(:function).find(function_a.id).related_functions.first['ref'].should eq(function_b.uri)
-    JSONModel(:function).find(function_b.id).related_functions.length.should eq(1)
-    JSONModel(:function).find(function_b.id).related_functions.first['relator'].should eq('is_nonpreferred_term_of')
-    JSONModel(:function).find(function_b.id).related_functions.first['ref'].should eq(function_a.uri)
-  end
-
   it 'can give a list of all functions' do
     function_names = ['function 1', 'function 2', 'function 3']
     function_names.each do |f|
@@ -122,14 +56,4 @@ describe 'series_system function controller' do
     expect { JSONModel(:function).find(function.id) }.to raise_error(RecordNotFound)
   end
 
-  it 'deletes the function correctly when linked to a mandate' do
-    mandate = create(:json_mandate, {})
-    function = create_function({ mandates: [{ ref: mandate.uri }] })
-    function_id = function.id
-    JSONModel(:function).find(function_id).id.should eq(function_id)
-    JSONModel(:mandate).find(mandate.id).functions.should_not be_empty
-    expect { function.delete }.to_not raise_error
-    expect { JSONModel(:function).find(function.id) }.to raise_error(RecordNotFound)
-    JSONModel(:mandate).find(mandate.id).functions.should be_empty
-  end
 end

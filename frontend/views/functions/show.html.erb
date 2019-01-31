@@ -30,17 +30,7 @@
         <% if not @function.date.blank? %>
           <%= render_aspace_partial :partial => "dates/show", :locals => { :dates =>[@function["date"]], :section_id => "mandate_date_", :section_title => I18n.t("mandate.date") } %>
         <% end %>
-
-        <% if @function.related_functions.length > 0 %>
-          <%= render_aspace_partial :partial => "related_functions/show", :locals => { :related_functions => @function.related_functions } %>
-        <% end %>
-
-        <% if not @function.mandates.blank? %>
-          <%= render_aspace_partial :partial => "mandates/show_as_subrecords", :locals => {:mandates => @function.mandates, :section_id => "function_mandates_"} %>
-        <% end %>
-
-        <%= render_aspace_partial :partial => "search/embedded", :locals => { :record => @function, :filter_term => {"function_uris_u_sstr" => @function.uri}.to_json, :heading_text => I18n.t("function.linked_records")} %>
-
+        
         <%= show_plugins_for(@function, readonly) %>
       <% end %>
     </div>

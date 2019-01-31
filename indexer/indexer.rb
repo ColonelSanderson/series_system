@@ -1,3 +1,5 @@
+require_relative '../lib/relationship_rules'
+
 class IndexerCommon
 
   @@record_types << :mandate
@@ -5,7 +7,13 @@ class IndexerCommon
   @@resolved_attributes << 'mandates'
   @@resolved_attributes << 'functions'
 
+
   add_indexer_initialize_hook do |indexer|
+
+    JSONModel.JSONModel(:mandate)
+    JSONModel.JSONModel(:function)
+
+    RelationshipRules.instance.mode(:indexer).bootstrap!
 
     indexer.add_document_prepare_hook do |doc, record|
       if record['record']['jsonmodel_type'] == 'mandate'
@@ -47,10 +55,14 @@ class IndexerCommon
     end
 
 
-    indexer.add_document_prepare_hook do |doc, record|
-      if ['resource', 'archival_object', 'agent_corporate_entity'].include?(record['record']['jsonmodel_type'])
-        doc['mandate_uris_u_sstr'] = ASUtils.wrap(record['record']['mandates']).collect{|m| m['ref']}
-        doc['function_uris_u_sstr'] = ASUtils.wrap(record['record']['functions']).collect{|f| f['ref']}
+    # index relationships for repository scoped records linked to global scoped
+    # record e.g. mandate <-> series, agent <-> item etc
+    RelationshipRules.instance.supported_rules.each do |rule|
+      indexer.add_document_prepare_hook do |doc, record|
+        if RelationshipRules.instance.jsonmodel_expander(rule.source_jsonmodel_type).collect(&:to_s).include?(record['record']['jsonmodel_type'])
+          property = RelationshipRules.instance.build_jsonmodel_property(rule.target_jsonmodel_type)
+          doc["#{rule.source_jsonmodel_type}_#{property}_u_sstr"] = ASUtils.wrap(record['record'][property]).collect{|r| r['ref']}
+        end
       end
     end
 

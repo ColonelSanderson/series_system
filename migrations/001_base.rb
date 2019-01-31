@@ -220,7 +220,6 @@ Sequel.migration do
 
     # Functions
     drop_table(:related_function_rlshp)
-    drop_table(:function_synonym)
     drop_table(:function)
   end
 

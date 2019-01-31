@@ -18,7 +18,6 @@
   <% form.emit_template("mandate") %>
 
   <%= render_aspace_partial :partial => "shared/subrecord_form", :locals => {:form => form, :name => "date", :cardinality => :zero_to_one, :template_erb => "dates/template", :template => "existence_date", :heading_text => I18n.t("date._singular")} %>
-  <%= render_aspace_partial :partial => "shared/subrecord_form", :locals => {:form => form, :name => "functions", :template => "function_rlshp", :template_erb => "functions/template"} %>
   <%= render_aspace_partial :partial => "external_ids/edit", :locals => {:form => form, :section_id => "external_ids"} %>
 
   <%= form_plugins_for("mandate", form) %>

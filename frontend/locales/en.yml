@@ -8,10 +8,8 @@ en:
     mandate_type: Type
     reference_number: Reference Number
     note: Note
-    functions: Functions
     external_ids: External IDs
     publish: Publish?
-    linked_records: Linked Records
     commencement_date: Commencement Date
     termination_date: Termination Date
     date: Date
@@ -36,9 +34,6 @@ en:
     source: Source
     note: Note
     publish: Publish?
-    mandates: Mandates
-    mandates_tooltip: The legislation or other authoritative instrument that provides authorisation for the establishment or operation of the function.
-    linked_records: Linked Records
     commencement_date: Commencement Date
     termination_date: Termination Date
     date: Date
@@ -56,32 +51,6 @@ en:
         updated: Function updated
         deleted: Function deleted
 
-  related_function:
-    relator: Relationship
-    relationship_type: Relationship Type
-    _singular: Related Function
-    _plural: Related Functions
-    _frontend:
-      action:
-        add: Add Related Function
-      messages:
-        select_a_type: Please select a Relationship Type
-
-  function_nonpreferred_term_relationship:
-    _singular: Non-preferred Term
-    relator: Relator
-    ref: Function
-
-  function_preferred_term_relationship:
-    _singular: Preferred Term
-    relator: Relator
-    ref: Function
-
-  function_synonym_relationship:
-    _singular: Synonym
-    relator: Relator
-    ref: Function
-
   agent_corporate_entity:
     mandates: Mandates
     function: Functions
@@ -95,10 +64,7 @@ en:
 
   enumeration_names:
     agency_category: Agency Category
-    function_nonpreferred_term_relator: Function Nonpreferred Term Relator
-    function_preferred_term_relator: Function Preferred Term Relator
     function_source: Function Source
-    function_synonym_relator: Function Synonym Relator
     mandate_type: Mandate Type
     user_defined_enum_1: Security Level
     user_defined_enum_2: Sensitivity Label
@@ -110,14 +76,6 @@ en:
     function_source:
       agift: AGIFT
       qsa_specific: QSA-specific
-    function_nonpreferred_term_relator:
-      has_nonpreferred_term_of: has non-preferred term of
-      is_nonpreferred_term_of: is non-preferred term of
-    function_preferred_term_relator:
-      has_preferred_term_of: has preferred term of
-      is_preferred_term_of: is preferred term of
-    function_synonym_relator:
-      synonym_of: is synonym of
 
   resource:
     user_defined:
@@ -157,3 +115,47 @@ en:
   similar_agencies:
     label: Similar Agencies
     explanation: "The following agencies have similar names to what you have entered.  Please ensure that the agency you are describing has not already been recorded:"
+
+  series_system_relationships:
+    add: Add Relationship
+    pick_one: Please pick a relationship type
+    relator: Relator
+    relationship_type: Type
+    start_date: Start Date
+    start_date_placeholder: YYYY, YYYY-MM or YYYY-MM-DD
+    end_date: End Date
+    end_date_placeholder: YYYY, YYYY-MM or YYYY-MM-DD
+    note: Note
+    relationship_types:
+      association: Association
+      authorisation: Authorisation
+      succession: Succession
+      ownership: Ownership
+      containment: Containment
+      creation: Creation
+      responsibility: Responsibility
+      represented: Represented
+      derivation: Derivation
+      documentation: Documentation
+      restriction: Restriction
+      nonpreferred_term: Nonpreferred Term
+      preferred_term: Preferred Term
+      synonym: Synonym
+    relationship_names:
+      series_system_series_relationships: Series Relationships
+      series_system_mandate_relationships: Mandate Relationships
+      series_system_function_relationships: Function Relationships
+      series_system_agent_relationships: Agent Relationships
+      series_system_record_relationships: Record Relationships
+      series_system_representation_relationships: Representation Relationships
+      series_system_transfer_relationships: Transfer Relationships
+      series_system_item_relationships: Item Relationships
+    target_types:
+      agent: Agent
+      record: Record
+      series: Series
+      item: Item
+      representation: Representationa
+      transfer: Transfer
+      mandate: Mandate
+      function: Function

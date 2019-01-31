@@ -1,6 +1,7 @@
 ArchivesSpace::Application.extend_aspace_routes(File.join(File.dirname(__FILE__), "routes.rb"))
 
 require_relative 'helpers/series_system_helper'
+require_relative '../lib/relationship_rules'
 
 Rails.application.config.after_initialize do
 
@@ -10,34 +11,6 @@ Rails.application.config.after_initialize do
 
   Plugins.register_edit_role_for_type('mandate', 'update_mandate_record')
   Plugins.register_edit_role_for_type('function', 'update_function_record')
-
-  Plugins.register_plugin_section(
-    Plugins::PluginSubRecord.new(
-      'series_system',
-      'mandates',
-      ['resource', 'archival_object', 'agent_corporate_entity'],
-      {
-        template_name: 'mandate_rlshp',
-        js_edit_template_name: 'template_mandate_rlshp',
-        template_erb: "mandates/template",
-        sidebar_label: I18n.t('mandate._plural'),
-      }
-    )
-  )
-
-  Plugins.register_plugin_section(
-    Plugins::PluginSubRecord.new(
-      'series_system',
-      'functions',
-      ['resource', 'archival_object', 'agent_corporate_entity'],
-      {
-        template_name: 'function_rlshp',
-        js_edit_template_name: 'template_function_rlshp',
-        template_erb: "functions/template",
-        sidebar_label: I18n.t('function._plural'),
-      }
-    )
-  )
 
   Plugins.register_plugin_section(
     Plugins::PluginSubRecord.new(
@@ -68,7 +41,6 @@ Rails.application.config.after_initialize do
   JSONModel(:function)
   JSONModel(:mandate)
 
-
   # Show a new search facet for our category
   Plugins.add_search_facets(:agent_corporate_entity, "agency_category_u_sstr")
 
@@ -77,6 +49,114 @@ Rails.application.config.after_initialize do
 
   # remove the 'ifmissing' => 'error' assertion to give the auto-generator a chance
   JSONModel.JSONModel(:resource).schema['properties']['id_0'].delete('ifmissing')
+
+
+  # Series system relationships *magic*
+  RelationshipRules.instance.mode(:frontend).bootstrap!
+
+  class SeriesSystemRelationshipSubRecord < Plugins::AbstractPluginSection
+
+    def render_edit(view_context, record, form_context)
+      view_context.render_aspace_partial(
+        :partial => "series_system_relationships/form",
+        :locals => {
+          :form => form_context,
+          :name => @name,
+          :source_jsonmodel_type => @source_jsonmodel_type,
+          :rule => @rule,
+          :template_prefix => @template_prefix,
+          :section_id => @section_id,
+          :relationship_jsonmodel_types => @relationship_jsonmodel_types,
+        })
+    end
+
+    def render_readonly(view_context, record, form_context)
+      view_context.render_aspace_partial(
+        :partial => "series_system_relationships/show_as_subrecord",
+        :locals => { :relationships => record.send(@name.intern),
+                     :context => form_context,
+                     :section_id => @section_id,
+                     :name => @name,
+                     :rule => @rule })
+    end
+
+    def supports?(record, mode)
+      result = super
+      if result && mode == :readonly
+        Array(record.send(@name.intern)).length > 0
+      else
+        result
+      end
+    end
+
+    private
+
+    def parse_opts(opts)
+      super
+      @name = opts.fetch(:name)
+      @sidebar_label = opts.fetch(:sidebar_label)
+      @template_prefix = opts.fetch(:template_prefix)
+      @rule = opts.fetch(:rule)
+      @relationship_jsonmodel_types = opts.fetch(:relationship_jsonmodel_types)
+      @source_jsonmodel_type = opts.fetch(:source_jsonmodel_type)
+      @section_id = "series_system_#{@target_jsonmodel_type}_#{@name}"
+    end
+  end
+
+  all_series_system_relationship_properties = []
+
+  RelationshipRules.instance.rules.each do |rule|
+    source_jsonmodel_types = RelationshipRules.instance.jsonmodel_expander(rule.source_jsonmodel_type)
+    source_jsonmodel_property =  RelationshipRules.instance.build_jsonmodel_property(rule.target_jsonmodel_type)
+
+    if RelationshipRules.instance.supported?(rule)
+      all_series_system_relationship_properties << source_jsonmodel_property
+
+      source_jsonmodel_types.each do |source_jsonmodel_type|
+
+        relationship_jsonmodel_types = []
+          rule.relationship_types.each do |relationship_type|
+          relationship_jsonmodel_types << RelationshipRules.instance.build_relationship_jsonmodel_name(rule, relationship_type)
+        end
+
+        Plugins.register_plugin_section(
+          SeriesSystemRelationshipSubRecord.new(
+            'series_system',
+            'series_system_relationships',
+            [source_jsonmodel_type.to_s],
+            {
+              name: source_jsonmodel_property,
+              rule: rule,
+              source_jsonmodel_type: source_jsonmodel_type,
+              sidebar_label: I18n.t("series_system_relationships.relationship_names.#{source_jsonmodel_property}"),
+              template_prefix: "series_system_#{source_jsonmodel_type}_to_#{rule.target_jsonmodel_type}",
+              relationship_jsonmodel_types: relationship_jsonmodel_types,
+            }
+          )
+        )
+      end
+    else
+      reverse_jsonmodel_property =  RelationshipRules.instance.build_jsonmodel_property(rule.source_jsonmodel_type)
+      Plugins.register_plugin_section(
+        Plugins::PluginReadonlySearch.new(
+          'series_system',
+          'series_system_relationships',
+          source_jsonmodel_types.collect(&:to_s),
+          {
+            filter_term_proc: proc { |record| { "#{rule.target_jsonmodel_type}_#{reverse_jsonmodel_property}_u_sstr" => record.uri }.to_json },
+            heading_text: I18n.t("series_system_relationships.relationship_names.#{source_jsonmodel_property}"),
+            sidebar_label: I18n.t("series_system_relationships.relationship_names.#{source_jsonmodel_property}"),
+          }
+        )
+      )
+    end
+  end
+
+  Plugins.add_resolve_field(all_series_system_relationship_properties.uniq)
+
+  require_relative '../lib/validations'
+  include SeriesSystemValidations
+
 end
 
 

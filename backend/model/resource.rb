@@ -1,5 +1,3 @@
-Resource.include(FunctionsArchivalRecords)
-Resource.include(MandatesArchivalRecords)
 Resource.include(AutoGenerator)
 
 class Resource

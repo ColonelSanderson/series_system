@@ -1,0 +1,138 @@
+<% define_template "#{template_prefix}_relator_nil" do %>
+  <div class="inline-subform">
+    <div class="form-group">
+      <div class="control-label col-sm-2"></div>
+      <div class="controls col-sm-6"><em><%= I18n.t("series_system_relationships.pick_one") %></em></div>
+    </div>
+  </div>
+<% end %>
+
+<% rule.relationship_types.each do |relationship_type| %>
+  <% relationship_jsonmodel = RelationshipRules.instance.build_relationship_jsonmodel_name(rule, relationship_type) %>
+  <% define_template relationship_jsonmodel, jsonmodel_definition(relationship_jsonmodel.intern) do |form| %>
+    <div class="subrecord-form-fields">
+      <h4 class="subrecord-form-heading"><%= I18n.t("series_system_relationships.relationship_types.#{relationship_type}") %></h4>
+      <div class="subrecord-form-container">
+        <%= form.hidden_input(:jsonmodel_type, "#{relationship_jsonmodel}") %>
+        <div class="form-group">
+          <label class="control-label col-sm-2">
+            <%= I18n.t("series_system_relationships.relator") %>
+          </label>
+          <div class="col-sm-4">
+            <% relator_value = RelationshipRules.instance.find_relator_value(rule.source_jsonmodel_type, rule, relationship_type) %>
+            <%= form.hidden_input(:relator, relator_value) %>
+            <div class="label-only"><%= relator_value %></div>
+          </div>
+        </div>
+        <div class="form-group required">
+          <label class="control-label col-sm-2">
+            <%= I18n.t("series_system_relationships.target_types.#{rule.target_jsonmodel_type}") %>
+          </label>
+          <div class="controls col-sm-8">
+            <div class="input-group linker-wrapper">
+              <input type="text" class="linker"
+                     id="<%= form.id_for("ref") %>"
+                     data-label="<%= I18n.t("mandate._singular") %>"
+                     data-label_plural="<%= I18n.t("mandate._plural") %>"
+                     data-path="<%= form.path %>"
+                     data-name="ref"
+                     data-url="<%= url_for :controller => :search, :action => :do_search, :format => :json %>"
+                     data-browse-url="<%= url_for :controller => :search, :action => :do_search, :format => :js, :facets => [], :sort => "title_sort asc" %>"
+                     data-selected="<%= form.obj['ref'].blank? ? '{}' : form.obj['_resolved'].to_json %>"
+                     data-format_template="display_string"
+                     data-multiplicity="one"
+                     data-types='[<%= RelationshipRules.instance.jsonmodel_expander(rule.target_jsonmodel_type).map{|t| "\"#{t}\""}.join(", ") %>]'
+                     data-exclude='<%= [current_record.uri].compact.to_json %>'
+                />
+
+              <% if form.obj.has_key?('_resolved') %>
+
+                <input type="text"
+                       class='prelinker'
+                       name="<%= form.path %>[_resolved]"
+                       value="<%= form.obj['_resolved'].to_json %>" />
+
+                <input type="text"
+                       class='prelinker'
+                       name="<%= form.path %>[ref]"
+                       value="<%= form.obj["ref"] %>" />
+
+              <% end %>
+
+              <div class="input-group-btn">
+                <a class="btn btn-default dropdown-toggle last" data-toggle="dropdown" href="javascript:void(0);"><span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                  <li><a href="javascript:void(0);" class="linker-browse-btn"><%= I18n.t("actions.browse") %></a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label col-sm-2">
+            <%= I18n.t("series_system_relationships.start_date") %>
+          </label>
+          <div class="col-sm-9">
+            <%= form.textfield("start_date", nil, {:placeholder => I18n.t("series_system_relationships.start_date_placeholder")}) %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label col-sm-2">
+            <%= I18n.t("series_system_relationships.end_date") %>
+          </label>
+          <div class="col-sm-9">
+            <%= form.textfield("end_date", nil, {:placeholder => I18n.t("series_system_relationships.end_date_placeholder")}) %>
+          </div>
+        </div>
+        <% if "series_system_association_relator" == JSONModel(relationship_jsonmodel.intern).schema["properties"]["relator"]["dynamic_enum"] %>
+          <div class="form-group">
+            <label class="control-label col-sm-2">
+              <%= I18n.t("series_system_relationships.note") %>
+            </label>
+            <div class="col-sm-10">
+              <%= form.textarea("note", form["note"] || "") %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+<% end %>
+
+<% define_template "#{template_prefix}_relationships" do |form| %>
+  <% if relationship_jsonmodel_types.include?(form.obj['jsonmodel_type']) %>
+    <% form.emit_template "#{template_prefix}_#{form.obj['jsonmodel_type']}" %>
+  <% else %>
+    <div class="subrecord-form-fields">
+      <div class="form-group">
+        <label class="control-label col-sm-2"><%= I18n.t("series_system_relationships.relationship_type") %></label>
+        <div class="col-sm-4">
+          <select class="form-control" name="series_system_relationship_type">
+            <option value="<%= template_prefix %>_relator_nil"></option>
+            <% rule.relationship_types.zip(relationship_jsonmodel_types).sort_by {|type, jsonmodel| I18n.t("series_system_relationships.relationship_types.#{type}")}.each do |type, jsonmodel| %>
+              <option value="<%= jsonmodel %>"><%= I18n.t("series_system_relationships.relationship_types.#{type}") %></option>
+            <% end %>
+          </select>
+        </div>
+      </div>
+      <div class="relationship-subform">
+        <% form.emit_template "#{template_prefix}_relator_nil" %>
+      </div>
+    </div>
+  <% end %>
+<% end %>
+
+
+
+<section id="<%= section_id %>" class="subrecord-form" data-subrecord-form="true" data-template="template_<%= "#{template_prefix}_relationships" %>" data-object-name="series_system_relationship" data-cardinality="on-to-many">
+  <h3 class="subrecord-form-heading">
+    <%= I18n.t("series_system_relationships.relationship_names.#{name}") %>
+    <button class="btn btn-sm btn-default pull-right"><%= I18n.t("series_system_relationships.add") %></button>
+  </h3>
+
+  <div class="subrecord-form-container">
+    <%= form.list_for(form[name], "#{name}[]") do |item| %>
+      <% form.emit_template(item['jsonmodel_type'], item) %>
+    <% end %>
+  </div>
+</section>

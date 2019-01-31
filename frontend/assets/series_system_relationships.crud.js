@@ -1,8 +1,8 @@
 $(function() {
 
-    var initRelatedFunctionForm = function(subform) {
+    var initSeriesSystemRelationshipForm = function(subform) {
 
-        $("[name=related_function_type]", subform).change(function(event) {
+        $("[name=series_system_relationship_type]", subform).change(function(event) {
             var type = $(this).val();
 
             var $targetContainer = $(this).parents(".form-group:first").siblings('.relationship-subform');
@@ -18,14 +18,14 @@ $(function() {
 
             $targetContainer.html($related_function_type_subform);
 
-            $(document).triggerHandler("subrecordcreated.aspace", ["related_function_type", $related_function_type_subform]);
+            $(document).triggerHandler("subrecordcreated.aspace", ["series_system_relationship_type", $related_function_type_subform]);
         });
 
     };
 
     $(document).bind("subrecordcreated.aspace", function(event, object_name, subform) {
-        if (object_name === "related_function") {
-            initRelatedFunctionForm($(subform));
+        if (object_name === "series_system_relationship") {
+            initSeriesSystemRelationshipForm($(subform));
         }
     });
 
