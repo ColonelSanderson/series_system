@@ -39,6 +39,22 @@ Rails.application.config.after_initialize do
     )
   )
 
+  Plugins.register_plugin_section(
+    Plugins::PluginSubRecord.new(
+      'series_system',
+      'external_ids',
+      ['agent_corporate_entity'],
+      {
+        template_name: 'external_id',
+        js_edit_template_name: 'template_external_id',
+        template_erb: "external_ids/edit",
+        erb_edit_template_path: "external_ids/edit",
+        erb_readonly_template_path: "external_ids/show",
+        sidebar_label: I18n.t('external_id._plural'),
+      }
+    )
+  )
+
   Plugins.add_search_facets(:mandate, "mandate_type_u_ssort")
   Plugins.add_facet_group_i18n("mandate_type_u_ssort",
                                proc {|facet| "enumerations.mandate_type.#{facet}" })
