@@ -1,5 +1,5 @@
 <!-- Series System plugin javascript -->
-<%= javascript_include_tag "#{AppConfig[:frontend_prefix]}assets/series-system.js" %>
+<%= javascript_include_tag "#{AppConfig[:frontend_proxy_prefix]}assets/series-system.js" %>
 
 <% begin %>
   <% if current_record && SeriesSystemHelper.supports_function?(current_record['jsonmodel_type']) %>
