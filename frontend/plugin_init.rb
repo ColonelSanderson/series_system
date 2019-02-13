@@ -75,4 +75,8 @@ Rails.application.config.after_initialize do
   Plugins.add_facet_group_i18n("agency_category_u_sstr",
                                proc {|facet| "enumerations.agency_category.#{facet}" })
 
+  # remove the 'ifmissing' => 'error' assertion to give the auto-generator a chance
+  JSONModel.JSONModel(:resource).schema['properties']['id_0'].delete('ifmissing')
 end
+
+

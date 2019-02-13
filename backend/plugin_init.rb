@@ -32,3 +32,8 @@ begin
 rescue NameError
   Log.info("Unable to register Mandate and Function for history. Please install the as_history plugin")
 end
+
+# remove the 'ifmissing' => 'error' assertion to give the auto-generator a chance
+Resource.my_jsonmodel.schema['properties']['id_0'].delete('ifmissing')
+
+

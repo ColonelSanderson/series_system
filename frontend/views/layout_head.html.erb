@@ -19,3 +19,11 @@
   <li><%= link_to I18n.t("mandate._singular"), :controller => :mandates, :action => :new %></li>
   <li><%= link_to I18n.t("function._singular"), :controller => :functions, :action => :new %></li>
 </script>
+
+<% if controller.controller_name == 'resources' %>
+  <% if controller.action_name == 'new' %>
+    <%= javascript_include_tag "#{AppConfig[:frontend_proxy_prefix]}assets/new_series_form.js" %>
+  <% elsif controller.action_name == 'edit' %>
+    <%= javascript_include_tag "#{AppConfig[:frontend_proxy_prefix]}assets/edit_series_form.js" %>
+  <% end %>
+<% end %>
