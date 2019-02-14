@@ -271,6 +271,15 @@ class RelationshipRules
     rules.select{|rule| jsonmodel_expander(rule.source_jsonmodel_category).include?(jsonmodel_type.intern)}
   end
 
+  # A list of all JSONModel properties on `source_jsonmodel_type` that can refer to `target_jsonmodel_type`
+  def relationship_jsonmodel_properties(source_jsonmodel_type, target_jsonmodel_type)
+    matched_rules = rules_for_jsonmodel_type(source_jsonmodel_type.intern).select {|rule|
+      jsonmodel_expander(rule.target_jsonmodel_category).include?(target_jsonmodel_type.intern)
+    }
+
+    matched_rules.map {|rule| build_jsonmodel_property(rule.target_jsonmodel_category)}
+  end
+
   def expand_reverse_relationship_rules!
     dict = {}
     reverse_rules = []
@@ -317,6 +326,20 @@ class RelationshipRules
     end
 
     relationship_type.relator_values.fetch(attr)
+  end
+
+  # For a given relator and value, return the other relator (e.g. given 'established' return 'established by')
+  def flip_relator(relator_name, value)
+    possible_values = JSONModel.enum_values(relator_name)
+
+    other_value = possible_values - [value]
+
+    if other_value.empty?
+      # Single value...
+      value
+    else
+      other_value[0]
+    end
   end
 
   def log(*args)

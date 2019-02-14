@@ -62,6 +62,7 @@ class IndexerCommon
         if RelationshipRules.instance.jsonmodel_expander(rule.source_jsonmodel_category).collect(&:to_s).include?(record['record']['jsonmodel_type'])
           property = RelationshipRules.instance.build_jsonmodel_property(rule.target_jsonmodel_category)
           doc["#{rule.source_jsonmodel_category}_#{property}_u_sstr"] = ASUtils.wrap(record['record'][property]).collect{|r| r['ref']}
+          doc["#{rule.source_jsonmodel_category}_#{property}_relator_u_sstr"] = ASUtils.wrap(record['record'][property]).collect{|r| r['relator']}
         end
       end
     end

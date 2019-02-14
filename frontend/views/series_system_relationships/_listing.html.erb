@@ -1,0 +1,45 @@
+<% add_column(I18n.t("series_system_relationships.relator"),
+              proc {|record|
+                    # These search result listings are shown when we're on the
+                    # record view for one record type, looking at the list of
+                    # records that link back to it.  For example, we might be on
+                    # an Agent Corporate Entity page viewing a list of Resource
+                    # records that the agent controls.
+
+                    # The type of record we're viewing (e.g. the Agent in the above example)
+                    this_record_url = filter_value
+                    this_record_type = JSONModel.parse_reference(this_record_url).fetch(:type)
+
+                    # The type of record linked to our record (e.g. the Resource in the above example)
+                    linked_record_type = record['jsonmodel_type']
+
+                    # The set of JSONModel properties that might contain the reference to the linked record we've found.
+                    relationship_properties = RelationshipRules.instance.relationship_jsonmodel_properties(linked_record_type, this_record_type)
+
+                    linked_record_json = ASUtils.json_parse(record['json'])
+
+                    relator_labels = []
+
+                    relationship_properties.each do |property|
+                      linked_record_json[property].each do |reference|
+                        # For each reference we find that links to this record,
+                        # pull out and translate its relator.  This requires
+                        # knowing which dynamic enum the relator is from, which
+                        # unfortunately requires a trip back to the JSONModel
+                        # Schema...
+
+                        relator_name = JSONModel(reference['jsonmodel_type'].intern).schema['properties']['relator']['dynamic_enum']
+
+                        if reference['ref'] == this_record_url
+                          reverse_relator = RelationshipRules.instance.flip_relator(relator_name, reference['relator'])
+
+                          relator_labels << I18n.t("enumerations.#{relator_name}.#{reverse_relator}")
+                        end
+                      end
+                    end
+
+                    relator_labels.join(", ")
+              },
+              :sortable => false)
+%>
+<%= render_aspace_partial :partial => "search/listing" %>

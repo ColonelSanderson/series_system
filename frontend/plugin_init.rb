@@ -147,6 +147,7 @@ Rails.application.config.after_initialize do
             filter_term_proc: proc { |record| { "#{rule.target_jsonmodel_category}_#{reverse_jsonmodel_property}_u_sstr" => record.uri }.to_json },
             heading_text: I18n.t("series_system_relationships.relationship_names.#{source_jsonmodel_property}"),
             sidebar_label: I18n.t("series_system_relationships.relationship_names.#{source_jsonmodel_property}"),
+            erb_template: 'series_system_relationships/search',
           }
         )
       )
