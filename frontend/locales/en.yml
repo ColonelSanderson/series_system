@@ -100,6 +100,8 @@ en:
     function_source: Function Source
     function_synonym_relator: Function Synonym Relator
     mandate_type: Mandate Type
+    user_defined_enum_1: Security Level
+    user_defined_enum_2: Sensitivity Label
 
   enumerations:
     mandate_type:
@@ -116,6 +118,11 @@ en:
       is_preferred_term_of: is preferred term of
     function_synonym_relator:
       synonym_of: is synonym of
+
+  resource:
+    user_defined:
+      enum_1: Security Level
+      enum_2: Sensitivity Label
 
   search_results:
     filter:

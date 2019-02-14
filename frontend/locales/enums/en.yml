@@ -27,3 +27,9 @@ en:
       BUSU: Business Unit/Area or Division
       COM: Commission
       UNP: Unprocessed
+    user_defined_enum_1:
+      official: Official
+      sensitive: Sensitive
+      protected: Protected
+    user_defined_enum_2:
+      no_value: No Value Defined
