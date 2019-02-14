@@ -59,9 +59,9 @@ class IndexerCommon
     # record e.g. mandate <-> series, agent <-> item etc
     RelationshipRules.instance.supported_rules.each do |rule|
       indexer.add_document_prepare_hook do |doc, record|
-        if RelationshipRules.instance.jsonmodel_expander(rule.source_jsonmodel_type).collect(&:to_s).include?(record['record']['jsonmodel_type'])
-          property = RelationshipRules.instance.build_jsonmodel_property(rule.target_jsonmodel_type)
-          doc["#{rule.source_jsonmodel_type}_#{property}_u_sstr"] = ASUtils.wrap(record['record'][property]).collect{|r| r['ref']}
+        if RelationshipRules.instance.jsonmodel_expander(rule.source_jsonmodel_category).collect(&:to_s).include?(record['record']['jsonmodel_type'])
+          property = RelationshipRules.instance.build_jsonmodel_property(rule.target_jsonmodel_category)
+          doc["#{rule.source_jsonmodel_category}_#{property}_u_sstr"] = ASUtils.wrap(record['record'][property]).collect{|r| r['ref']}
         end
       end
     end

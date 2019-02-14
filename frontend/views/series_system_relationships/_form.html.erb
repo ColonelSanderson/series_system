@@ -19,14 +19,14 @@
             <%= I18n.t("series_system_relationships.relator") %>
           </label>
           <div class="col-sm-4">
-            <% relator_value = RelationshipRules.instance.find_relator_value(rule.source_jsonmodel_type, rule, relationship_type) %>
+            <% relator_value = RelationshipRules.instance.find_relator_value(rule.source_jsonmodel_category, rule, relationship_type) %>
             <%= form.hidden_input(:relator, relator_value) %>
             <div class="label-only"><%= I18n.t("enumerations.series_system_#{relationship_type}_relator.#{relator_value}", default: relator_value) %></div>
           </div>
         </div>
         <div class="form-group required">
           <label class="control-label col-sm-2">
-            <%= I18n.t("series_system_relationships.target_types.#{rule.target_jsonmodel_type}") %>
+            <%= I18n.t("series_system_relationships.target_types.#{rule.target_jsonmodel_category}") %>
           </label>
           <div class="controls col-sm-8">
             <div class="input-group linker-wrapper">
@@ -41,7 +41,7 @@
                      data-selected="<%= form.obj['ref'].blank? ? '{}' : form.obj['_resolved'].to_json %>"
                      data-format_template="display_string"
                      data-multiplicity="one"
-                     data-types='[<%= RelationshipRules.instance.jsonmodel_expander(rule.target_jsonmodel_type).map{|t| "\"#{t}\""}.join(", ") %>]'
+                     data-types='[<%= RelationshipRules.instance.jsonmodel_expander(rule.target_jsonmodel_category).map{|t| "\"#{t}\""}.join(", ") %>]'
                      data-exclude='<%= [current_record.uri].compact.to_json %>'
                 />
 

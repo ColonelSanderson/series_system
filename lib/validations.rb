@@ -27,9 +27,9 @@ module SeriesSystemValidations
 
     rules.each do |rule|
       next unless RelationshipRules.instance.supported?(rule)
-      next if rule.source_jsonmodel_type == rule.target_jsonmodel_type
+      next if rule.source_jsonmodel_category == rule.target_jsonmodel_category
 
-      property = RelationshipRules.instance.build_jsonmodel_property(rule.target_jsonmodel_type)
+      property = RelationshipRules.instance.build_jsonmodel_property(rule.target_jsonmodel_category)
 
       ASUtils.wrap(hash[property]).each_with_index do |reln_hash, i|
         relationship_jsonmodel = reln_hash["jsonmodel_type"]
@@ -47,9 +47,9 @@ module SeriesSystemValidations
   end
 
   RelationshipRules.instance.supported_rules.each do |rule|
-    next if rule.source_jsonmodel_type == rule.target_jsonmodel_type
+    next if rule.source_jsonmodel_category == rule.target_jsonmodel_category
 
-    RelationshipRules.instance.jsonmodel_expander(rule.source_jsonmodel_type).each do |source_jsonmodel_type|
+    RelationshipRules.instance.jsonmodel_expander(rule.source_jsonmodel_category).each do |source_jsonmodel_type|
       validation_name = "#{source_jsonmodel_type}_series_system_relationships"
       if JSONModel(source_jsonmodel_type.intern) and !JSONModel.custom_validations.include?(validation_name)
         JSONModel(source_jsonmodel_type.intern).add_validation(validation_name) do |hash|

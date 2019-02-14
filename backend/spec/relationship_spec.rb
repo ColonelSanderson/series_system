@@ -17,9 +17,9 @@ describe 'series_system relationships' do
 
   RelationshipRules.instance.supported_rules.each do |rule|
 
-    describe "#{rule.source_jsonmodel_type} to #{rule.target_jsonmodel_type}" do
-      RelationshipRules.instance.jsonmodel_expander(rule.source_jsonmodel_type).each do |source_jsonmodel|
-        RelationshipRules.instance.jsonmodel_expander(rule.target_jsonmodel_type).each do |target_jsonmodel|
+    describe "#{rule.source_jsonmodel_category} to #{rule.target_jsonmodel_category}" do
+      RelationshipRules.instance.jsonmodel_expander(rule.source_jsonmodel_category).each do |source_jsonmodel|
+        RelationshipRules.instance.jsonmodel_expander(rule.target_jsonmodel_category).each do |target_jsonmodel|
           rule.relationship_types.each do |relationship_type|
 
             it "#{source_jsonmodel} #{relationship_type} #{target_jsonmodel}" do
@@ -39,7 +39,7 @@ describe 'series_system relationships' do
               relationship.end_date = '2010-12-31'
               relationship.note = generate(:generic_description)
 
-              jsonmodel_property = RelationshipRules.instance.build_jsonmodel_property(rule.target_jsonmodel_type)
+              jsonmodel_property = RelationshipRules.instance.build_jsonmodel_property(rule.target_jsonmodel_category)
 
               opts = {}
               opts[jsonmodel_property] = [relationship.to_hash]
@@ -60,7 +60,7 @@ describe 'series_system relationships' do
 
               # check reverse relationship if supported
               if RelationshipRules.instance.supported?(rule.reverse_rule)
-                reverse_jsonmodel_property = RelationshipRules.instance.build_jsonmodel_property(rule.reverse_rule.target_jsonmodel_type)
+                reverse_jsonmodel_property = RelationshipRules.instance.build_jsonmodel_property(rule.reverse_rule.target_jsonmodel_category)
                 other_relator = relator_options(relationship_name).length == 1 ? relator_options(relationship_name).first : relator_options(relationship_name).reject{|r| r == relationship.relator}.first
                 target_refreshed = target_model.to_jsonmodel(target.id)
                 target_refreshed.send(reverse_jsonmodel_property).length.should eq(1)
@@ -123,7 +123,7 @@ describe 'series_system relationships' do
               expect { relationship.to_hash(:validated) }.to_not raise_error
             end
 
-            if rule.source_jsonmodel_type != rule.target_jsonmodel_type
+            if rule.source_jsonmodel_category != rule.target_jsonmodel_category
               it "#{source_jsonmodel} #{relationship_type} #{target_jsonmodel} ref validation" do
                 source_model = RelationshipRules.instance.model_for_jsonmodel_type(source_jsonmodel)
 
@@ -136,7 +136,7 @@ describe 'series_system relationships' do
                 relationship.ref = target.uri
                 relationship.relator = relator_options(relationship_name).sample || raise("No relator for #{relationship_name}")
 
-                jsonmodel_property = RelationshipRules.instance.build_jsonmodel_property(rule.target_jsonmodel_type)
+                jsonmodel_property = RelationshipRules.instance.build_jsonmodel_property(rule.target_jsonmodel_category)
 
                 opts = {}
                 opts[jsonmodel_property] = [relationship.to_hash]

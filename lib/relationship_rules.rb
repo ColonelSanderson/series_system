@@ -5,26 +5,27 @@ class RelationshipRules
 
   attr_reader :rules, :relationships, :all_relationship_jsonmodels
 
-  RelationshipRule = Struct.new(:source_jsonmodel_type, :target_jsonmodel_type, :relationship_types, :reverse_rule, :is_reversed) do
+  # The series system relationship rules define which types of records can link
+  # to which other types of records.  These types are high-level categories like
+  # "agent" which must be mapped to the underlying ArchivesSpace JSONModels.
+  # Here are those mappings.
+  #
+  JSONMODEL_CATEGORIES = {
+    :agent => [:agent_corporate_entity, :agent_family, :agent_person, :agent_software],
+    :record => [:resource, :archival_object],
+    :transfer => [:accession],
+    :representation => [:digital_object, :digital_object_component],
+    :series => [:resource],
+    :item => [:archival_object],
+  }
+
+
+  RelationshipRule = Struct.new(:source_jsonmodel_category, :target_jsonmodel_category, :relationship_types, :reverse_rule, :is_reversed) do
     def key
-      "#{source_jsonmodel_type}__#{target_jsonmodel_type}"
+      "#{source_jsonmodel_category}__#{target_jsonmodel_category}"
     end
   end
   RelationshipType = Struct.new(:key, :relator, :relator_values)
-
-  # Magic Mappers:
-  # :agent === :agent_corporate_entity, :agent_family, :agent_person, :agent_software 
-  # :record === :resource, :archival_object 
-  # :transfer === :accession
-  # :representation === :digital_object, :digital_object_component
-  # :series === :resource
-  # :item === :archival_object
-
-  def self.relationship_type_keys
-    ['association', 'authorisation', 'succession', 'ownership', 'containment',
-     'responsibility', 'creation', 'represented', 'derivation', 'documentation',
-     'restriction', 'synonym', 'preferred_term', 'nonpreferred_term']
-  end
 
   def initialize
     @mode = :backend
@@ -46,9 +47,9 @@ class RelationshipRules
     relator_values['nonpreferred_term'] = {:source => "has_nonpreferred_term_of", :target => "is_nonpreferred_term_of"}
 
     @relationships = {}
-    self.class.relationship_type_keys.each do |key|
+    relator_values.keys.each do |key|
       relator = "series_system_#{key}_relator"
-      @relationships[key] = RelationshipType.new(key, relator, relator_values[key])
+      @relationships[key] = RelationshipType.new(key, relator, relator_values.fetch(key))
     end
 
     @rules = []
@@ -113,8 +114,8 @@ class RelationshipRules
   end
 
   def validate_rule(rule)
-    validate_jsonmodel_type(rule.source_jsonmodel_type)
-    validate_jsonmodel_type(rule.target_jsonmodel_type)
+    validate_jsonmodel_category(rule.source_jsonmodel_category)
+    validate_jsonmodel_category(rule.target_jsonmodel_category)
 
     raise "Rule needs relationships: #{rule.inspect}" if rule.relationship_types.nil? || rule.relationship_types.empty?
 
@@ -125,42 +126,28 @@ class RelationshipRules
 
   end
 
-  def validate_jsonmodel_type(jsonmodel_type_or_magic)
-    log "Validating jsonmodel type: #{jsonmodel_type_or_magic}"
-    jsonmodel_types = jsonmodel_expander(jsonmodel_type_or_magic)
+  def validate_jsonmodel_category(jsonmodel_category_or_magic)
+    log "Validating jsonmodel type: #{jsonmodel_category_or_magic}"
+    jsonmodel_types = jsonmodel_expander(jsonmodel_category_or_magic)
     jsonmodel_types.each do |jsonmodel_type|
       raise "No JSONModel for #{jsonmodel_type}" unless JSONModel.models.include?(jsonmodel_type.to_s)
     end
   end
 
-  def jsonmodel_expander(jsonmodel_type)
-    if jsonmodel_type == :agent
-      [:agent_corporate_entity, :agent_family, :agent_person, :agent_software]
-    elsif jsonmodel_type == :record
-      [:resource, :archival_object]
-    elsif jsonmodel_type == :transfer
-      [:accession]
-    elsif jsonmodel_type == :representation
-      [:digital_object, :digital_object_component]
-    elsif jsonmodel_type == :series
-      [:resource]
-    elsif jsonmodel_type == :item
-      [:archival_object]
-    else
-      ASUtils.wrap(jsonmodel_type)
-    end
+  def jsonmodel_expander(jsonmodel_category)
+    JSONMODEL_CATEGORIES.fetch(jsonmodel_category, ASUtils.wrap(jsonmodel_category))
   end
 
-  def global?(jsonmodel_type)
-    # FIXME can we make this refer to the models and work in the frontend?
-    [:agent, :agent_corporate_entity, :agent_family, :agent_person,
-     :agent_software, :function, :mandate].include?(jsonmodel_type.intern)
+  def global?(jsonmodel_category)
+    jsonmodel_expander(jsonmodel_category).any? {|jsonmodel_type|
+      !JSONModel.JSONModel(jsonmodel_type).schema.fetch('uri').start_with?("/repositories/")
+    }
   end
 
   def supported?(rule)
     # global->repository scoped relationships as not supported
-    return true if !global?(rule.source_jsonmodel_type)
-    return true if global?(rule.source_jsonmodel_type) and global?(rule.target_jsonmodel_type)
+    return true if !global?(rule.source_jsonmodel_category)
+    return true if global?(rule.source_jsonmodel_category) and global?(rule.target_jsonmodel_category)
 
     false
   end
@@ -175,7 +162,7 @@ class RelationshipRules
 
     return unless supported?(rule)
 
-    jsonmodel_expander(rule.source_jsonmodel_type).each do |source_jsonmodel_type|
+    jsonmodel_expander(rule.source_jsonmodel_category).each do |source_jsonmodel_type|
       relationship_jsonmodels = []
       relators = []
 
@@ -196,7 +183,7 @@ class RelationshipRules
             "ifmissing" => "error"
           },
           "ref" => {
-            "type" => (jsonmodel_expander(rule.source_jsonmodel_type) + jsonmodel_expander(rule.target_jsonmodel_type)).map { |target_jsonmodel_type|
+            "type" => (jsonmodel_expander(rule.source_jsonmodel_category) + jsonmodel_expander(rule.target_jsonmodel_category)).map { |target_jsonmodel_type|
                         {"type" => "JSONModel(:#{target_jsonmodel_type}) uri"}
                       },
             "ifmissing" => "error"
@@ -211,7 +198,7 @@ class RelationshipRules
         @all_relationship_jsonmodels << rlshp_name
       end
 
-      jsonmodel_property = build_jsonmodel_property(rule.target_jsonmodel_type)
+      jsonmodel_property = build_jsonmodel_property(rule.target_jsonmodel_category)
       source_schema = JSONModel.JSONModel(source_jsonmodel_type).schema
       source_schema["properties"][jsonmodel_property] = {
         "type" => "array",
@@ -227,7 +214,7 @@ class RelationshipRules
       if backend?
         source_model = model_for_jsonmodel_type(source_jsonmodel_type)
         source_model.include(DirectionalRelationships) unless source_model.included_modules.include?(DirectionalRelationships)
-        references = jsonmodel_expander(rule.target_jsonmodel_type).map {|type|
+        references = jsonmodel_expander(rule.target_jsonmodel_category).map {|type|
           model_for_jsonmodel_type(type)
         }
   
@@ -269,19 +256,19 @@ class RelationshipRules
   end
 
   def build_relationship_jsonmodel_name(rule, relationship_type)
-    "series_system_#{[rule.source_jsonmodel_type, rule.target_jsonmodel_type].sort.join('_')}_#{relationship_type}_relationship"
+    "series_system_#{[rule.source_jsonmodel_category, rule.target_jsonmodel_category].sort.join('_')}_#{relationship_type}_relationship"
   end
 
-  def build_jsonmodel_property(target_jsonmodel_type)
-    "series_system_#{target_jsonmodel_type}_relationships"
+  def build_jsonmodel_property(target_jsonmodel_category)
+    "series_system_#{target_jsonmodel_category}_relationships"
   end
 
   def has_rules_for_jsonmodel_type?(jsonmodel_type)
-    rules.any?{|rule| jsonmodel_expander(rule.source_jsonmodel_type).include?(jsonmodel_type.intern)}
+    rules.any?{|rule| jsonmodel_expander(rule.source_jsonmodel_category).include?(jsonmodel_type.intern)}
   end
 
   def rules_for_jsonmodel_type(jsonmodel_type)
-    rules.select{|rule| jsonmodel_expander(rule.source_jsonmodel_type).include?(jsonmodel_type.intern)}
+    rules.select{|rule| jsonmodel_expander(rule.source_jsonmodel_category).include?(jsonmodel_type.intern)}
   end
 
   def expand_reverse_relationship_rules!
@@ -291,13 +278,13 @@ class RelationshipRules
     rules.each do |rule|
       dict[rule.key] = rule
 
-      if rule.target_jsonmodel_type == rule.source_jsonmodel_type
+      if rule.target_jsonmodel_category == rule.source_jsonmodel_category
         rule.reverse_rule = rule
         next
       end
 
-      reverse_rule = RelationshipRule.new(rule.target_jsonmodel_type, rule.source_jsonmodel_type, rule.relationship_types)
-      raise "Already defined relationship between #{rule.target_jsonmodel_type}->#{rule.source_jsonmodel_type}" if dict.has_key?(reverse_rule.key)
+      reverse_rule = RelationshipRule.new(rule.target_jsonmodel_category, rule.source_jsonmodel_category, rule.relationship_types)
+      raise "Already defined relationship between #{rule.target_jsonmodel_category}->#{rule.source_jsonmodel_category}" if dict.has_key?(reverse_rule.key)
 
       reverse_rule.is_reversed = true
 
@@ -321,9 +308,9 @@ class RelationshipRules
       raise "Relationship type not defined for '%s'" % [relationship_type_key]
     end
 
-    if rule.source_jsonmodel_type == record_type
+    if rule.source_jsonmodel_category == record_type
       attr = :source
-    elsif rule.target_jsonmodel_type == record_type
+    elsif rule.target_jsonmodel_category == record_type
       attr = :target
     else
       raise "Provided rule didn't match provided record_type"

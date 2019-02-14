@@ -99,15 +99,15 @@ Rails.application.config.after_initialize do
       @rule = opts.fetch(:rule)
       @relationship_jsonmodel_types = opts.fetch(:relationship_jsonmodel_types)
       @source_jsonmodel_type = opts.fetch(:source_jsonmodel_type)
-      @section_id = "series_system_#{@target_jsonmodel_type}_#{@name}"
+      @section_id = "series_system_#{opts.fetch(:target_jsonmodel_category)}_#{@name}"
     end
   end
 
   all_series_system_relationship_properties = []
 
   RelationshipRules.instance.rules.each do |rule|
-    source_jsonmodel_types = RelationshipRules.instance.jsonmodel_expander(rule.source_jsonmodel_type)
-    source_jsonmodel_property =  RelationshipRules.instance.build_jsonmodel_property(rule.target_jsonmodel_type)
+    source_jsonmodel_types = RelationshipRules.instance.jsonmodel_expander(rule.source_jsonmodel_category)
+    source_jsonmodel_property =  RelationshipRules.instance.build_jsonmodel_property(rule.target_jsonmodel_category)
 
     if RelationshipRules.instance.supported?(rule)
       all_series_system_relationship_properties << source_jsonmodel_property
@@ -128,22 +128,23 @@ Rails.application.config.after_initialize do
               name: source_jsonmodel_property,
               rule: rule,
               source_jsonmodel_type: source_jsonmodel_type,
+              target_jsonmodel_category: rule.target_jsonmodel_category,
               sidebar_label: I18n.t("series_system_relationships.relationship_names.#{source_jsonmodel_property}"),
-              template_prefix: "series_system_#{source_jsonmodel_type}_to_#{rule.target_jsonmodel_type}",
+              template_prefix: "series_system_#{source_jsonmodel_type}_to_#{rule.target_jsonmodel_category}",
               relationship_jsonmodel_types: relationship_jsonmodel_types,
             }
           )
         )
       end
     else
-      reverse_jsonmodel_property =  RelationshipRules.instance.build_jsonmodel_property(rule.source_jsonmodel_type)
+      reverse_jsonmodel_property =  RelationshipRules.instance.build_jsonmodel_property(rule.source_jsonmodel_category)
       Plugins.register_plugin_section(
         Plugins::PluginReadonlySearch.new(
           'series_system',
           'series_system_relationships',
           source_jsonmodel_types.collect(&:to_s),
           {
-            filter_term_proc: proc { |record| { "#{rule.target_jsonmodel_type}_#{reverse_jsonmodel_property}_u_sstr" => record.uri }.to_json },
+            filter_term_proc: proc { |record| { "#{rule.target_jsonmodel_category}_#{reverse_jsonmodel_property}_u_sstr" => record.uri }.to_json },
             heading_text: I18n.t("series_system_relationships.relationship_names.#{source_jsonmodel_property}"),
             sidebar_label: I18n.t("series_system_relationships.relationship_names.#{source_jsonmodel_property}"),
           }
