@@ -32,4 +32,6 @@ en:
       sensitive: Sensitive
       protected: Protected
     user_defined_enum_2:
-      no_value: No Value Defined
+      published: Public Access / Published
+      cultural_sensitivity: Cultural Sensitivity Warning
+      secret_and_sacred: Secret and Sacred

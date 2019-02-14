@@ -10,16 +10,6 @@ Sequel.migration do
     ['official', 'sensitive', 'protected'].each_with_index do |val, ix|
       self[:enumeration_value].insert({:enumeration_id => enum_1_id, :value => val, :position => ix})
     end
-
-# values not yet provided
-#     enum_2_id = self[:enumeration].filter(:name => 'user_defined_enum_2').get(:id)
-
-#    self[:enumeration_value].filter(:enumeration_id => enum_2_id).delete
-
-#     [].each_with_index do |val, ix|
-#       self[:enumeration_value].insert({:enumeration_id => enum_2_id, :value => val, :position => ix})
-#     end
-
   end
 
   down do
