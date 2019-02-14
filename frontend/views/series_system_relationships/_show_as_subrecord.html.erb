@@ -15,7 +15,7 @@
         <tbody>
         <% relationships.each_with_index do | relationship, index | %>
           <tr>
-            <td><%= relationship['relator'] %></td>
+            <td><%= I18n.t("enumerations.#{}.#{JSONModel(relationship['jsonmodel_type'].intern).schema['properties']['relator']['dynamic_enum']}.#{relationship['relator']}", default: relationship['relator']) %></td>
             <td>
               <div class="token-list">
                 <%= render_token :object => relationship['_resolved'],

@@ -21,7 +21,7 @@
           <div class="col-sm-4">
             <% relator_value = RelationshipRules.instance.find_relator_value(rule.source_jsonmodel_type, rule, relationship_type) %>
             <%= form.hidden_input(:relator, relator_value) %>
-            <div class="label-only"><%= relator_value %></div>
+            <div class="label-only"><%= I18n.t("enumerations.series_system_#{relationship_type}_relator.#{relator_value}", default: relator_value) %></div>
           </div>
         </div>
         <div class="form-group required">
