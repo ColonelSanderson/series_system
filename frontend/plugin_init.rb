@@ -122,7 +122,7 @@ Rails.application.config.after_initialize do
         Plugins.register_plugin_section(
           SeriesSystemRelationshipSubRecord.new(
             'series_system',
-            'series_system_relationships',
+            "series_system_relationships_#{source_jsonmodel_property}",
             [source_jsonmodel_type.to_s],
             {
               name: source_jsonmodel_property,
@@ -141,7 +141,7 @@ Rails.application.config.after_initialize do
       Plugins.register_plugin_section(
         Plugins::PluginReadonlySearch.new(
           'series_system',
-          'series_system_relationships',
+          "series_system_relationships_#{source_jsonmodel_property}",
           source_jsonmodel_types.collect(&:to_s),
           {
             filter_term_proc: proc { |record| { "#{rule.target_jsonmodel_category}_#{reverse_jsonmodel_property}_u_sstr" => record.uri }.to_json },
