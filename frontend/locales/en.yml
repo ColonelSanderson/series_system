@@ -146,3 +146,7 @@ en:
 
   series_system_agency:
     agency_category: Agency Category
+
+  similar_agencies:
+    label: Similar Agencies
+    explanation: "The following agencies have similar names to what you have entered.  Please ensure that the agency you are describing has not already been recorded:"

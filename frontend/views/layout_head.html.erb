@@ -29,3 +29,9 @@
     <%= javascript_include_tag "#{AppConfig[:frontend_proxy_prefix]}assets/show_series_form.js" %>
   <% end %>
 <% end %>
+
+<% if ['new', 'edit', 'create'].include?(controller.action_name) %>
+  <!-- JS for detecting similar agent names  -->
+  <link href="<%= "#{AppConfig[:frontend_proxy_prefix]}assets/styles/similar_agencies.css" %>" media="all" rel="stylesheet" type="text/css">
+  <%= javascript_include_tag("similar_agencies.js") %>
+<% end %>

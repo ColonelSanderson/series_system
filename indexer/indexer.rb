@@ -42,6 +42,7 @@ class IndexerCommon
     indexer.add_document_prepare_hook do |doc, record|
       if ['agent_corporate_entity'].include?(record['record']['jsonmodel_type'])
         doc['agency_category_u_sstr'] = record['record']['agency_category']
+        doc['agency_name_u_stext'] = record['record']['names'].find {|name| name['authorized']}['primary_name']
       end
     end
 

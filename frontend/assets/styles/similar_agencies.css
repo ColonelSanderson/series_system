@@ -1,0 +1,8 @@
+.similar-agencies-list li {
+    float: none;
+}
+
+.similar-agencies-list li .token {
+    float: none;
+    display: inline-block;
+}

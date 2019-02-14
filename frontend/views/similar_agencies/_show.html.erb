@@ -1,0 +1,18 @@
+<p><%= I18n.t("similar_agencies.explanation") %></p>
+
+<ul class="token-list similar-agencies-list">
+    <% similar_agencies.each do |similar| %>
+        <li>
+            <%=
+            render_token(:uri => similar['uri'],
+                         :label => similar['name'],
+                         :type => 'agent_corporate_entity',
+                         :inside_linker_browse => true)
+            %>
+        </li>
+    <% end %>
+</ul>
+
+<script>
+ $(document).triggerHandler("subrecordcreated.aspace", ["similar_agencies", $('.similar-agencies-list')]);
+</script>
