@@ -21,9 +21,11 @@
 </script>
 
 <% if controller.controller_name == 'resources' %>
-  <% if controller.action_name == 'new' %>
+  <% if ['new', 'create'].include?(controller.action_name) %>
     <%= javascript_include_tag "#{AppConfig[:frontend_proxy_prefix]}assets/new_series_form.js" %>
   <% elsif controller.action_name == 'edit' %>
     <%= javascript_include_tag "#{AppConfig[:frontend_proxy_prefix]}assets/edit_series_form.js" %>
+  <% else %>
+    <%= javascript_include_tag "#{AppConfig[:frontend_proxy_prefix]}assets/show_series_form.js" %>
   <% end %>
 <% end %>
