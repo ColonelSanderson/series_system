@@ -116,7 +116,7 @@ en:
     label: Similar Agencies
     explanation: "The following agencies have similar names to what you have entered.  Please ensure that the agency you are describing has not already been recorded:"
 
-  series_system_relationships:
+  series_system_relationships: &series_system_relationship
     add: Add Relationship
     pick_one: Please pick a relationship type
     relator: Relator
@@ -126,6 +126,7 @@ en:
     end_date: End Date
     end_date_placeholder: YYYY, YYYY-MM or YYYY-MM-DD
     note: Note
+    ref: Relationship Record
     relationship_types:
       association: Association
       authorisation: Authorisation
@@ -159,3 +160,92 @@ en:
       transfer: Transfer
       mandate: Mandate
       function: Function
+
+  series_system_agent_agent_succession_relationship:
+    <<: *series_system_relationship
+  series_system_agent_agent_ownership_relationship:
+    <<: *series_system_relationship
+  series_system_agent_agent_containment_relationship:
+    <<: *series_system_relationship
+  series_system_agent_agent_association_relationship:
+    <<: *series_system_relationship
+  series_system_agent_mandate_authorisation_relationship:
+    <<: *series_system_relationship
+  series_system_agent_mandate_ownership_relationship:
+    <<: *series_system_relationship
+  series_system_agent_mandate_creation_relationship:
+    <<: *series_system_relationship
+  series_system_agent_function_ownership_relationship:
+    <<: *series_system_relationship
+  series_system_agent_function_creation_relationship:
+    <<: *series_system_relationship
+  series_system_series_series_succession_relationship:
+    <<: *series_system_relationship
+  series_system_series_series_ownership_relationship:
+    <<: *series_system_relationship
+  series_system_item_series_containment_relationship:
+    <<: *series_system_relationship
+  series_system_item_series_ownership_relationship:
+    <<: *series_system_relationship
+  series_system_item_item_containment_relationship:
+    <<: *series_system_relationship
+  series_system_item_item_succession_relationship:
+    <<: *series_system_relationship
+  series_system_item_representation_containment_relationship:
+    <<: *series_system_relationship
+  series_system_item_representation_represented_relationship:
+    <<: *series_system_relationship
+  series_system_representation_representation_association_relationship:
+    <<: *series_system_relationship
+  series_system_representation_representation_containment_relationship:
+    <<: *series_system_relationship
+  series_system_representation_representation_derivation_relationship:
+    <<: *series_system_relationship
+  series_system_record_transfer_containment_relationship:
+    <<: *series_system_relationship
+  series_system_mandate_mandate_association_relationship:
+    <<: *series_system_relationship
+  series_system_mandate_mandate_containment_relationship:
+    <<: *series_system_relationship
+  series_system_mandate_mandate_succession_relationship:
+    <<: *series_system_relationship
+  series_system_function_mandate_creation_relationship:
+    <<: *series_system_relationship
+  series_system_function_mandate_association_relationship:
+    <<: *series_system_relationship
+  series_system_function_function_containment_relationship:
+    <<: *series_system_relationship
+  series_system_function_function_association_relationship:
+    <<: *series_system_relationship
+  series_system_function_function_succession_relationship:
+    <<: *series_system_relationship
+  series_system_function_function_synonym_relationship:
+    <<: *series_system_relationship
+  series_system_function_function_preferred_term_relationship:
+    <<: *series_system_relationship
+  series_system_function_function_nonpreferred_term_relationship:
+    <<: *series_system_relationship
+  series_system_agent_record_ownership_relationship:
+    <<: *series_system_relationship
+  series_system_agent_record_creation_relationship:
+    <<: *series_system_relationship
+  series_system_agent_record_association_relationship:
+    <<: *series_system_relationship
+  series_system_agent_representation_creation_relationship:
+    <<: *series_system_relationship
+  series_system_agent_representation_ownership_relationship:
+    <<: *series_system_relationship
+  series_system_agent_transfer_ownership_relationship:
+    <<: *series_system_relationship
+  series_system_mandate_series_association_relationship:
+    <<: *series_system_relationship
+  series_system_mandate_series_ownership_relationship:
+    <<: *series_system_relationship
+  series_system_mandate_series_documentation_relationship:
+    <<: *series_system_relationship
+  series_system_mandate_series_restriction_relationship:
+    <<: *series_system_relationship
+  series_system_function_series_documentation_relationship:
+    <<: *series_system_relationship
+  series_system_function_series_association_relationship:
+    <<: *series_system_relationship
