@@ -67,6 +67,16 @@ class IndexerCommon
       end
     end
 
+    indexer.add_document_prepare_hook do |doc, record|
+      ['dates_of_existence', 'date'].each do |date_property|
+        next unless record['record'][date_property]
+
+        ASUtils.wrap(record['record'][date_property]).each do |date|
+          doc['fullrecord'] << (' ' + IndexerCommon.generate_years_for_date_range(date['begin'], date['end']).join(' '))
+        end
+      end
+    end
+
   end
 
   def self.extract_commencement_date_for_search(date)
