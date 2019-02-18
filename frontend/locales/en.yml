@@ -82,10 +82,6 @@ en:
       enum_1: Security Level
       enum_2: Sensitivity Label
 
-  search_results:
-    filter:
-      agency_category_u_sstr: Agency Category
-
   search_sorting:
     mandate_type_u_ssort: Mandate type
     commencement_date_u_sortdate: Commencement Date
@@ -95,6 +91,7 @@ en:
     filter:
       function_source_u_sstr: Function Source
       mandate_type_u_ssort: Mandate Type
+      agency_category_u_sstr: Agency Category
 
   advanced_search:
     date:
