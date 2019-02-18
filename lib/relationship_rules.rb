@@ -308,13 +308,17 @@ class RelationshipRules
     @rules = @rules + reverse_rules
   end
 
+  def find_relator_values(relationship_type_key)
+    relationship_type = self.relationships.fetch(relationship_type_key) do
+      raise "Relationship type not defined for '%s'" % [relationship_type_key]
+    end
+
+    relationship_type.relator_values
+  end
+
   def find_relator_value(record_type, rule, relationship_type_key)
     if rule.is_reversed
       rule = rule.reverse_rule
-    end
-
-    relationship_type = self.relationships.fetch(relationship_type_key) do
-      raise "Relationship type not defined for '%s'" % [relationship_type_key]
     end
 
     if rule.source_jsonmodel_category == record_type
@@ -325,7 +329,7 @@ class RelationshipRules
       raise "Provided rule didn't match provided record_type"
     end
 
-    relationship_type.relator_values.fetch(attr)
+    find_relator_values(relationship_type_key).fetch(attr)
   end
 
   # For a given relator and value, return the other relator (e.g. given 'established' return 'established by')
@@ -346,6 +350,13 @@ class RelationshipRules
     if backend?
       Log.debug(args)
     end
+  end
+
+  def should_show_multiple_relators?(rule, relationship_type)
+    return false if rule.source_jsonmodel_category != rule.target_jsonmodel_category
+
+    relator_values = find_relator_values(relationship_type)
+    relator_values.fetch(:source) != relator_values.fetch(:target)
   end
 end
  

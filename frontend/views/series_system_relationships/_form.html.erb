@@ -19,9 +19,19 @@
             <%= I18n.t("series_system_relationships.relator") %>
           </label>
           <div class="col-sm-4">
-            <% relator_value = RelationshipRules.instance.find_relator_value(rule.source_jsonmodel_category, rule, relationship_type) %>
-            <%= form.hidden_input(:relator, relator_value) %>
-            <div class="label-only"><%= I18n.t("enumerations.series_system_#{relationship_type}_relator.#{relator_value}", default: relator_value) %></div>
+            <% if RelationshipRules.instance.should_show_multiple_relators?(rule, relationship_type) %>
+              <%
+                relator_values = RelationshipRules.instance.find_relator_values(relationship_type)
+                relator_options = [relator_values.fetch(:source), relator_values.fetch(:target)].map {|relator_value|
+                  [I18n.t("enumerations.series_system_#{relationship_type}_relator.#{relator_value}", default: relator_value), relator_value]
+                }
+              %>
+              <%= form.select "relator", relator_options %>
+            <% else %>
+              <% relator_value = RelationshipRules.instance.find_relator_value(rule.source_jsonmodel_category, rule, relationship_type) %>
+              <%= form.hidden_input(:relator, relator_value) %>
+              <div class="label-only"><%= I18n.t("enumerations.series_system_#{relationship_type}_relator.#{relator_value}", default: relator_value) %></div>
+            <% end %>
           </div>
         </div>
         <div class="form-group required">
