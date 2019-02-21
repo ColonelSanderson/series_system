@@ -1,2 +1,1 @@
-AgentCorporateEntity.include(MandatesAgencies)
-AgentCorporateEntity.include(FunctionsAgencies)
+AgentCorporateEntity.include(ExternalIDs)

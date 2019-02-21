@@ -1,0 +1,79 @@
+en:
+  enumerations:
+    agency_category:
+      COI: Commission of Inquiry
+      CWLTH: Commonwealth government authority
+      COR: Correctional facility
+      DEPT: Department
+      CRT: District Court
+      LAN: Land Court
+      DST: District Office
+      REG: Registry
+      EDF: Educational facility
+      EXEC: Executive Council
+      GOC: Government-owned corporation
+      GOV: Governor
+      LOC: Local government authority
+      MAG: Magistrates Court
+      MIN: Ministerial Office
+      NSW: New South Wales government authority
+      OTHER: Other agency type
+      RES: Residential care facility
+      STAT: Statutory authority
+      SUP: Supreme Court
+      TRB: Tribunal
+      FIRM: Commercial entity
+      LEESA: Law Enforcement/Emergency Services agency
+      BUSU: Business Unit/Area or Division
+      COM: Commission
+      UNP: Unprocessed
+
+    user_defined_enum_1:
+      official: Official
+      sensitive: Sensitive
+      protected: Protected
+    user_defined_enum_2:
+      published: Public Access / Published
+      cultural_sensitivity: Cultural Sensitivity Warning
+      secret_and_sacred: Secret and Sacred
+
+    series_system_association_relator:
+      is_associated_with: Is associated with
+    series_system_authorisation_relator:
+      authorises: Authorises
+      is_authorised_by: Is authorised by
+    series_system_succession_relator:
+      supercedes: Supercedes
+      precedes: Precedes
+    series_system_ownership_relator:
+      controls: Controls
+      is_controlled_by: Is controlled by
+    series_system_containment_relator:
+      contains: Contains
+      is_contained_within: Is contained within
+    series_system_creation_relator:
+      established: Established
+      established_by: Established by
+    series_system_responsibility_relator:
+      is_responsible_for: Is responsible for
+      under_responsibility_of: Under responsibility of
+    series_system_represented_relator:
+      represents: Represents
+      is_represented_by: Is represented by
+    series_system_derivation_relator:
+      derives: Derives
+      is_derived_from: Is derived from
+    series_system_documentation_relator:
+      documents: Documents
+      is_documented_by: Is documented by
+    series_system_restriction_relator:
+      restricts: Restricts
+      is_restricted_by: Is restricted by
+    series_system_synonym_relator:
+      is_synonym_of: Is synonym of
+    series_system_preferred_term_relator:
+      has_preferred_term_of: Has preferred term of
+      is_preferred_term_of: Is preferred term of
+    series_system_nonpreferred_term_relator:
+      has_nonpreferred_term_of: Has nonpreferred term of
+      is_nonpreferred_term_of: Is nonpreferred term of

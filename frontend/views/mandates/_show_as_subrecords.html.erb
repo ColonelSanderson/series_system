@@ -9,23 +9,29 @@
       <table class="table table-bordered table-striped">
         <thead>
         <tr>
-          <th class="col-xs-8"><%= I18n.t('mandate._singular') %></th>
-          <th class="col-xs-2"><%= I18n.t('mandate.start_date') %></th>
-          <th class="col-xs-2"><%= I18n.t('mandate.end_date') %></th>
+          <th class="col-xs-6"><%= I18n.t('mandate._singular') %></th>
+          <th class="col-xs-3"><%= I18n.t('mandate_rlshp.start_date') %></th>
+          <th class="col-xs-3"><%= I18n.t('mandate_rlshp.end_date') %></th>
         </tr>
         </thead>
         <tbody>
         <% mandates.each_with_index do | mandate, index | %>
-          <td>
-            <div class="col-xs-6 token-list">
-              <%= render_token :object => mandate['_resolved'],
-                               :label => mandate['_resolved']['title'],
-                               :type => "mandate",
-                               :uri => mandate['ref'] %>
-            </div>
-          </td>
-          <td><%= mandate['start_date'] %></td>
-          <td><%= mandate['end_date'] %></td>
+          <tr>
+            <td>
+              <div class="col-xs-6 token-list">
+                <%= render_token :object => mandate['_resolved'],
+                                 :label => mandate['_resolved']['display_string'],
+                                 :type => "mandate",
+                                 :uri => mandate['ref'] %>
+              </div>
+            </td>
+            <td>
+              <%= mandate['start_date'] %>
+            </td>
+            <td>
+              <%= mandate['end_date'] %>
+            </td>
+          </tr>
         <% end %>
         </tbody>
       </table>

@@ -6,24 +6,19 @@ en:
   mandate:
     title: Title
     mandate_type: Type
-    functions: Functions
-    functions_tooltip: .
-    start_date: Start Date
-    start_date_tooltip: The date that the mandate commenced, was implemented, or first implemented.
-    end_date: End Date
-    end_date_tooltip: The date the mandate was abolished or when it ceased to exist.
-    description: Description
-    description_tooltip: The description of the mandate.
-    identifier: Identifier
-    identifier_tooltip: The unique number of the mandate within the system.
-    external_documents: External Documents
-    external_documents_tooltip: References to authorising or related documentation.
-    linked_agents: Linked Agents
+    reference_number: Reference Number
+    note: Note
+    external_ids: External IDs
+    publish: Publish?
+    commencement_date: Commencement Date
+    termination_date: Termination Date
+    date: Date
     _singular: Mandate
     _plural: Mandates
     _frontend:
       section:
         basic_information: Basic Information
+        date: Date
       action:
         create: Create Mandate
         save: Save Mandate
@@ -36,19 +31,12 @@ en:
   function:
     title: Title
     title_tooltip: The name of the function.
-    mandates: Mandates
-    mandates_tooltip: The legislation or other authoritative instrument that provides authorisation for the establishment or operation of the function.
-    start_date: Start Date
-    start_date_tooltip: The date that the function commenced, was implemented, or first undertaken.
-    end_date: End Date
-    end_date_tooltip: The date the function was abolished or when it ceased to be performed.
-    description: Description
-    description_tooltip: The description of the function.
-    identifier: Identifier
-    identifier_tooltip: The unique number of the function within the system.
-    linked_agents: Linked Agents
-    external_documents: External Documents
-    external_documents_tooltip: References to authorising or related documentation.
+    source: Source
+    note: Note
+    publish: Publish?
+    commencement_date: Commencement Date
+    termination_date: Termination Date
+    date: Date
     _singular: Function
     _plural: Functions
     _frontend:
@@ -63,34 +51,198 @@ en:
         updated: Function updated
         deleted: Function deleted
 
-  controlled_by:
-    section: Controlled By
-    agent: Agency
-    start_date: Start Date
-    end_date: End Date
-    current: Current
-    _plural: Controlling Agencies
-    _singular: Controlling Agency
-    _frontend:
-      action:
-        add: Add Controlling Agency
-
   agent_corporate_entity:
     mandates: Mandates
     function: Functions
-    controls: Controls
+
+  date:
+    inferred_date_source: Inferred source
+
+  date_fields:
+    inferred_date_source: Inferred source
+    inferred_date_source_placeholder: The inferred source of the date
+
+  enumeration_names:
+    agency_category: Agency Category
+    function_source: Function Source
+    mandate_type: Mandate Type
+    user_defined_enum_1: Security Level
+    user_defined_enum_2: Sensitivity Label
 
   enumerations:
     mandate_type:
       legislation: Legislation
-      gazetted_notice: Gazetted notice
-      cabinet_handbook: Cabinet handbook
-      directive: Directive
-      disposal_authorisation: Disposal authorisation
-      rap: RAP
+      regulation: Regulation
+    function_source:
+      agift: AGIFT
+      qsa_specific: QSA-specific
 
-  location:
-    _singular: Location
+  resource:
+    user_defined:
+      enum_1: Security Level
+      enum_2: Sensitivity Label
 
-  validation_errors:
-    end_date_must_occur_after_start_date: 'End date must occur after start date.'
+  search_sorting:
+    mandate_type_u_ssort: Mandate type
+    commencement_date_u_sortdate: Commencement Date
+    termination_date_u_sortdate: Termination Date
+
+  search_results:
+    filter:
+      function_source_u_sstr: Function Source
+      mandate_type_u_ssort: Mandate Type
+      agency_category_u_sstr: Agency Category
+
+  advanced_search:
+    date:
+      commencement_date: Commencement Date
+      termination_date: Termination Date
+
+  mandate_rlshp:
+    start_date: Commencement Date
+    end_date: Termination Date
+
+  function_rlshp:
+    start_date: Commencement Date
+    end_date: Termination Date
+
+  series_system_agency:
+    agency_category: Agency Category
+
+  similar_agencies:
+    label: Similar Agencies
+    explanation: "The following agencies have similar names to what you have entered.  Please ensure that the agency you are describing has not already been recorded:"
+
+  series_system_relationships: &series_system_relationship
+    add: Add Relationship
+    pick_one: Please pick a relationship type
+    relator: Relator
+    relationship_type: Type
+    start_date: Start Date
+    start_date_placeholder: YYYY, YYYY-MM or YYYY-MM-DD
+    end_date: End Date
+    end_date_placeholder: YYYY, YYYY-MM or YYYY-MM-DD
+    note: Note
+    ref: Relationship Record
+    relationship_types:
+      association: Association
+      authorisation: Authorisation
+      succession: Succession
+      ownership: Ownership
+      containment: Containment
+      creation: Creation
+      responsibility: Responsibility
+      represented: Represented
+      derivation: Derivation
+      documentation: Documentation
+      restriction: Restriction
+      nonpreferred_term: Nonpreferred Term
+      preferred_term: Preferred Term
+      synonym: Synonym
+    relationship_names:
+      series_system_series_relationships: Series Relationships
+      series_system_mandate_relationships: Mandate Relationships
+      series_system_function_relationships: Function Relationships
+      series_system_agent_relationships: Agent Relationships
+      series_system_record_relationships: Record Relationships
+      series_system_representation_relationships: Representation Relationships
+      series_system_transfer_relationships: Transfer Relationships
+      series_system_item_relationships: Item Relationships
+    target_types:
+      agent: Agent
+      record: Record
+      series: Series
+      item: Item
+      representation: Representationa
+      transfer: Transfer
+      mandate: Mandate
+      function: Function
+
+  series_system_agent_agent_succession_relationship:
+    <<: *series_system_relationship
+  series_system_agent_agent_ownership_relationship:
+    <<: *series_system_relationship
+  series_system_agent_agent_containment_relationship:
+    <<: *series_system_relationship
+  series_system_agent_agent_association_relationship:
+    <<: *series_system_relationship
+  series_system_agent_mandate_authorisation_relationship:
+    <<: *series_system_relationship
+  series_system_agent_mandate_ownership_relationship:
+    <<: *series_system_relationship
+  series_system_agent_mandate_creation_relationship:
+    <<: *series_system_relationship
+  series_system_agent_function_ownership_relationship:
+    <<: *series_system_relationship
+  series_system_agent_function_creation_relationship:
+    <<: *series_system_relationship
+  series_system_series_series_succession_relationship:
+    <<: *series_system_relationship
+  series_system_series_series_ownership_relationship:
+    <<: *series_system_relationship
+  series_system_item_series_containment_relationship:
+    <<: *series_system_relationship
+  series_system_item_series_ownership_relationship:
+    <<: *series_system_relationship
+  series_system_item_item_containment_relationship:
+    <<: *series_system_relationship
+  series_system_item_item_succession_relationship:
+    <<: *series_system_relationship
+  series_system_item_representation_containment_relationship:
+    <<: *series_system_relationship
+  series_system_item_representation_represented_relationship:
+    <<: *series_system_relationship
+  series_system_representation_representation_association_relationship:
+    <<: *series_system_relationship
+  series_system_representation_representation_containment_relationship:
+    <<: *series_system_relationship
+  series_system_representation_representation_derivation_relationship:
+    <<: *series_system_relationship
+  series_system_record_transfer_containment_relationship:
+    <<: *series_system_relationship
+  series_system_mandate_mandate_association_relationship:
+    <<: *series_system_relationship
+  series_system_mandate_mandate_containment_relationship:
+    <<: *series_system_relationship
+  series_system_mandate_mandate_succession_relationship:
+    <<: *series_system_relationship
+  series_system_function_mandate_creation_relationship:
+    <<: *series_system_relationship
+  series_system_function_mandate_association_relationship:
+    <<: *series_system_relationship
+  series_system_function_function_containment_relationship:
+    <<: *series_system_relationship
+  series_system_function_function_association_relationship:
+    <<: *series_system_relationship
+  series_system_function_function_succession_relationship:
+    <<: *series_system_relationship
+  series_system_function_function_synonym_relationship:
+    <<: *series_system_relationship
+  series_system_function_function_preferred_term_relationship:
+    <<: *series_system_relationship
+  series_system_function_function_nonpreferred_term_relationship:
+    <<: *series_system_relationship
+  series_system_agent_record_ownership_relationship:
+    <<: *series_system_relationship
+  series_system_agent_record_creation_relationship:
+    <<: *series_system_relationship
+  series_system_agent_record_association_relationship:
+    <<: *series_system_relationship
+  series_system_agent_representation_creation_relationship:
+    <<: *series_system_relationship
+  series_system_agent_representation_ownership_relationship:
+    <<: *series_system_relationship
+  series_system_agent_transfer_ownership_relationship:
+    <<: *series_system_relationship
+  series_system_mandate_series_association_relationship:
+    <<: *series_system_relationship
+  series_system_mandate_series_ownership_relationship:
+    <<: *series_system_relationship
+  series_system_mandate_series_documentation_relationship:
+    <<: *series_system_relationship
+  series_system_mandate_series_restriction_relationship:
+    <<: *series_system_relationship
+  series_system_function_series_documentation_relationship:
+    <<: *series_system_relationship
+  series_system_function_series_association_relationship:
+    <<: *series_system_relationship

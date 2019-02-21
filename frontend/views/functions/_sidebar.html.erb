@@ -4,7 +4,5 @@
                :record => @function,
                :plusone => :submit
            }) do |sidebar| %>
-  <%= sidebar.render_for_view_and_edit(:subrecord_type => 'mandate', :property => 'mandates') %>
-  <%= sidebar.render_for_view_only(:subrecord_type => 'agent_corporate_entity', :property => 'linked_agents', :anchor => 'linked_agents') %>
-  <%= sidebar.render_for_view_and_edit(:subrecord_type => 'external_document', :property => 'external_documents', :anchor => 'linked_agents') %>
+  <%= sidebar.render_for_view_and_edit(:subrecord_type => 'date', :property => 'date') %>
 <% end %>

@@ -35,7 +35,7 @@
              data-url="<%= url_for :controller => :search, :action => :do_search, :format => :json %>"
              data-browse-url="<%= url_for :controller => :search, :action => :do_search, :format => :js, :facets => [], :sort => "title_sort asc", :exclude => exclude_ids %>"
              data-selected="<%= selected_json %>"
-             data-format_template="title"
+             data-format_template="display_string"
              data-multiplicity="<%= multiplicity %>"
              <% if multiplicity === "many" %>data-sortable="true"<% end %>
              data-types='["mandate"]'

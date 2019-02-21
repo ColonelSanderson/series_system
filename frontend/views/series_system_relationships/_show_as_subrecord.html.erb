@@ -1,0 +1,43 @@
+<section id="<%= section_id %>" class="subrecord-form-dummy">
+  <h3><%= I18n.t("series_system_relationships.relationship_names.#{name}") %></h3>
+  <div class="subrecord-form-container">
+    <div class="subrecord-form-fields">
+      <table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+          <th class="col-xs-2"><%= I18n.t("series_system_relationships.relator") %></th>
+          <th class="col-xs-3"><%= I18n.t("series_system_relationships.target_types.#{rule.target_jsonmodel_category}") %></th>
+          <th class="col-xs-2"><%= I18n.t('series_system_relationships.start_date') %></th>
+          <th class="col-xs-2"><%= I18n.t('series_system_relationships.end_date') %></th>
+          <th class="col-xs-3"><%= I18n.t('series_system_relationships.note') %></th>
+        </tr>
+        </thead>
+        <tbody>
+        <% relationships.each_with_index do | relationship, index | %>
+          <tr>
+            <td><%= I18n.t("enumerations.#{}.#{JSONModel(relationship['jsonmodel_type'].intern).schema['properties']['relator']['dynamic_enum']}.#{relationship['relator']}", default: relationship['relator']) %></td>
+            <td>
+              <div class="token-list">
+                <%= render_token :object => relationship['_resolved'],
+                                 :label => relationship['_resolved']['display_string'] || relationship['_resolved']['title'],
+                                 :type => relationship['_resolved']['jsonmodel_type'],
+                                 :uri => relationship['ref'] %>
+              </div>
+            </td>
+            <td>
+              <%= relationship['start_date'] %>
+            </td>
+            <td>
+              <%= relationship['end_date'] %>
+            </td>
+
+            <td>
+              <%= preserve_newlines(relationship['note'] || "") %>
+            </td>
+          </tr>
+        <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>

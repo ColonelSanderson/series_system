@@ -1,0 +1,91 @@
+$(document).ready(function() {
+
+    var showSpinner = function (input) {
+        var spinner = $('<i class="spinner" />');
+
+        spinner.css('position', 'absolute')
+               .css('top', input.position().top + 'px')
+               .css('left', (input.position().left + input.width() + 50) + 'px');
+
+        input.after(spinner);
+    };
+
+    var hideSpinner = function (input) {
+        input.parent().find('.spinner').remove();
+    };
+
+    var showSimilarAgencies = function (displayFunction) {
+        var input = $('.authoritive-name').find('input[name *= "[primary_name]"]');
+
+        if (input.length == 0) {
+            return;
+        }
+
+        var name = input.val();
+
+        if (!name) {
+            displayFunction({ matched: false });
+            return;
+        }
+
+        showSpinner(input);
+
+        $.ajax({
+            url: AS.app_prefix("/similar_agencies"),
+            data: {
+                name: name,
+            },
+            success : function(similar_agencies) {
+                displayFunction(similar_agencies, input);
+            },
+            complete: function () {
+                hideSpinner(input);
+            },
+        });
+    };
+
+
+    var displayInline = function (similar_agencies, input) {
+        $('.similar-agencies').remove();
+
+        if (!similar_agencies['matched']) {
+            return;
+        }
+
+        var msg = $('<div class="form-group similar-agencies"><label class="control-label col-sm-2" /><div class="col-sm-9 content" /></div>');
+
+        msg.find('label').text('<%= I18n.t("similar_agencies.label") %>');
+        var content = msg.find('.content');
+
+        content.html(similar_agencies['markup']);
+
+        $(input).closest('.form-group').after(msg);
+    };
+
+    var shouldHandle = function (input) {
+        var formAction = $(input).closest('#agent_form').attr('action');
+
+        /* We're on a primary_name field within an authoritive name on a corporate entity agent. */
+        return ($(input).attr('name').endsWith('[primary_name]') &&
+                $(input).closest('.authoritive-name').length > 0 &&
+                formAction && formAction.indexOf('agent_corporate_entity') >= 0);
+    }
+
+    var checkNameTimer = null;
+
+    $(document).on('keyup', '#agent_form input[type=text]', function () {
+        if (shouldHandle(this)) {
+            clearTimeout(checkNameTimer);
+
+            checkNameTimer = setTimeout(function () {
+                showSimilarAgencies(displayInline);
+            }, 300);
+        }
+    });
+
+    $(document).on('change', '#agent_form input[type=text]', function () {
+        if (shouldHandle(this)) {
+            showSimilarAgencies(displayInline);
+        }
+    });
+});

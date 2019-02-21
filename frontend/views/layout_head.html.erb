@@ -1,4 +1,14 @@
-<%= javascript_include_tag "#{AppConfig[:frontend_prefix]}assets/series-system.js" %>
+<!-- Series System plugin javascript -->
+<%= javascript_include_tag "#{AppConfig[:frontend_proxy_prefix]}assets/series-system.js" %>
+
+<% begin %>
+  <% if current_record && RelationshipRules.instance.has_rules_for_jsonmodel_type?(current_record['jsonmodel_type']) %>
+    <!-- Allow series system relationships to be created from required contexts -->
+    <%= javascript_include_tag("series_system_relationships.crud.js") %>
+  <% end %>
+<% rescue %>
+<% end %>
+
 
 <script type="text/template" id="seriesSystemBrowseActions">
   <li class="divider"></li>
@@ -10,3 +20,19 @@
   <li><%= link_to I18n.t("mandate._singular"), :controller => :mandates, :action => :new %></li>
   <li><%= link_to I18n.t("function._singular"), :controller => :functions, :action => :new %></li>
 </script>
+
+<% if controller.controller_name == 'resources' %>
+  <% if ['new', 'create'].include?(controller.action_name) %>
+    <%= javascript_include_tag "#{AppConfig[:frontend_proxy_prefix]}assets/new_series_form.js" %>
+  <% elsif ['edit', 'update'].include?(controller.action_name) %>
+    <%= javascript_include_tag "#{AppConfig[:frontend_proxy_prefix]}assets/edit_series_form.js" %>
+  <% else %>
+    <%= javascript_include_tag "#{AppConfig[:frontend_proxy_prefix]}assets/show_series_form.js" %>
+  <% end %>
+<% end %>
+
+<% if ['new', 'edit', 'create', 'update'].include?(controller.action_name) %>
+  <!-- JS for detecting similar agent names  -->
+  <link href="<%= "#{AppConfig[:frontend_proxy_prefix]}assets/styles/similar_agencies.css" %>" media="all" rel="stylesheet" type="text/css">
+  <%= javascript_include_tag("similar_agencies.js") %>
+<% end %>

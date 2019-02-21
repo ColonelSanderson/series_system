@@ -26,9 +26,20 @@ Permission.define("delete_mandate_record",
                   :implied_by => 'manage_mandate_record',
                   :level => "global")
 
+require_relative '../lib/relationship_rules'
+RelationshipRules.instance.bootstrap!
+
+require_relative '../lib/validations'
+include SeriesSystemValidations
+
 begin
   History.register_model(Mandate)
   History.register_model(Function)
 rescue NameError
   Log.info("Unable to register Mandate and Function for history. Please install the as_history plugin")
 end
+
+# remove the 'ifmissing' => 'error' assertion to give the auto-generator a chance
+Resource.my_jsonmodel.schema['properties']['id_0'].delete('ifmissing')
+
+
