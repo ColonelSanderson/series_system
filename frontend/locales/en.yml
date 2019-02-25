@@ -92,6 +92,29 @@ en:
       function_source_u_sstr: Function Source
       mandate_type_u_ssort: Mandate Type
       agency_category_u_sstr: Agency Category
+      agent_series_system_agent_relationships_u_sstr: Agent Relationship
+      agent_series_system_function_relationships_u_sstr: Function Relationship
+      agent_series_system_mandate_relationships_u_sstr: Mandate Relationship
+      function_series_system_agent_relationships_u_sstr: Agent Relationship
+      function_series_system_function_relationships_u_sstr: Function Relationship
+      function_series_system_mandate_relationships_u_sstr: Mandate Relationship
+      item_series_system_item_relationships_u_sstr: Item Relationship
+      item_series_system_representation_relationships_u_sstr: Representation Relationship
+      item_series_system_series_relationships_u_sstr: Series Relationship
+      mandate_series_system_agent_relationships_u_sstr: Agent Relationship
+      mandate_series_system_function_relationships_u_sstr: Function Relationship
+      mandate_series_system_mandate_relationships_u_sstr: Mandate Relationship
+      record_series_system_agent_relationships_u_sstr: Agent Relationship
+      record_series_system_transfer_relationships_u_sstr: Transfer Relationship
+      representation_series_system_agent_relationships_u_sstr: Agent Relationship
+      representation_series_system_item_relationships_u_sstr: Item Relationship
+      representation_series_system_representation_relationships_u_sstr: Representation Relationship
+      series_series_system_function_relationships_u_sstr: Function Relationship
+      series_series_system_item_relationships_u_sstr: Item Relationship
+      series_series_system_mandate_relationships_u_sstr: Mandate Relationship
+      series_series_system_series_relationships_u_sstr: Series Relationship
+      transfer_series_system_agent_relationships_u_sstr: Agent Relationship
+      transfer_series_system_record_relationships_u_sstr:  Record Relationship
 
   advanced_search:
     date:

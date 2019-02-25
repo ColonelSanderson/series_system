@@ -158,7 +158,6 @@ Rails.application.config.after_initialize do
 
   require_relative '../lib/validations'
   include SeriesSystemValidations
-
 end
 
 
