@@ -1,5 +1,6 @@
 require 'db/migrations/utils'
 require 'json'
+require 'digest/sha1'
 
 Sequel.migration do
   up do
