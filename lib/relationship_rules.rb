@@ -82,6 +82,29 @@ class RelationshipRules
     expand_reverse_relationship_rules!
   end
 
+  # An enduring relationship can't be terminated unless there's a new
+  # relationship (with a different record) to take its place.
+  def enduring_relationships
+    ['series_system_agent_record_ownership_relationship']
+  end
+
+  # Non-closeable relationships are left open even when an agency is being terminated
+  def non_auto_closeable_relationships
+    result = []
+
+    rules.each do |rule|
+      next unless rule.source_jsonmodel_category == :agent
+
+      rule.relationship_types.each do |relationship_type|
+        if ['creation', 'succession'].include?(relationship_type)
+          result << build_relationship_jsonmodel_name(rule, relationship_type)
+        end
+      end
+    end
+
+    result
+  end
+
   def mode(mode)
     @mode = mode
     self
@@ -226,13 +249,29 @@ class RelationshipRules
                                                      :class_callback => proc {|clz|
                                                        clz.instance_eval do
                                                          include DynamicEnums
+
                                                          uses_enums({
                                                            :property => 'relator',
                                                            :uses_enum => relators,
                                                          })
+
+
+                                                         def self.create(values)
+                                                           values.delete('relationship_id')
+                                                           super
+                                                         end
+
+
+                                                         alias_method :values_orig, :values
+                                                         define_method(:values) do
+                                                           result = values_orig
+
+                                                           result['relationship_id'] = self.id.to_s
+                                                           result
+                                                         end
                                                        end
                                                      })
-  
+
         log "Added #{jsonmodel_property} relationship to #{source_model.to_s} with relators: #{relators}"
       end
     end

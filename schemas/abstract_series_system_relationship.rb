@@ -5,6 +5,10 @@
     "type" => "object",
     "subtype" => "ref",
     "properties" => {
+      "relationship_id" => {
+        "type" => "string",
+        "readonly" => "true",
+      },
       "ref" => {
         "type" => [{"type" => "JSONModel(:accession) uri"},
                    {"type" => "JSONModel(:resource) uri"},
