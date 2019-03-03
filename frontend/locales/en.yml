@@ -201,6 +201,11 @@ en:
       mandate: Mandate
       function: Function
 
+  group:
+    permission_types:
+      manage_function_record: create/update functions in this repository
+      manage_mandate_record: create/update mandates in this repository
+
   series_system_agent_agent_succession_relationship:
     <<: *series_system_relationship
   series_system_agent_agent_ownership_relationship:
