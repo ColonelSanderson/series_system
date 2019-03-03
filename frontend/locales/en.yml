@@ -136,6 +136,26 @@ en:
     label: Similar Agencies
     explanation: "The following agencies have similar names to what you have entered.  Please ensure that the agency you are describing has not already been recorded:"
 
+  record:
+    _singular: Record
+    _plural: Records
+
+  series:
+    _singular: Series
+    _plural: Series
+
+  item:
+    _singular: Item
+    _plural: Items
+
+  representation:
+    _singular: Representation
+    _plural: Representationas
+
+  transfer:
+    _singular: transfer
+    _plural: transfers
+
   series_system_relationships: &series_system_relationship
     add: Add Relationship
     pick_one: Please pick a relationship type
@@ -176,7 +196,7 @@ en:
       record: Record
       series: Series
       item: Item
-      representation: Representationa
+      representation: Representation
       transfer: Transfer
       mandate: Mandate
       function: Function
