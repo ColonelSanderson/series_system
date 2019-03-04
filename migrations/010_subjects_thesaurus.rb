@@ -11,23 +11,33 @@ Sequel.migration do
       source_ids = {}
       # Get unique source_id fields and create terms for them
       json_terms.uniq { |subject| subject[:source_id] }.each do |subject|
-        source_ids[subject[:source_id].intern] = self[:enumeration_value].insert(
-          enumeration_id: subject_source_id,
-          position: self[:enumeration_value].filter(enumeration_id: subject_source_id).max(:position) + 1,
-          value: subject[:source_id],
-          readonly: 1
-        )
+        source_ids[subject[:source_id].intern] = begin
+                                                   self[:enumeration_value].insert(
+                                                     enumeration_id: subject_source_id,
+                                                     position: self[:enumeration_value].filter(enumeration_id: subject_source_id).max(:position) + 1,
+                                                     value: subject[:source_id],
+                                                     readonly: 1
+                                                   )
+                                                 rescue Sequel::UniqueConstraintViolation
+                                                   self[:enumeration_value].filter(:value => subject[:source_id], :enumeration_id => subject_source_id).first[:id]
+                                                 end
       end
       # Group subjects by their enum type
       # TODO: unique tags?
       json_terms.group_by { |json_term| json_term[:term_type] }.each do |key, term_groups|
         next_position = self[:enumeration_value].filter(enumeration_id: enumeration_id).max(:position) + 1
-        enumeration_value_id = self[:enumeration_value].insert(
-          enumeration_id: enumeration_id,
-          position: next_position,
-          value: key,
-          readonly: 1
-        )
+        enumeration_value_id =
+          begin
+            self[:enumeration_value].insert(
+              enumeration_id: enumeration_id,
+              position: next_position,
+              value: key,
+              readonly: 1
+            )
+          rescue Sequel::UniqueConstraintViolation
+            self[:enumeration_value].filter(:enumeration_id => enumeration_id, :value => key).first[:id]
+          end
+
         term_groups.each do |term|
           inserted_subject_id = self[:subject].insert(
             lock_version: 1,
