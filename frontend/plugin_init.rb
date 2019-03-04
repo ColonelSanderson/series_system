@@ -21,7 +21,7 @@ Rails.application.config.after_initialize do
         template_name: 'external_id',
         js_edit_template_name: 'template_external_id',
         template_erb: "external_ids/edit",
-        erb_edit_template_path: "external_ids/edit",
+        erb_edit_template_path: "external_ids/template",
         erb_readonly_template_path: "external_ids/show",
         sidebar_label: I18n.t('external_id._plural'),
       }
