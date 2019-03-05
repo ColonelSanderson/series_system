@@ -32,12 +32,13 @@ module SeriesSystemValidations
       property = RelationshipRules.instance.build_jsonmodel_property(rule.target_jsonmodel_category)
 
       ASUtils.wrap(hash[property]).each_with_index do |reln_hash, i|
+        next unless reln_hash["ref"]
+
         relationship_jsonmodel = reln_hash["jsonmodel_type"]
         ref_jsonmodel_type = JSONModel.parse_reference(reln_hash["ref"])[:type].to_s
         possible_ref_types = JSONModel(relationship_jsonmodel.intern).schema.fetch("properties").fetch("ref").fetch("type").collect{|t| t["type"]}
         possible_ref_types.reject!{|type| type == "JSONModel(:#{source_jsonmodel_type}) uri"}
         unless possible_ref_types.include?("JSONModel(:#{ref_jsonmodel_type}) uri")
-          # FIXME what should the path look like here?
           errors << ["#{property}/#{i}/ref", "not a valid jsonmodel_type"]
         end
       end
