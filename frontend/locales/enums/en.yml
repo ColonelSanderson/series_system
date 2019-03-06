@@ -27,6 +27,7 @@ en:
       BUSU: Business Unit/Area or Division
       COM: Commission
       UNP: Unprocessed
+      NPA: Non Public Authority
 
     user_defined_enum_1:
       official: Official
