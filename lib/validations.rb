@@ -16,6 +16,13 @@ module SeriesSystemValidations
       errors << ["end_date", "not a valid date"]
     end
 
+    if hash['start_date'] && hash['end_date'] && errors.empty?
+      shorty = [hash['start_date'].length, hash['end_date'].length].min
+      if hash['start_date'][0,shorty] > hash['end_date'][0,shorty]
+        errors << ['end_date', 'cannot be before start date']
+      end
+    end
+
     errors
   end
 

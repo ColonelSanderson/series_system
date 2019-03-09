@@ -1,4 +1,7 @@
 en:
+  validation_errors:
+    cannot_be_before_start_date: cannot be before start date
+
   plugins:
     series_system:
       testing: true
