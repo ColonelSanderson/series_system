@@ -161,6 +161,7 @@ en:
     pick_one: Please pick a relationship type
     relator: Relator
     relationship_type: Type
+    succession_date: Succession Date
     start_date: Start Date
     start_date_placeholder: YYYY, YYYY-MM or YYYY-MM-DD
     end_date: End Date

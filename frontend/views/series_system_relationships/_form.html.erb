@@ -80,20 +80,29 @@
         </div>
         <div class="form-group">
           <label class="control-label col-sm-2">
-            <%= I18n.t("series_system_relationships.start_date") %>
+            <% if "series_system_succession_relator" == JSONModel(relationship_jsonmodel.intern).schema["properties"]["relator"]["dynamic_enum"] %>
+              <%= I18n.t("series_system_relationships.succession_date") %>
+            <% else %>
+              <%= I18n.t("series_system_relationships.start_date") %>
+            <% end %>
           </label>
           <div class="col-sm-9">
             <%= form.textfield("start_date", nil, {:placeholder => I18n.t("series_system_relationships.start_date_placeholder")}) %>
           </div>
         </div>
-        <div class="form-group">
-          <label class="control-label col-sm-2">
-            <%= I18n.t("series_system_relationships.end_date") %>
-          </label>
-          <div class="col-sm-9">
-            <%= form.textfield("end_date", nil, {:placeholder => I18n.t("series_system_relationships.end_date_placeholder")}) %>
+
+
+        <% unless "series_system_succession_relator" == JSONModel(relationship_jsonmodel.intern).schema["properties"]["relator"]["dynamic_enum"] %>
+          <div class="form-group">
+            <label class="control-label col-sm-2">
+              <%= I18n.t("series_system_relationships.end_date") %>
+            </label>
+            <div class="col-sm-9">
+              <%= form.textfield("end_date", nil, {:placeholder => I18n.t("series_system_relationships.end_date_placeholder")}) %>
+            </div>
           </div>
-        </div>
+        <% end %>
+
         <% if "series_system_association_relator" == JSONModel(relationship_jsonmodel.intern).schema["properties"]["relator"]["dynamic_enum"] %>
           <div class="form-group">
             <label class="control-label col-sm-2">
