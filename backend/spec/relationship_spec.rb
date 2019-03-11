@@ -110,17 +110,19 @@ describe 'series_system relationships' do
               relationship.end_date = 'NOT VALID'
               expect { relationship.to_hash(:validated) }.to raise_error(JSONModel::ValidationException)
 
-              relationship.end_date = '123'
+              relationship.end_date = '2111'
               expect { relationship.to_hash(:validated) }.to_not raise_error
 
-              relationship.end_date = '1111'
-              expect { relationship.to_hash(:validated) }.to_not raise_error
-
-              relationship.end_date = '1234-02-31'
+              relationship.end_date = '2234-02-31'
               expect { relationship.to_hash(:validated) }.to raise_error(JSONModel::ValidationException)
 
               relationship.end_date = '2009-11-12'
               expect { relationship.to_hash(:validated) }.to_not raise_error
+
+              # check the start_date isn't after the end_date
+              relationship.start_date = '2009-11-12'
+              relationship.end_date = '2009-11-11'
+              expect { relationship.to_hash(:validated) }.to raise_error(JSONModel::ValidationException)
             end
 
             if rule.source_jsonmodel_category != rule.target_jsonmodel_category
