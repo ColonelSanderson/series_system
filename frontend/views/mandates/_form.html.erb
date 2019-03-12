@@ -7,6 +7,11 @@
         <%= I18n.t("mandate._frontend.section.basic_information") %>
         <%= link_to_help :topic => "mandate_basic_information" %>
       </h3>
+
+      <%= render_plugin_partials("top_of_basic_information_mandate",
+                                 :form => form,
+                                 :record => @mandate) %>
+
       <%= form.label_and_textfield "title" %>
       <%= form.label_and_select "mandate_type", form.possible_options_for("mandate_type", true) %>
       <%= form.label_and_textfield "reference_number" %>
