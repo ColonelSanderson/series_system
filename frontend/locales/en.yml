@@ -57,11 +57,11 @@ en:
 
   name_corporate_entity:
     primary_name: Primary name
-    primary_name_tooltip: Primary name
+    primary_name_tooltip: The preferred name of the corporate agency.
     subordinate_name_1: Acronym
-    subordinate_name_1_tooltip: Acronym
+    subordinate_name_1_tooltip: The acronym, based on the Primary name field.
     subordinate_name_2: Alternative name
-    subordinate_name_2_tooltip: Alternative name
+    subordinate_name_2_tooltip: An alternative to the name given by Primary name field.
 
   date:
     inferred_date_source: Inferred source
