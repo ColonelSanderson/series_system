@@ -127,4 +127,18 @@ $(function() {
 	    calculateCommonDates(this, true);
 	});
     });
+
+
+    $(document).on('change', 'section[id$=_dates_of_existence] input[id$=_begin_]', function () {
+        $('section[id^=series_system_] input.linker.initialised').each(function() {
+	    calculateCommonDates(this);
+	});
+    });
+
+
+    $(document).on('change', 'section[id$=_dates_of_existence] input[id$=_end_]', function () {
+        $('section[id^=series_system_] input.linker.initialised').each(function() {
+	    calculateCommonDates(this);
+	});
+    });
 });
