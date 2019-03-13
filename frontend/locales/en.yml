@@ -55,6 +55,14 @@ en:
     mandates: Mandates
     function: Functions
 
+  name_corporate_entity:
+    primary_name: Primary name
+    primary_name_tooltip: Primary name
+    subordinate_name_1: Acronym
+    subordinate_name_1_tooltip: Acronym
+    subordinate_name_2: Alternative name
+    subordinate_name_2_tooltip: Alternative name
+
   date:
     inferred_date_source: Inferred source
 

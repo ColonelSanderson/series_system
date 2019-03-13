@@ -1,0 +1,14 @@
+{
+  "agents": {
+    "agent_corporate_entity_names": {
+      "show": [
+        ["agent_names_", "_primary_name_"],
+        ["agent_names_", "_subordinate_name_1_"],
+        ["agent_names_", "_subordinate_name_2_"]
+      ],
+      "defaultValues": [
+        { "path": ["agent_names_", "_source_"], "value": "local" }
+      ]
+    }
+  }
+}

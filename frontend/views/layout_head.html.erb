@@ -1,14 +1,4 @@
-<!-- Series System plugin javascript -->
-<%= javascript_include_tag "#{AppConfig[:frontend_proxy_prefix]}assets/series-system.js" %>
-
-<% begin %>
-  <% if current_record && RelationshipRules.instance.has_rules_for_jsonmodel_type?(current_record['jsonmodel_type']) %>
-    <!-- Allow series system relationships to be created from required contexts -->
-    <%= javascript_include_tag("series_system_relationships.crud.js") %>
-  <% end %>
-<% rescue %>
-<% end %>
-
+<%= javascript_include_tag "#{AppConfig[:frontend_prefix]}assets/series-system.js" %>
 
 <script type="text/template" id="seriesSystemBrowseActions">
   <li class="divider"></li>
@@ -25,4 +15,11 @@
   <!-- JS for detecting similar agent names  -->
   <link href="<%= "#{AppConfig[:frontend_proxy_prefix]}assets/styles/similar_agencies.css" %>" media="all" rel="stylesheet" type="text/css">
   <%= javascript_include_tag("similar_agencies.js") %>
+  <%= javascript_include_tag "#{AppConfig[:frontend_proxy_prefix]}assets/simplify-form.js" %>
+  <script>
+    $(document).ready(function() {
+        $.getJSON('<%= "#{request.base_url}/assets/config/hidden_fields.json" %>')
+          .then(json => new SimplifyFields(json, '<%= controller_name %>'))
+    });
+  </script>
 <% end %>
