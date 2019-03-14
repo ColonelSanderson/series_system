@@ -14,7 +14,6 @@ class RelationshipRules
     :agent => [:agent_corporate_entity, :agent_family, :agent_person, :agent_software],
     :record => [:resource, :archival_object],
     :transfer => [:accession],
-    :representation => [:digital_object, :digital_object_component],
     :series => [:resource],
     :item => [:archival_object],
   }
@@ -55,7 +54,6 @@ class RelationshipRules
     @rules = []
     @rules << RelationshipRule.new(:agent, :agent, ['succession', 'ownership', 'containment', 'association'])
     @rules << RelationshipRule.new(:agent, :record, ['ownership', 'creation','association'])
-    @rules << RelationshipRule.new(:agent, :representation, ['creation', 'ownership'])
     @rules << RelationshipRule.new(:agent, :transfer, ['ownership'])
     @rules << RelationshipRule.new(:agent, :mandate, ['authorisation', 'ownership', 'creation'])
     @rules << RelationshipRule.new(:agent, :function, ['ownership', 'creation'])
@@ -64,9 +62,6 @@ class RelationshipRules
     @rules << RelationshipRule.new(:series, :item, ['containment', 'ownership'])
 
     @rules << RelationshipRule.new(:item, :item, ['containment', 'succession'])
-    @rules << RelationshipRule.new(:item, :representation, ['containment', 'represented'])
-
-    @rules << RelationshipRule.new(:representation, :representation, ['association', 'containment', 'derivation'])
 
     @rules << RelationshipRule.new(:transfer, :record, ['containment'])
 
