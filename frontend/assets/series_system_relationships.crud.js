@@ -47,12 +47,22 @@ $(function() {
     };
 
 
+    var sortStart = function(start) {
+	return start.replace(/-/g, '').padEnd(8, '0');
+    };
+
+
+    var sortEnd = function(end) {
+	return end.replace(/-/g, '').padEnd(8, '9');
+    };
+
+
     var calculateCommonDates = function(linker, init) {
 	var $linker = $(linker);
 
-	if (!init && !$linker.parents('.subrecord-form-container').find('.token-input-token:first').is('[id]')) {
+	if (!init && !$linker.closest('.subrecord-form-container').find('.token-input-token:first').is('[id]')) {
 	    // linker is empty, so set placeholder and get out
-	    var $common = $linker.parents('.subrecord-form-container').find('.series-system-relationship-common-dates');
+	    var $common = $linker.closest('.subrecord-form-container').find('.series-system-relationship-common-dates');
 	    $common.html($common.data('placeholder'));
 	    return;
 	}
@@ -61,24 +71,27 @@ $(function() {
 	if (!obj || jQuery.isEmptyObject(obj)) {
 	    obj = $linker.closest('.linker-wrapper').find('input[name$="[_resolved]"]').val();
 	    if (!obj) {
+		// linker is empty, so set placeholder and get out
+		var $common = $linker.closest('.subrecord-form-container').find('.series-system-relationship-common-dates');
+		$common.html($common.data('placeholder'));
 		return;
 	    }
 	}
 
-	var startDate = false;
-	var endDate = false;
+	var linkedStart = false;
+	var linkedEnd = false;
 
 	if (obj.hasOwnProperty('date')) {
-	    var newDates = dateBounds(obj['date'], startDate, endDate);
-	    startDate = newDates[0];
-	    endDate = newDates[1];
+	    var newDates = dateBounds(obj['date'], linkedStart, linkedEnd);
+	    linkedStart = newDates[0];
+	    linkedEnd = newDates[1];
 	}
 
 	if (obj.hasOwnProperty('dates_of_existence')) {
 	    $(obj['dates_of_existence']).each(function() {
-		var newDates = dateBounds(this, startDate, endDate);
-		startDate = newDates[0];
-		endDate = newDates[1];
+		var newDates = dateBounds(this, linkedStart, linkedEnd);
+		linkedStart = newDates[0];
+		linkedEnd = newDates[1];
 	    });
 	}
 
@@ -87,46 +100,75 @@ $(function() {
 	    $datesSection = $('section[id$=_date_]');
 	}
 
-	var myStartDate = false;
-	var myEndDate = false;
+	var thisStart = false;
+	var thisEnd = false;
 
 	$datesSection.find('input[id$=_begin_]').each(function() {
-	    if (!myStartDate || $(this).val() < myStartDate) {
-		myStartDate = $(this).val();
+	    if (!thisStart || $(this).val() < thisStart) {
+		thisStart = $(this).val();
 	    }
 	});
 
 	$datesSection.find('input[id$=_end_]').each(function() {
-	    if (!myEndDate || $(this).val() > myEndDate) {
-		myEndDate = $(this).val();
+	    if (!thisEnd || $(this).val() > thisEnd) {
+		thisEnd = $(this).val();
 	    }
 	});
 
-	if (!startDate || (myStartDate && myStartDate.padEnd(10, '0') > startDate.padEnd(10, '0'))) {
-	    startDate = myStartDate;
+	var commonStart = linkedStart;
+	var commonEnd = linkedEnd;
+
+	if (!linkedStart || (thisStart && sortStart(thisStart) > sortStart(linkedStart))) {
+	    commonStart = thisStart;
 	}
 
-	if (!endDate || (myEndDate && myEndDate.padEnd(10, '9') < endDate.padEnd(10, '9'))) {
-	    endDate = myEndDate;
+	if (!linkedEnd || (thisEnd && sortEnd(thisEnd) < sortEnd(linkedEnd))) {
+	    commonEnd = thisEnd;
 	}
 
 	var msg = '';
-	if (startDate) {
-	    msg += startDate + ' -- ';
+	if (commonStart) {
+	    msg += commonStart + ' -- ';
 	} else {
 	    msg += 'up to ';
 	}
-	if (endDate) {
-	    msg += endDate;
+	if (commonEnd) {
+	    msg += commonEnd;
 	} else {
 	    msg += 'present';
 	}
-	$linker.parents('.subrecord-form-container').find('.series-system-relationship-common-dates').html(msg);
+
+	var $container = $linker.closest('.subrecord-form-container');
+	var $commonInput = $container.find('.series-system-relationship-common-dates');
+	$commonInput.html(msg);
+	$commonInput.data('start', commonStart);;
+	$commonInput.data('end', commonEnd);;
+
+	var $startInput = $container.find('input[id$=_start_date_]');
+	if ($startInput.val() == '') {
+	    $startInput.attr('value', commonStart);
+	}
+	$startInput.trigger('change');
+
+	var $endInput = $container.find('input[id$=_end_date_]');
+	if ($endInput.val() == '') {
+	    $endInput.attr('value', commonEnd);
+	}
+	$endInput.trigger('change');
     };
 
 
-    $('section[id^=series_system_] input.linker').on('change', function () {
-	calculateCommonDates(this);
+    $(document).on('change', 'section[id^=series_system_] input[id$=_date_]', function() {
+	var $this = $(this);
+	var $common = $this.closest('.subrecord-form-container').find('.series-system-relationship-common-dates');
+
+	if ($this.val() != '' &&
+	    (($common.data('start') && sortStart($common.data('start')) > sortStart($this.val())) ||
+	     ($common.data('end') && sortEnd($common.data('end')) < sortEnd($this.val())))) {
+	    $this.closest('.form-group').addClass('has-warning');
+	} else {
+	    $this.closest('.form-group').removeClass('has-warning');
+	}
     });
 
 
