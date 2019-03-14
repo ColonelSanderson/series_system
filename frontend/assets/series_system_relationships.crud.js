@@ -144,17 +144,23 @@ $(function() {
 	$commonInput.data('start', commonStart);;
 	$commonInput.data('end', commonEnd);;
 
+	var $typeInput = $container.closest('li').find('input[id$=_jsonmodel_type_]:first');
+	var isSuccession = $typeInput.length > 0 ? ($typeInput.val().endsWith('succession_relationship')) :
+	                   $container.closest('li').find('select[name=series_system_relationship_type]').val().endsWith('succession_relationship');
+
 	var $startInput = $container.find('input[id$=_start_date_]');
 	if ($startInput.val() == '') {
-	    $startInput.attr('value', commonStart);
+	    $startInput.attr('value', isSuccession ? commonEnd : commonStart);
 	}
 	$startInput.trigger('change');
 
-	var $endInput = $container.find('input[id$=_end_date_]');
-	if ($endInput.val() == '') {
-	    $endInput.attr('value', commonEnd);
+	if (!isSuccession) {
+	    var $endInput = $container.find('input[id$=_end_date_]');
+	    if ($endInput.val() == '') {
+		$endInput.attr('value', commonEnd);
+	    }
+	    $endInput.trigger('change');
 	}
-	$endInput.trigger('change');
     };
 
 
