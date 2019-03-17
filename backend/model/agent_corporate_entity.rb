@@ -1,1 +1,2 @@
 AgentCorporateEntity.include(ExternalIDs)
+AgentCorporateEntity.include(AgentManager::Mixin)
