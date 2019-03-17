@@ -78,6 +78,19 @@
             </div>
           </div>
         </div>
+
+        <div class="form-group">
+          <label class="control-label col-sm-2">
+            <%= I18n.t("series_system_relationships.common_dates") %>
+          </label>
+	  <div class="col-sm-9">
+            <div class="label-only series-system-relationship-common-dates"
+                 data-placeholder="<%=h I18n.t("series_system_relationships.common_dates_placeholder") %>">
+              <%= I18n.t("series_system_relationships.common_dates_placeholder") %>
+            </div>
+          </div>
+        </div>
+
         <div class="form-group">
           <label class="control-label col-sm-2">
             <% if "series_system_succession_relator" == JSONModel(relationship_jsonmodel.intern).schema["properties"]["relator"]["dynamic_enum"] %>
