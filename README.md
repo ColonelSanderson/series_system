@@ -6,7 +6,7 @@ as part of the Queensland State Archives Digital Archiving Program.
 
 ## Hiding fields
 
-To hide fields using the  `assets/config/hidden_fields.json` config, add a new entry for the controller type (eg. `agents`), then using the id of the `<section>` element, add a new property (eg. `agent_corporate_entity_names`) with `show` and `defaultValues` arrays.
+To hide fields using the  `lib/hidden_fields.rb` config, add a new entry for the controller type (eg. `agents`), then using the id of the `<section>` element, add a new property (eg. `agent_corporate_entity_names`) with `show` and `defaultValues` arrays.
 Entries in the `show` array are the segments of the id that are generated using its data-attributes. An empty array here indicates that all values should be hidden, as will the section header and if applicable, the menu sidebar link.
 `defaultValues` entries are objects with a path array, and a value.
 It should look something like this: 
