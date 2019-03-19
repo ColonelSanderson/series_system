@@ -2,24 +2,32 @@ class SimplifyFields {
     constructor (config, controller) {
         this.config = config[controller];
         this.controller = controller;
+        if (!this.config || !controller) {
+            return;
+        }
         this.simplify();
         $(document).on("subrecordcreated.aspace", (event, objectName, subform) => {
-            const subsectionId = this.getItemPath(subform[0].parentElement.dataset.idPath, subform[0].dataset.index);
-            // Dirty hack for getting the correct config name.
-            const splitConfigNames = subform[0].parentElement.dataset.idPath.split(/[0-9]+/);
-            const topmostSectionId = subform[0].closest('div.record-pane > fieldset > section').id;
-            const configSection = config[controller][topmostSectionId];
-            if (typeof configSection === 'undefined' || typeof configSection.show === 'undefined') {
-                return;
-            }
-            config[controller][topmostSectionId].show.forEach(showFieldNames => {
-                if (Array.isArray(showFieldNames) &&
-                    showFieldNames.filter(element => splitConfigNames.map(
-                        element => element.replace('${index}_', '')).includes(element))
-                ) {
-                    this.parseSubsectionVisibility(subform[0], config[controller][topmostSectionId], subsectionId);
+            // In modals, `subform` can have multiple matches, which are not distinguishable from the subform torget we want.
+            // So just process all of them again
+            subform.each((subformIndex, subformValue) => {
+                const idPath = subformValue.closest('ul.subrecord-form-list').dataset.idPath;
+                const index = subformValue.closest('ul.subrecord-form-list li').dataset.index;
+                const subsectionId = this.getItemPath(idPath, index);
+                // Dirty hack for getting the correct config name.
+                const splitConfigNames = idPath.split(/[0-9]+/);
+                const topmostSectionId = subformValue.closest('form fieldset > section').id;
+                const configSection = config[controller][topmostSectionId];
+                if (typeof configSection === 'undefined' || typeof configSection.show === 'undefined') {
+                    return;
                 }
-
+                config[controller][topmostSectionId].show.forEach(showFieldNames => {
+                    if (Array.isArray(showFieldNames) &&
+                        showFieldNames.filter(element => splitConfigNames.map(
+                            element => element.replace('${index}_', '')).includes(element))
+                    ) {
+                        this.parseSubsectionVisibility(subformValue, config[controller][topmostSectionId], subsectionId);
+                    }
+                });
             });
         });
     }
