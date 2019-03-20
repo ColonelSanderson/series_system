@@ -30,6 +30,7 @@ class RelationshipRules
     @mode = :backend
 
     relator_values = {}
+    relator_values['abolition'] = {:source => "abolished", :target => "is_abolished_by"}
     relator_values['administers'] = {:source => "administered", :target => "is_administered_by"}
     relator_values['association'] = {:source => "is_associated_with", :target => "is_associated_with"}
     relator_values['authorisation'] = {:source => "authorises", :target => "is_authorised_by"}
@@ -67,7 +68,7 @@ class RelationshipRules
 
     @rules << RelationshipRule.new(:mandate, :series, ['association', 'ownership', 'documentation', 'restriction'])
     @rules << RelationshipRule.new(:mandate, :mandate, ['association', 'containment', 'succession'])
-    @rules << RelationshipRule.new(:mandate, :function, ['creation', 'association'])
+    @rules << RelationshipRule.new(:mandate, :function, ['creation', 'association', 'abolition'])
 
     @rules << RelationshipRule.new(:function, :series, ['documentation', 'association'])
     @rules << RelationshipRule.new(:function, :function, ['containment', 'association', 'succession', 'preferred_term', 'nonpreferred_term'])

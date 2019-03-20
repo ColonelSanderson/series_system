@@ -182,6 +182,7 @@ en:
     note: Note
     ref: Relationship Record
     relationship_types:
+      abolition: Abolition
       administers: Administers
       association: Association
       authorisation: Authorisation
