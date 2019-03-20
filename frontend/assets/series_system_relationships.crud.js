@@ -99,6 +99,9 @@ $(function() {
 	if ($datesSection.length == 0) {
 	    $datesSection = $('section[id$=_date_]');
 	}
+	if ($datesSection.length == 0) {
+	    $datesSection = $('section[id$=_dates_]');
+	}
 
 	var thisStart = false;
 	var thisEnd = false;
