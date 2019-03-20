@@ -72,4 +72,30 @@ module SeriesSystemValidations
       series_system_relationship_check_dates(hash)
     end
   end
+
+
+  def self.check_controlling_agency(hash)
+    errors = []
+
+    if hash['dates'].select {|d| d['label'] == 'existence' && d['end']}.empty?
+      reln = hash["series_system_agent_relationships"].select do |ar|
+        ar['jsonmodel_type'] == 'series_system_agent_record_ownership_relationship' &&
+        ar['relator'] == 'is_controlled_by' &&
+        !ar['end_date']
+      end
+
+      errors << ["series_system_agent_relationships", "must have a controlling agency"] if reln.empty?
+    end
+
+    errors
+  end
+
+
+  if JSONModel(:resource)
+    JSONModel(:resource).add_validation("check_series_controlling_agency") do |hash|
+      check_controlling_agency(hash)
+    end
+  end
+
+
 end
