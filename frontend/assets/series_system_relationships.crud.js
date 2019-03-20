@@ -129,16 +129,25 @@ $(function() {
 	    commonEnd = thisEnd;
 	}
 
-	var msg = '';
-	if (commonStart) {
-	    msg += commonStart + ' -- ';
-	} else {
-	    msg += 'up to ';
+	if (commonStart && commonEnd && sortStart(commonStart) > sortEnd(commonEnd)) {
+	    commonStart = false;
+	    commonEnd = false;
 	}
-	if (commonEnd) {
-	    msg += commonEnd;
+
+	var msg = '';
+	if (!commonStart && ! commonEnd) {
+	    msg = '-- no common dates --';
 	} else {
-	    msg += 'present';
+	    if (commonStart) {
+		msg += commonStart + ' -- ';
+	    } else {
+		msg += 'up to ';
+	    }
+	    if (commonEnd) {
+		msg += commonEnd;
+	    } else {
+		msg += 'present';
+	    }
 	}
 
 	var $container = $linker.closest('.subrecord-form-container');
