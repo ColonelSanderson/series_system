@@ -78,6 +78,13 @@ $(function() {
 	    }
 	}
 
+	if (typeof obj === 'string') {
+	    obj = JSON.parse(obj);
+	    if (obj.hasOwnProperty('json')) {
+		obj = JSON.parse(obj['json']);
+	    }
+	}
+
 	var linkedStart = false;
 	var linkedEnd = false;
 
@@ -129,13 +136,8 @@ $(function() {
 	    commonEnd = thisEnd;
 	}
 
-	if (commonStart && commonEnd && sortStart(commonStart) > sortEnd(commonEnd)) {
-	    commonStart = false;
-	    commonEnd = false;
-	}
-
 	var msg = '';
-	if (!commonStart && ! commonEnd) {
+	if (commonStart && commonEnd && sortStart(commonStart) > sortEnd(commonEnd)) {
 	    msg = '-- no common dates --';
 	} else {
 	    if (commonStart) {
@@ -155,6 +157,20 @@ $(function() {
 	$commonInput.html(msg);
 	$commonInput.data('start', commonStart);;
 	$commonInput.data('end', commonEnd);;
+    };
+
+
+    var prePopulateDateFields = function(linker) {
+	var $linker = $(linker);
+
+	var $container = $linker.closest('.subrecord-form-container');
+	var $commonInput = $container.find('.series-system-relationship-common-dates');
+	var commonStart = $commonInput.data('start');
+	var commonEnd = $commonInput.data('end');
+
+	if (commonStart && commonEnd && sortStart(commonStart) > sortEnd(commonEnd)) {
+	    return;
+	}
 
 	var $typeInput = $container.closest('li').find('input[id$=_jsonmodel_type_]:first');
 	var isSuccession = $typeInput.length > 0 ? ($typeInput.val().endsWith('succession_relationship')) :
@@ -192,6 +208,7 @@ $(function() {
 
     $(document).on('change', 'section[id^=series_system_] input.linker', function () {
 	calculateCommonDates(this);
+	prePopulateDateFields(this);
     });
 
 
