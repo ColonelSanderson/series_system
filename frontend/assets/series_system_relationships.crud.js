@@ -149,14 +149,14 @@ $(function() {
 	                   $container.closest('li').find('select[name=series_system_relationship_type]').val().endsWith('succession_relationship');
 
 	var $startInput = $container.find('input[id$=_start_date_]');
-	if ($startInput.val() == '') {
+	if ($startInput.val() == '' && isSuccession ? commonEnd : commonStart) {
 	    $startInput.attr('value', isSuccession ? commonEnd : commonStart);
 	}
 	$startInput.trigger('change');
 
 	if (!isSuccession) {
 	    var $endInput = $container.find('input[id$=_end_date_]');
-	    if ($endInput.val() == '') {
+	    if ($endInput.val() == '' && commonEnd) {
 		$endInput.attr('value', commonEnd);
 	    }
 	    $endInput.trigger('change');
