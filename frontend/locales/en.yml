@@ -196,7 +196,6 @@ en:
       restriction: Restriction
       nonpreferred_term: Nonpreferred Term
       preferred_term: Preferred Term
-      synonym: Synonym
     relationship_names:
       series_system_series_relationships: Series Relationships
       series_system_mandate_relationships: Mandate Relationships
@@ -278,8 +277,6 @@ en:
   series_system_function_function_association_relationship:
     <<: *series_system_relationship
   series_system_function_function_succession_relationship:
-    <<: *series_system_relationship
-  series_system_function_function_synonym_relationship:
     <<: *series_system_relationship
   series_system_function_function_preferred_term_relationship:
     <<: *series_system_relationship

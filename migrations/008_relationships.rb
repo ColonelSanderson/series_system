@@ -186,15 +186,12 @@ Sequel.migration do
     end
 
     # rename function relators
-    self[:enumeration].filter(name: 'function_synonym_relator').update(name: 'series_system_synonym_relator')
     self[:enumeration].filter(name: 'function_preferred_term_relator').update(name: 'series_system_preferred_term_relator')
     self[:enumeration].filter(name: 'function_nonpreferred_term_relator').update(name: 'series_system_nonpreferred_term_relator')
 
     self[:related_function_rlshp].all.each do |row|
       enum_name = self[:enumeration].filter(id: self[:enumeration_value].filter(id: row[:relator_id]).select(:enumeration_id)).select(:name).first[:name]
-      jsonmodel_type = if enum_name == 'series_system_synonym_relator'
-                         'series_system_function_function_synonym_relationship'
-                       elsif enum_name == 'series_system_preferred_term_relator'
+      jsonmodel_type = if enum_name == 'series_system_preferred_term_relator'
                          'series_system_function_function_preferred_term_relationship'
                        elsif enum_name == 'series_system_nonpreferred_term_relator'
                          'series_system_function_function_nonpreferred_term_relationship'

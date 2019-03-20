@@ -40,7 +40,6 @@ Sequel.migration do
 
     create_enum("function_preferred_term_relator", ["has_preferred_term_of", "is_preferred_term_of"])
     create_enum("function_nonpreferred_term_relator", ["has_nonpreferred_term_of", "is_nonpreferred_term_of"])
-    create_enum("function_synonym_relator", ["is_synonym_of"])
 
     create_table(:related_function_rlshp) do
       primary_key :id
@@ -212,7 +211,7 @@ Sequel.migration do
     drop_table(:mandate)
 
     ['function_source', 'mandate_type', 'function_preferred_term_relator',
-    'function_nonpreferred_term_relator', 'function_synonym_relator'].each do |enum_name|
+    'function_nonpreferred_term_relator'].each do |enum_name|
       mandate_type_enum = self[:enumeration].filter(:name => enum_name)
       self[:enumeration_value].filter(:enumeration_id => mandate_type_enum.select(:id)).delete
       mandate_type_enum.delete

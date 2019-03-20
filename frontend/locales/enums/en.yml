@@ -75,8 +75,6 @@ en:
     series_system_restriction_relator:
       restricts: Restricts
       is_restricted_by: Is restricted by
-    series_system_synonym_relator:
-      is_synonym_of: Is synonym of
     series_system_preferred_term_relator:
       has_preferred_term_of: Has preferred term of
       is_preferred_term_of: Is preferred term of

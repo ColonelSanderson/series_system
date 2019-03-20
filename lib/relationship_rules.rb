@@ -42,7 +42,6 @@ class RelationshipRules
     relator_values['responsibility'] = {:source => "is_responsible_for", :target => "under_responsibility_of"}
     relator_values['restriction'] = {:source => "restricts", :target => "is_restricted_by"}
     relator_values['succession'] = {:source => "supercedes", :target => "precedes"}
-    relator_values['synonym'] = {:source => "is_synonym_of", :target => "is_synonym_of"}
     relator_values['preferred_term'] = {:source => "has_preferred_term_of", :target => "is_preferred_term_of"}
     relator_values['nonpreferred_term'] = {:source => "has_nonpreferred_term_of", :target => "is_nonpreferred_term_of"}
 
@@ -71,7 +70,7 @@ class RelationshipRules
     @rules << RelationshipRule.new(:mandate, :function, ['creation', 'association'])
 
     @rules << RelationshipRule.new(:function, :series, ['documentation', 'association'])
-    @rules << RelationshipRule.new(:function, :function, ['containment', 'association', 'succession', 'synonym', 'preferred_term', 'nonpreferred_term'])
+    @rules << RelationshipRule.new(:function, :function, ['containment', 'association', 'succession', 'preferred_term', 'nonpreferred_term'])
 
     @all_relationship_jsonmodels = []
 
