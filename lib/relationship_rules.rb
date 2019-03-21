@@ -66,11 +66,11 @@ class RelationshipRules
 
     @rules << RelationshipRule.new(:transfer, :record, ['containment'])
 
-    @rules << RelationshipRule.new(:mandate, :series, ['association', 'ownership', 'documentation', 'restriction'])
+    @rules << RelationshipRule.new(:mandate, :series, ['documentation', 'restriction'])
     @rules << RelationshipRule.new(:mandate, :mandate, ['association', 'containment', 'succession'])
     @rules << RelationshipRule.new(:mandate, :function, ['creation', 'association', 'abolition'])
 
-    @rules << RelationshipRule.new(:function, :series, ['documentation', 'association'])
+    @rules << RelationshipRule.new(:function, :series, ['documentation'])
     @rules << RelationshipRule.new(:function, :function, ['containment', 'association', 'succession', 'preferred_term', 'nonpreferred_term'])
 
     @all_relationship_jsonmodels = []
