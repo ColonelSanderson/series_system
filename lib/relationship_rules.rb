@@ -393,5 +393,15 @@ class RelationshipRules
     relator_values = find_relator_values(relationship_type)
     relator_values.fetch(:source) != relator_values.fetch(:target)
   end
+
+  def show_notes_field?(rule, relationship_type, relator)
+    # All association relationships get a note
+    return true if ["series_system_association_relator"].include?(relator)
+
+    # Succession relationships between agencies do as well
+    return true if rule.source_jsonmodel_category == :agent && rule.target_jsonmodel_category == :agent && relationship_type == 'succession'
+
+    false
+  end
 end
- 
+
