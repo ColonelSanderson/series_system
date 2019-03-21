@@ -139,7 +139,7 @@
       <div class="form-group">
         <label class="control-label col-sm-2"><%= I18n.t("series_system_relationships.relationship_type") %></label>
         <div class="col-sm-4">
-          <select class="form-control" name="series_system_relationship_type">
+          <select class="form-control" name="series_system_relationship_type" id="<%= form.id_for('series_system_relationship_type') %>">
             <option value="<%= template_prefix %>_relator_nil"></option>
             <% rule.relationship_types.zip(relationship_jsonmodel_types).sort_by {|type, jsonmodel| I18n.t("series_system_relationships.relationship_types.#{type}")}.each do |type, jsonmodel| %>
               <option value="<%= jsonmodel %>"><%= I18n.t("series_system_relationships.relationship_types.#{type}") %></option>
@@ -151,6 +151,19 @@
         <% form.emit_template "#{template_prefix}_relator_nil" %>
       </div>
     </div>
+
+    <% if rule.relationship_types.length == 1 %>
+      <%# When there's only one candidate, there's only one choice!  Select it automatically. %>
+      <script>
+       var select = $("#<%= form.id_for('series_system_relationship_type') %>");
+
+       // Give the subform initialised event a chance to fire.
+       setTimeout(function () {
+         select.val(select.find('option:nth-child(2)').attr('value')).trigger('change');
+       });
+      </script>
+    <% end %>
+
   <% end %>
 <% end %>
 
