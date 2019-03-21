@@ -59,7 +59,7 @@ class RelationshipRules
     @rules << RelationshipRule.new(:agent, :mandate, ['authorisation', 'ownership', 'creation', 'administers'])
     @rules << RelationshipRule.new(:agent, :function, ['administers'])
 
-    @rules << RelationshipRule.new(:series, :series, ['succession', 'ownership'])
+    @rules << RelationshipRule.new(:series, :series, ['succession', 'ownership', 'association'])
     @rules << RelationshipRule.new(:series, :item, ['containment', 'ownership'])
 
     @rules << RelationshipRule.new(:item, :item, ['containment', 'succession'])
