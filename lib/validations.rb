@@ -78,13 +78,46 @@ module SeriesSystemValidations
     errors = []
 
     if hash['dates'].select {|d| d['label'] == 'existence' && d['end']}.empty?
-      reln = hash["series_system_agent_relationships"].select do |ar|
+      control_relns = hash["series_system_agent_relationships"].select do |ar|
         ar['jsonmodel_type'] == 'series_system_agent_record_ownership_relationship' &&
-        ar['relator'] == 'is_controlled_by' &&
-        !ar['end_date']
+        ar['relator'] == 'is_controlled_by'
       end
 
-      errors << ["series_system_agent_relationships", "must have a controlling agency"] if reln.empty?
+      current_control_relns = control_relns.select{|r| !r['end_date'] }
+
+      # must have a current controller
+      if current_control_relns.empty?
+        errors << ["series_system_agent_relationships", "must have a current controlled by relationship with an agency"]
+      end
+
+      # mustn't have more than one current controller
+      if current_control_relns.length > 1
+        errors << ["series_system_agent_relationships", "cannot have more than one current controlled by relationship with an agency"]
+      end
+
+      def sort_start(date)
+        date ? date.gsub(/\D/,'').ljust(8, '0') : '00000000'
+      end
+
+      def sort_end(date)
+        date ? date.gsub(/\D/,'').ljust(8, '9') : '99999999'
+      end
+
+      while !control_relns.empty?
+        reln = control_relns.pop
+
+        # must have a start date
+        unless reln['start_date']
+          errors << ["series_system_agent_relationships", "must have a start date"]
+        end
+
+        control_relns.each do |cr|
+          # control mustn't overlap
+          unless sort_start(reln['start_date']) >= sort_end(cr['end_date']) || sort_end(reln['end_date']) <= sort_start(cr['start_date'])
+            errors << ["series_system_agent_relationships", "controlled by relationship dates cannot overlap"]
+          end
+        end
+      end
     end
 
     errors
