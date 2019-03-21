@@ -71,7 +71,7 @@ class RelationshipRules
     @rules << RelationshipRule.new(:mandate, :function, ['creation', 'association', 'abolition'])
 
     @rules << RelationshipRule.new(:function, :series, ['documentation'])
-    @rules << RelationshipRule.new(:function, :function, ['containment', 'association', 'succession', 'preferred_term', 'nonpreferred_term'])
+    @rules << RelationshipRule.new(:function, :function, ['containment', 'association', 'succession'])
 
     @all_relationship_jsonmodels = []
 
