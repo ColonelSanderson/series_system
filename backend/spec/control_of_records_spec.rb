@@ -94,12 +94,23 @@ describe 'Series System' do
         :ref => old_agency.uri
       }
 
+      less_specific_not_overlapping_controller = {
+        :jsonmodel_type => 'series_system_agent_record_ownership_relationship',
+        :relator => 'is_controlled_by',
+        :start_date => '2010',
+        :end_date => '2019',
+        :ref => old_agency.uri
+      }
+
       expect { create(:json_resource,
                       :series_system_agent_relationships => [current_controller, nearly_overlapping_controller]) }.to_not raise_error
 
       expect { create(:json_resource,
                       :series_system_agent_relationships => [current_controller,
                                                              overlapping_controller]) }.to raise_error(JSONModel::ValidationException)
+      expect { create(:json_resource,
+                      :series_system_agent_relationships => [current_controller, less_specific_not_overlapping_controller]) }.to_not raise_error
+
     end
 
 

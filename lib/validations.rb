@@ -95,14 +95,6 @@ module SeriesSystemValidations
         errors << ["series_system_agent_relationships", "cannot have more than one current controlled by relationship with an agency"]
       end
 
-      def sort_start(date)
-        date ? date.gsub(/\D/,'').ljust(8, '0') : '00000000'
-      end
-
-      def sort_end(date)
-        date ? date.gsub(/\D/,'').ljust(8, '9') : '99999999'
-      end
-
       while !control_relns.empty?
         reln = control_relns.pop
 
@@ -113,7 +105,7 @@ module SeriesSystemValidations
 
         control_relns.each do |cr|
           # control mustn't overlap
-          unless sort_start(reln['start_date']) >= sort_end(cr['end_date']) || sort_end(reln['end_date']) <= sort_start(cr['start_date'])
+          if overlap?(reln['start_date'], cr['end_date']) && overlap?(cr['start_date'], reln['end_date'])
             errors << ["series_system_agent_relationships", "controlled by relationship dates cannot overlap"]
           end
         end
@@ -122,6 +114,15 @@ module SeriesSystemValidations
 
     errors
   end
+
+  def self.overlap?(start_date, end_date)
+    start_date ||= '0' * end_date.length
+    end_date ||= '9' * start_date.length
+
+    shorty = [start_date.length, end_date.length].min
+    start_date[0,shorty] < end_date[0,shorty]
+  end
+
 
 
   if JSONModel(:resource)
