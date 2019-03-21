@@ -70,7 +70,6 @@ Sequel.migration do
     end
 
     create_enum("series_system_association_relator", ["is_associated_with"])
-    create_enum("series_system_authorisation_relator", ["authorises", "is_authorised_by"])
     create_enum("series_system_succession_relator", ["supercedes", "precedes"])
     create_enum("series_system_ownership_relator", ["controls", "is_controlled_by"])
     create_enum("series_system_containment_relator", ["contains", "is_contained_within"])

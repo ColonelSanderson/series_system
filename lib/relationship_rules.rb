@@ -33,7 +33,6 @@ class RelationshipRules
     relator_values['abolition'] = {:source => "abolished", :target => "is_abolished_by"}
     relator_values['administers'] = {:source => "administered", :target => "is_administered_by"}
     relator_values['association'] = {:source => "is_associated_with", :target => "is_associated_with"}
-    relator_values['authorisation'] = {:source => "authorises", :target => "is_authorised_by"}
     relator_values['containment'] = {:source => "contains", :target => "is_contained_within"}
     relator_values['creation'] = {:source => "established", :target => "established_by"}
     relator_values['derivation'] = {:source => "derives", :target => "is_derived_from"}
@@ -56,7 +55,7 @@ class RelationshipRules
     @rules << RelationshipRule.new(:agent, :agent, ['succession', 'ownership', 'containment', 'association'])
     @rules << RelationshipRule.new(:agent, :record, ['ownership', 'creation'])
     @rules << RelationshipRule.new(:agent, :transfer, ['ownership'])
-    @rules << RelationshipRule.new(:agent, :mandate, ['authorisation', 'ownership', 'creation', 'administers'])
+    @rules << RelationshipRule.new(:agent, :mandate, ['creation', 'administers'])
     @rules << RelationshipRule.new(:agent, :function, ['administers'])
 
     @rules << RelationshipRule.new(:series, :series, ['succession', 'ownership', 'association'])

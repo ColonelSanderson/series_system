@@ -48,9 +48,6 @@ en:
       is_administered_by: Is administered by
     series_system_association_relator:
       is_associated_with: Is associated with
-    series_system_authorisation_relator:
-      authorises: Authorises
-      is_authorised_by: Is authorised by
     series_system_succession_relator:
       supercedes: Supercedes
       precedes: Precedes
