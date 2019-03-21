@@ -37,7 +37,7 @@ class RelationshipRules
     relator_values['containment'] = {:source => "contains", :target => "is_contained_within"}
     relator_values['creation'] = {:source => "established", :target => "established_by"}
     relator_values['derivation'] = {:source => "derives", :target => "is_derived_from"}
-    relator_values['documentation'] = {:source => "documents", :target => "is_documented_by"}
+    relator_values['documentation'] = {:source => "is_documented_by", :target => "documents"}
     relator_values['ownership'] = {:source => "controls", :target => "is_controlled_by"}
     relator_values['represented'] = {:source => "represents", :target => "is_represented_by"}
     relator_values['responsibility'] = {:source => "is_responsible_for", :target => "under_responsibility_of"}
