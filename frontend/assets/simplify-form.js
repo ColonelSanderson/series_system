@@ -79,6 +79,7 @@ class SimplifyFields {
                         throw new Error('Value provided does not match values listed in the target select element');
                     } else {
                         sectionField.value = defaultValue;
+                        setTimeout(() => sectionField.dispatchEvent(new Event('change')));
                     }
                     break;
                 case 'INPUT':

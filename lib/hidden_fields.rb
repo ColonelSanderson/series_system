@@ -22,6 +22,7 @@ module HiddenFields
           ["agent_dates_of_existence_", "_inferred_date_source_"]
         ],
         "defaultValues" => [
+          {"path"=>["agent_dates_of_existence_", "_date_type_"], "value"=>"range"}
         ]
       }
     }
