@@ -28,7 +28,9 @@
 
   <% if HiddenFields::CONFIG.include?(controller_name) %>
     <script>
+     $(function () {
         new SimplifyFields(<%== ASUtils.to_json(HiddenFields::CONFIG) %>, '<%= controller_name %>');
+     });
     </script>
   <% end %>
 <% end %>
