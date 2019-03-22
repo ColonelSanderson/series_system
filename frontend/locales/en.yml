@@ -67,11 +67,11 @@ en:
     subordinate_name_2_tooltip: An alternative to the name given by Primary name field.
 
   date:
-    inferred_date_source: Inferred source
+    date_notes: Date notes
 
   date_fields:
-    inferred_date_source: Inferred source
-    inferred_date_source_placeholder: The inferred source of the date
+    date_notes: Date notes
+    date_notes_placeholder: Notes about this date
 
   enumeration_names:
     agency_category: Agency Category

@@ -1,3 +1,3 @@
 {
-    "inferred_date_source" => {"type" => "string", "maxLength" => 16384}
+    "date_notes" => {"type" => "string", "maxLength" => 16384}
 }
