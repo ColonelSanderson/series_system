@@ -38,6 +38,13 @@ class SimplifyFields {
                 const sectionId = section.id;
                 const currentSectionConfig = this.config[sectionId];
                 if (typeof currentSectionConfig === 'undefined') { return; }
+                if (currentSectionConfig.moveSectionAfter) {
+                    const targetSection = document.querySelector(`#${currentSectionConfig.moveSectionAfter}`);
+                    if (targetSection) {
+                        section.parentNode.removeChild(section);
+                        targetSection.parentNode.insertBefore(section, targetSection.nextSibling);
+                    }
+                }
                 if (typeof currentSectionConfig.show === 'undefined' || currentSectionConfig.show.length === 0) {
                     section.classList.add('hide');
                     // Check by class name, or by href

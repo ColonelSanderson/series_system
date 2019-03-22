@@ -9,7 +9,8 @@ module HiddenFields
         ],
         "defaultValues" => [
           { "path" => ["agent_names_", "_source_"], "value" => "local" }
-        ]
+        ],
+        "moveSectionAfter" => "basic_information",
       },
       "agent_corporate_entity_dates_of_existence" => {
         "show" => [

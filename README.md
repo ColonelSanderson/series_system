@@ -19,13 +19,18 @@ CONFIG =
          ["agent_names_", "_source_"],
          ["agent_names_", "_rules_"]],
        "defaultValues"=>
-        [{"path"=>["agent_names_", "_source_"], "value"=>"local"}]}}}
+        [{"path"=>["agent_names_", "_source_"], "value"=>"local"}],
+       "moveSectionAfter" => "basic_information",
+        }}}
 
 ```
 Once an entry is added, that section's fields will be hidden unless they have been added to `show` array.
 For hiding fields in sub-sections, an entry will need to be added for both the `<section>` id and the field in the parent `<section>`.
 
 The `defaultValues` property allows fields have have mandatory values added to them when hidden.
+
+If given, `moveSectionAfter` will cause the current section to be
+repositioned to sit after another section (specified by element ID).
 
 
 ## Dependencies
