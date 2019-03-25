@@ -51,7 +51,51 @@ describe 'Series System' do
 
 
     it 'does not allow terminated agencies to control records' do
-      # hmm only have a ref to the agency when validating
+      terminated_agency = create(:json_agent_corporate_entity,
+                                 :dates_of_existence => [{
+                                                           :label => 'existence',
+                                                           :date_type => 'range',
+                                                           :begin => '1999-01-01',
+                                                           :end => '2001-01-01'
+                                                         }])
+
+      controlled_by_terminated_agency = {
+        :jsonmodel_type => 'series_system_agent_record_ownership_relationship',
+        :relator => 'is_controlled_by',
+        :start_date => '2019-02-01',
+        :ref => terminated_agency.uri
+      }
+
+      expect {
+        create(:json_resource, :series_system_agent_relationships => [controlled_by_terminated_agency])
+      }.to raise_error(JSONModel::ValidationException)
+    end
+
+
+    it 'does not allow agencies with current control of records to be terminated' do
+      current_agency = create(:json_agent_corporate_entity,
+                              :dates_of_existence => [{
+                                                        :label => 'existence',
+                                                        :date_type => 'range',
+                                                        :begin => '2019-01-01'
+                                                      }])
+      current_controller = {
+        :jsonmodel_type => 'series_system_agent_record_ownership_relationship',
+        :relator => 'is_controlled_by',
+        :start_date => '2019-01-01',
+        :ref => current_agency.uri
+      }
+
+      create(:json_resource, :series_system_agent_relationships => [current_controller])
+
+      # refresh the agency because its lock_version gets bumped when the relationship is created
+      current_agency = AgentCorporateEntity.to_jsonmodel(current_agency.id)
+
+      current_agency['dates_of_existence'][0]['end'] = '2019-01-31'
+
+      RequestContext.in_global_repo do
+        expect { AgentCorporateEntity[current_agency.id].update_from_json(current_agency) }.to raise_error(ConflictException)
+      end
     end
 
 
