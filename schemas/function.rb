@@ -14,6 +14,7 @@
       "display_string" => {"type" => "string", "readonly" => true},
 
       "date" => {"type" => "JSONModel(:date) object"},
+      "non_preferred_names" => {"type" => "array", "items" => {"type" => "JSONModel(:function_non_preferred_name) object"}}
     },
     "additionalProperties" => false
   }

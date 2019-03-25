@@ -219,3 +219,11 @@ en:
     permission_types:
       manage_function_record: create/update functions in this repository
       manage_mandate_record: create/update mandates in this repository
+
+  non_preferred_name:
+    _singular: Non-Preferred Name
+    _plural: Non-Preferred Names
+    name: Name
+    _frontend:
+      action:
+        add: Add Non-Preferred Name

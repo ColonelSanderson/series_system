@@ -11,6 +11,11 @@ class Function < Sequel::Model(:function)
                     :corresponding_to_association => :date,
                     :is_array => false)
 
+  one_to_many :function_non_preferred_name
+  def_nested_record(:the_property => :non_preferred_names,
+                    :contains_records_of_type => :function_non_preferred_name,
+                    :corresponding_to_association  => :function_non_preferred_name)
+
   def self.sequel_to_jsonmodel(objs, opts = {})
     jsons = super
 

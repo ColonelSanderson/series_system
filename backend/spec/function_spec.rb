@@ -13,6 +13,15 @@ describe 'series_system function model' do
     expect { Function.create_from_json(build(:json_function, opts)) }.to_not raise_error
   end
 
+  it 'lets you create a function with non preferred names' do
+    opts = { non_preferred_names: [{name: 'Bob'}, {name: 'Mary'}] }
+    function = Function.create_from_json(build(:json_function, opts))
+    names = Function[function.id].function_non_preferred_name
+    names.length.should be(2)
+    names[0].name.should eq("Bob")
+    names[1].name.should eq("Mary")
+  end
+
 end
 
 
