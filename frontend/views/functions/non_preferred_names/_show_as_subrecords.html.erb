@@ -1,0 +1,12 @@
+<section id="function_non_preferred_names_" class="subrecord-form-dummy">
+  <h3><%= I18n.t("non_preferred_name._plural") %></h3>
+  <div class="subrecord-form-container">
+    <div class="subrecord-form-fields">
+      <ul>
+        <% non_preferred_names.each do |name| %>
+          <li><%= name['name'] %></li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+</section>

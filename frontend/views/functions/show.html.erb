@@ -34,7 +34,11 @@
         <% if not @function.date.blank? %>
           <%= render_aspace_partial :partial => "dates/show", :locals => { :dates =>[@function["date"]], :section_id => "mandate_date_", :section_title => I18n.t("mandate.date") } %>
         <% end %>
-        
+
+        <% unless @function.non_preferred_names.blank? %>
+          <%= render_aspace_partial :partial => "functions/non_preferred_names/show_as_subrecords", :locals => { non_preferred_names: @function.non_preferred_names } %>
+        <% end %>
+
         <%= show_plugins_for(@function, readonly) %>
       <% end %>
     </div>

@@ -5,4 +5,5 @@
                :plusone => :submit
            }) do |sidebar| %>
   <%= sidebar.render_for_view_and_edit(:subrecord_type => 'date', :property => 'date') %>
+  <%= sidebar.render_for_view_and_edit(subrecord_type: 'function_non_preferred_name', property: 'non_preferred_names', title: I18n.t('non_preferred_name._plural')) %>
 <% end %>
