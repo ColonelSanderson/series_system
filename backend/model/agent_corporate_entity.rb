@@ -1,2 +1,2 @@
 AgentCorporateEntity.include(ExternalIDs)
-AgentCorporateEntity.include(ControlOfRecords)
+AgentCorporateEntity.include(RecordController)

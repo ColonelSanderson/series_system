@@ -1,1 +1,1 @@
-Resource.include(ControlOfRecords)
+Resource.include(ControlledRecord)

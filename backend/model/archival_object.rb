@@ -1,1 +1,1 @@
-ArchivalObject.include(ControlOfRecords)
+ArchivalObject.include(ControlledRecord)
