@@ -4,21 +4,23 @@ describe 'Series System' do
 
   describe 'Control of Records' do
 
-    it 'ensures a record has exactly one current controlling agency' do
-      current_agency = create(:json_agent_corporate_entity,
-                              :dates_of_existence => [{
-                                                        :label => 'existence',
-                                                        :date_type => 'range',
-                                                        :begin => '2019-01-01'
-                                                      }])
+    it 'ensures a series has exactly one current controlling agency' do
+      current_agency =
+        create(:json_agent_corporate_entity,
+               :dates_of_existence => [{
+                                         :label => 'existence',
+                                         :date_type => 'range',
+                                         :begin => '2019-01-01'
+                                       }])
 
-      old_agency = create(:json_agent_corporate_entity,
-                          :dates_of_existence => [{
-                                                    :label => 'existence',
-                                                    :date_type => 'range',
-                                                    :begin => '1999-01-01',
-                                                    :end => '2001-01-01'
-                                                  }])
+      old_agency =
+        create(:json_agent_corporate_entity,
+               :dates_of_existence => [{
+                                         :label => 'existence',
+                                         :date_type => 'range',
+                                         :begin => '1999-01-01',
+                                         :end => '2001-01-01'
+                                       }])
 
       current_controller = {
         :jsonmodel_type => 'series_system_agent_record_ownership_relationship',
@@ -50,13 +52,14 @@ describe 'Series System' do
 
 
     it 'does not allow terminated agencies to control records' do
-      terminated_agency = create(:json_agent_corporate_entity,
-                                 :dates_of_existence => [{
-                                                           :label => 'existence',
-                                                           :date_type => 'range',
-                                                           :begin => '1999-01-01',
-                                                           :end => '2001-01-01'
-                                                         }])
+      terminated_agency =
+        create(:json_agent_corporate_entity,
+               :dates_of_existence => [{
+                                         :label => 'existence',
+                                         :date_type => 'range',
+                                         :begin => '1999-01-01',
+                                         :end => '2001-01-01'
+                                       }])
 
       controlled_by_terminated_agency = {
         :jsonmodel_type => 'series_system_agent_record_ownership_relationship',
@@ -72,12 +75,14 @@ describe 'Series System' do
 
 
     it 'does not allow agencies with current control of records to be terminated' do
-      current_agency = create(:json_agent_corporate_entity,
-                              :dates_of_existence => [{
-                                                        :label => 'existence',
-                                                        :date_type => 'range',
-                                                        :begin => '2019-01-01'
-                                                      }])
+      current_agency =
+        create(:json_agent_corporate_entity,
+               :dates_of_existence => [{
+                                         :label => 'existence',
+                                         :date_type => 'range',
+                                         :begin => '2019-01-01'
+                                       }])
+
       current_controller = {
         :jsonmodel_type => 'series_system_agent_record_ownership_relationship',
         :relator => 'is_controlled_by',
@@ -99,20 +104,22 @@ describe 'Series System' do
 
 
     it 'does not allow dates of control to overlap for a record' do
-      current_agency = create(:json_agent_corporate_entity,
-                              :dates_of_existence => [{
-                                                        :label => 'existence',
-                                                        :date_type => 'range',
-                                                        :begin => '2019-01-01'
-                                                      }])
+      current_agency =
+        create(:json_agent_corporate_entity,
+               :dates_of_existence => [{
+                                         :label => 'existence',
+                                         :date_type => 'range',
+                                         :begin => '2019-01-01'
+                                       }])
 
-      old_agency = create(:json_agent_corporate_entity,
-                          :dates_of_existence => [{
-                                                    :label => 'existence',
-                                                    :date_type => 'range',
-                                                    :begin => '2019-01-01',
-                                                    :end => '2019-03-01'
-                                                  }])
+      old_agency =
+        create(:json_agent_corporate_entity,
+               :dates_of_existence => [{
+                                         :label => 'existence',
+                                         :date_type => 'range',
+                                         :begin => '2019-01-01',
+                                         :end => '2019-03-01'
+                                       }])
 
       current_controller = {
         :jsonmodel_type => 'series_system_agent_record_ownership_relationship',
@@ -158,12 +165,13 @@ describe 'Series System' do
 
 
     it 'ensures control relationships have a start date' do
-      current_agency = create(:json_agent_corporate_entity,
-                              :dates_of_existence => [{
-                                                        :label => 'existence',
-                                                        :date_type => 'range',
-                                                        :begin => '2019-01-01'
-                                                      }])
+      current_agency =
+        create(:json_agent_corporate_entity,
+               :dates_of_existence => [{
+                                         :label => 'existence',
+                                         :date_type => 'range',
+                                         :begin => '2019-01-01'
+                                       }])
 
       no_start_controller = {
         :jsonmodel_type => 'series_system_agent_record_ownership_relationship',
@@ -177,19 +185,21 @@ describe 'Series System' do
 
 
     it 'allows items to be controlled by an agency other than the series controller' do
-      series_control_agency = create(:json_agent_corporate_entity,
-                                     :dates_of_existence => [{
-                                                               :label => 'existence',
-                                                               :date_type => 'range',
-                                                               :begin => '2019-01-01'
-                                                             }])
+      series_control_agency =
+        create(:json_agent_corporate_entity,
+               :dates_of_existence => [{
+                                         :label => 'existence',
+                                         :date_type => 'range',
+                                         :begin => '2019-01-01'
+                                       }])
 
-      item_control_agency = create(:json_agent_corporate_entity,
-                                   :dates_of_existence => [{
-                                                             :label => 'existence',
-                                                             :date_type => 'range',
-                                                             :begin => '2019-01-01'
-                                                           }])
+      item_control_agency =
+        create(:json_agent_corporate_entity,
+               :dates_of_existence => [{
+                                         :label => 'existence',
+                                         :date_type => 'range',
+                                         :begin => '2019-01-01'
+                                       }])
 
       series_controller = {
         :jsonmodel_type => 'series_system_agent_record_ownership_relationship',
@@ -214,27 +224,30 @@ describe 'Series System' do
 
 
     it 'tells you who the responsible agency is for a record and aggregates them at series level' do
-      current_agency = create(:json_agent_corporate_entity,
-                              :dates_of_existence => [{
-                                                        :label => 'existence',
-                                                        :date_type => 'range',
-                                                        :begin => '2019-01-01'
-                                                      }])
+      current_agency =
+        create(:json_agent_corporate_entity,
+               :dates_of_existence => [{
+                                         :label => 'existence',
+                                         :date_type => 'range',
+                                         :begin => '2019-01-01'
+                                       }])
 
-      old_agency = create(:json_agent_corporate_entity,
-                          :dates_of_existence => [{
-                                                    :label => 'existence',
-                                                    :date_type => 'range',
-                                                    :begin => '1999-01-01',
-                                                    :end => '2001-01-01'
-                                                  }])
+      old_agency =
+        create(:json_agent_corporate_entity,
+               :dates_of_existence => [{
+                                         :label => 'existence',
+                                         :date_type => 'range',
+                                         :begin => '1999-01-01',
+                                         :end => '2001-01-01'
+                                       }])
 
-      item_override_agency = create(:json_agent_corporate_entity,
-                                    :dates_of_existence => [{
-                                                              :label => 'existence',
-                                                              :date_type => 'range',
-                                                              :begin => '2019-01-01'
-                                                            }])
+      item_override_agency =
+        create(:json_agent_corporate_entity,
+               :dates_of_existence => [{
+                                         :label => 'existence',
+                                         :date_type => 'range',
+                                         :begin => '2019-01-01'
+                                       }])
 
       current_controller = {
         :jsonmodel_type => 'series_system_agent_record_ownership_relationship',
