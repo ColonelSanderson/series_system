@@ -23,8 +23,7 @@
                    {"type" => "JSONModel(:mandate) uri"}],
         "ifmissing" => "error"
       },
-
-      "start_date" => {"type" => "string", "maxLength" => 255},
+      "start_date" => {"type" => "string", "maxLength" => 255, "ifmissing" => "error"},
       "end_date" => {"type" => "string", "maxLength" => 255},
       "note" => {"type" => "string", "maxLength" => 16384},
 

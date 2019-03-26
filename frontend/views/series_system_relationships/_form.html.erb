@@ -91,7 +91,7 @@
           </div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group required">
           <label class="control-label col-sm-2">
             <% if "series_system_succession_relator" == JSONModel(relationship_jsonmodel.intern).schema["properties"]["relator"]["dynamic_enum"] %>
               <%= I18n.t("series_system_relationships.succession_date") %>

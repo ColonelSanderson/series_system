@@ -88,9 +88,16 @@ describe 'series_system relationships' do
               relationship.end_date = '2010-12-31'
               relationship.note = generate(:generic_description)
 
+              # mandatory
+              relationship.start_date = nil
+              expect { relationship.to_hash(:validated) }.to raise_error(JSONModel::ValidationException)
+
               # check the start_date
               relationship.start_date = 'NOT-VALID'
               expect { relationship.to_hash(:validated) }.to raise_error(JSONModel::ValidationException)
+
+              relationship.start_date = '0000'
+              expect { relationship.to_hash(:validated) }.to_not raise_error
 
               relationship.start_date = '123'
               expect { relationship.to_hash(:validated) }.to_not raise_error
@@ -137,6 +144,7 @@ describe 'series_system relationships' do
                 relationship = JSONModel(relationship_name.intern).new
                 relationship.ref = target.uri
                 relationship.relator = relator_options(relationship_name).sample || raise("No relator for #{relationship_name}")
+                relationship.start_date = '1999'
 
                 jsonmodel_property = RelationshipRules.instance.build_jsonmodel_property(rule.target_jsonmodel_category)
 
