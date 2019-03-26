@@ -1,6 +1,26 @@
 require 'factory_bot'
 require 'spec/lib/factory_bot_helpers'
 
+FactoryBot.modify do
+  factory :json_resource, class: JSONModel(:resource) do
+    self.series_system_agent_relationships {
+      [
+       {
+         'jsonmodel_type' => 'series_system_agent_record_ownership_relationship',
+         'relator' => 'is_controlled_by',
+         'start_date' => generate(:yyyy_mm_dd),
+         'ref' => create(:json_agent_corporate_entity).uri
+       }
+      ]
+    }
+  end
+
+  factory :json_agent_corporate_entity, class: JSONModel(:agent_corporate_entity) do
+    self.dates_of_existence { [build(:json_date, :end => nil, :label => 'existence')] }
+  end
+end
+
+
 FactoryBot.define do
 
   def JSONModel(key)
