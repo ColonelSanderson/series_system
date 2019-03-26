@@ -212,5 +212,83 @@ describe 'Series System' do
                       :series_system_agent_relationships => [item_controller]) }.to_not raise_error
     end
 
+
+    it 'tells you who the responsible agency is for a record and aggregates them at series level' do
+      current_agency = create(:json_agent_corporate_entity,
+                              :dates_of_existence => [{
+                                                        :label => 'existence',
+                                                        :date_type => 'range',
+                                                        :begin => '2019-01-01'
+                                                      }])
+
+      old_agency = create(:json_agent_corporate_entity,
+                          :dates_of_existence => [{
+                                                    :label => 'existence',
+                                                    :date_type => 'range',
+                                                    :begin => '1999-01-01',
+                                                    :end => '2001-01-01'
+                                                  }])
+
+      item_override_agency = create(:json_agent_corporate_entity,
+                                    :dates_of_existence => [{
+                                                              :label => 'existence',
+                                                              :date_type => 'range',
+                                                              :begin => '2019-01-01'
+                                                            }])
+
+      current_controller = {
+        :jsonmodel_type => 'series_system_agent_record_ownership_relationship',
+        :relator => 'is_controlled_by',
+        :start_date => '2019-02-01',
+        :ref => current_agency.uri
+      }
+
+      old_controller = {
+        :jsonmodel_type => 'series_system_agent_record_ownership_relationship',
+        :relator => 'is_controlled_by',
+        :start_date => '1999-02-01',
+        :end_date => '2001-01-01',
+        :ref => old_agency.uri
+      }
+
+      override_controller = {
+        :jsonmodel_type => 'series_system_agent_record_ownership_relationship',
+        :relator => 'is_controlled_by',
+        :start_date => '2019-02-01',
+        :ref => item_override_agency.uri
+      }
+
+      series = create(:json_resource, :series_system_agent_relationships => [current_controller, old_controller])
+
+      item_inheriting_control_from_series =
+        create(:json_archival_object,
+               :resource => { :ref => series.uri},
+               :series_system_agent_relationships => [])
+
+      item_overriding_control =
+        create(:json_archival_object,
+               :resource => { :ref => series.uri},
+               :series_system_agent_relationships => [override_controller])
+
+      item_inheriting_control_from_parent =
+        create(:json_archival_object,
+               :parent => { :ref => item_overriding_control.uri },
+               :resource => { :ref => series.uri},
+               :series_system_agent_relationships => [])
+
+      Resource[series.id].responsible_agency.id.should eq(current_agency.id)
+
+      ArchivalObject[item_inheriting_control_from_series.id].responsible_agency.id.should eq(current_agency.id)
+
+      ArchivalObject[item_overriding_control.id].responsible_agency.id.should eq(item_override_agency.id)
+
+      ArchivalObject[item_inheriting_control_from_parent.id].responsible_agency.id.should eq(item_override_agency.id)
+
+      other_responsible_agencies = Resource[series.id].other_responsible_agencies
+
+      other_responsible_agencies.length.should eq(1)
+
+      other_responsible_agencies[0].id.should eq(item_override_agency.id)
+    end
   end
 end
