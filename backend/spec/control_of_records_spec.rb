@@ -1,11 +1,10 @@
 require 'spec_helper'
-require 'pp'
 
 describe 'Series System' do
 
   describe 'Control of Records' do
 
-    it 'ensures an item has exactly one current controlling agency' do
+    it 'ensures a record has exactly one current controlling agency' do
       current_agency = create(:json_agent_corporate_entity,
                               :dates_of_existence => [{
                                                         :label => 'existence',
@@ -99,7 +98,7 @@ describe 'Series System' do
     end
 
 
-    it 'does not allow dates of control to overlap for an item' do
+    it 'does not allow dates of control to overlap for a record' do
       current_agency = create(:json_agent_corporate_entity,
                               :dates_of_existence => [{
                                                         :label => 'existence',
@@ -174,6 +173,43 @@ describe 'Series System' do
 
       expect { create(:json_resource,
                       :series_system_agent_relationships => [no_start_controller]) }.to raise_error(JSONModel::ValidationException)
+    end
+
+
+    it 'allows items to be controlled by an agency other than the series controller' do
+      series_control_agency = create(:json_agent_corporate_entity,
+                                     :dates_of_existence => [{
+                                                               :label => 'existence',
+                                                               :date_type => 'range',
+                                                               :begin => '2019-01-01'
+                                                             }])
+
+      item_control_agency = create(:json_agent_corporate_entity,
+                                   :dates_of_existence => [{
+                                                             :label => 'existence',
+                                                             :date_type => 'range',
+                                                             :begin => '2019-01-01'
+                                                           }])
+
+      series_controller = {
+        :jsonmodel_type => 'series_system_agent_record_ownership_relationship',
+        :relator => 'is_controlled_by',
+        :start_date => '2019-01-01',
+        :ref => series_control_agency.uri
+      }
+
+      item_controller = {
+        :jsonmodel_type => 'series_system_agent_record_ownership_relationship',
+        :relator => 'is_controlled_by',
+        :start_date => '2019-01-01',
+        :ref => item_control_agency.uri
+      }
+
+      series = create(:json_resource, :series_system_agent_relationships => [series_controller])
+
+      expect { create(:json_archival_object,
+                      :resource => { :ref => series.uri},
+                      :series_system_agent_relationships => [item_controller]) }.to_not raise_error
     end
 
   end
