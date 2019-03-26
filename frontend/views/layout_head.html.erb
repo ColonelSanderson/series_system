@@ -29,11 +29,10 @@
   <%= javascript_include_tag("similar_agencies.js") %>
   <%= javascript_include_tag "#{AppConfig[:frontend_proxy_prefix]}assets/simplify-form.js" %>
 
-  <% if HiddenFields::CONFIG.include?(controller_name) %>
-    <script>
-     $(function () {
-        new SimplifyFields(<%== ASUtils.to_json(HiddenFields::CONFIG) %>, '<%= controller_name %>');
-     });
-    </script>
-  <% end %>
+  <script>
+   $(function () {
+     new SimplifyFields(<%== ASUtils.to_json(HiddenFields::CONFIG) %>,
+                        '<%= controller_name %>');
+   });
+  </script>
 <% end %>

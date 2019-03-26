@@ -2,7 +2,9 @@ class SimplifyFields {
     constructor (config, controller) {
         this.config = config[controller];
         this.controller = controller;
-        if (!this.config || !controller) {
+        this.globalRules = config._global || {};
+
+        if ((!this.config || !controller) && this.globalRules.length === 0) {
             return;
         }
         this.simplify();
@@ -15,7 +17,11 @@ class SimplifyFields {
                 const subsectionId = this.getItemPath(idPath, index);
                 // Dirty hack for getting the correct config name.
                 const splitConfigNames = idPath.split(/[0-9]+/);
-                const topmostSectionId = subformValue.closest('form fieldset > section').id;
+                const topmostSection = subformValue.closest('form fieldset > section');
+                if (!topmostSection) {
+                    return;
+                }
+                const topmostSectionId = topmostSection.id;
                 const configSection = config[controller][topmostSectionId];
                 if (typeof configSection === 'undefined' || typeof configSection.show === 'undefined') {
                     return;
@@ -29,6 +35,8 @@ class SimplifyFields {
                     }
                 });
             });
+
+            this.applyGlobalRules(subform[0]);
         });
     }
 
@@ -56,6 +64,8 @@ class SimplifyFields {
                     this.parseSectionVisibility(section, currentSectionConfig);
                 }
             });
+
+        this.applyGlobalRules(document);
     }
 
     parseSectionFields (sectionField, config, configFieldId) {
@@ -78,8 +88,7 @@ class SimplifyFields {
                     if (!Array.apply(null, sectionField.options).map(option => option.value).includes(defaultValue)) {
                         throw new Error('Value provided does not match values listed in the target select element');
                     } else {
-                        sectionField.value = defaultValue;
-                        setTimeout(() => sectionField.dispatchEvent(new Event('change')));
+                        this.setInputValueWithChangeEvent(sectionField, defaultValue);
                     }
                     break;
                 case 'INPUT':
@@ -87,7 +96,7 @@ class SimplifyFields {
                         throw new Error(`Expected checkbox value to be boolean, but found: ${defaultValue}`);
                     }
                 case 'TEXTAREA':
-                    sectionField.value = defaultValue;
+                    this.setInputValueWithChangeEvent(sectionField, defaultValue);
                     break;
                 default:
                     throw new Error(`Unexpected field tag: ${sectionField.tagName}`);
@@ -133,5 +142,45 @@ class SimplifyFields {
 
     getItemPath (idPath, index) {
         return idPath.replace('${index}', index);
+    }
+
+    setInputValueWithChangeEvent (input, value) {
+        if (input.value !== value) {
+            input.value = value;
+            setTimeout(() => input.dispatchEvent(new Event('change')));
+        }
+    }
+
+    findElementsMatchingRule (rootElement, rule) {
+        const result = [];
+
+        rootElement.querySelectorAll(rule.selector)
+                   .forEach(element => {
+                       if (!rule.nameMustMatchRegex || element.name.match(rule.nameMustMatchRegex)) {
+                           result.push(element);
+                       }
+                    });
+
+        return result;
+    }
+
+    applyGlobalRules (element) {
+        // Set defaults as appropriate
+        (this.globalRules.defaultValues || []).forEach(rule => {
+            this.findElementsMatchingRule(element, rule).forEach(match => {
+                this.setInputValueWithChangeEvent(match, rule.value);
+            });
+        });
+
+        // Hide fields marked for hiding
+        (this.globalRules.hideFields || []).forEach(rule => {
+            this.findElementsMatchingRule(element, rule).forEach(match => {
+                const hideMe = rule.hideClosestSelector ? match.closest(rule.hideClosestSelector) : element;
+
+                if (hideMe && !hideMe.matches('.hide')) {
+                    hideMe.classList.add('hide');
+                }
+            });
+        });
     }
 }

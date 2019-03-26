@@ -1,5 +1,38 @@
 module HiddenFields
   CONFIG = {
+    # Rules here apply to any controller and any section
+    "_global" => {
+      "hideFields" => [
+        {
+          "selector" => 'select[name*="[era]"]',
+          "nameMustMatchRegex" => "date.*\\[era\\]",
+          "hideClosestSelector" => '.form-group',
+        },
+        {
+          "selector" => 'select[name*="[calendar]"]',
+          "nameMustMatchRegex" => "date.*\\[calendar\\]",
+          "hideClosestSelector" => '.form-group',
+        },
+        {
+          "selector" => 'textarea[name*="[expression]"]',
+          "nameMustMatchRegex" => "date.*\\[expression\\]",
+          "hideClosestSelector" => '.form-group',
+        },
+        {
+          "selector" => 'select[name*="[date_type]"]',
+          "nameMustMatchRegex" => "date.*\\[date_type\\]",
+          "hideClosestSelector" => '.form-group',
+        }
+      ],
+      "defaultValues" => [
+        {
+          "selector" => 'select[name*="[date_type]"]',
+          "nameMustMatchRegex" => "date.*\\[date_type\\]",
+          "value" => 'inclusive',
+        }
+      ],
+    },
+
     "agents" => {
       "agent_corporate_entity_names" => {
         "show" => [
