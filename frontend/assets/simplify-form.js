@@ -41,7 +41,7 @@ class SimplifyFields {
     }
 
     simplify () {
-        document.querySelectorAll('div.record-pane fieldset section')
+        document.querySelectorAll('div.record-pane section')
             .forEach((section) => {
                 const sectionId = section.id;
                 const currentSectionConfig = this.config[sectionId];
