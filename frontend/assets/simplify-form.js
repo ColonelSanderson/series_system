@@ -150,6 +150,16 @@ class SimplifyFields {
     setInputValueWithChangeEvent (input, value) {
         if (input.value !== value) {
             input.value = value;
+
+            if (input.closest('.combobox-container')) {
+                // Comboboxes use a hidden input for the actual value, but need
+                // their display element updated to make the value visible to the user.
+                const selectId = input.name.replace('[', '_').replace(']', '_');
+                const label = document.querySelector(`#${selectId} option[value="${value}"]`).innerText;
+
+                input.closest('.combobox-container').querySelector('input[type=text]').value = label;
+            }
+
             setTimeout(() => input.dispatchEvent(new Event('change')));
         }
     }
