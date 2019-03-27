@@ -175,6 +175,7 @@ en:
     succession_date: Succession Date
     common_dates: Common Dates
     common_dates_placeholder: -- the range of dates in common between this record and the record linked above --
+    common_dates_warning: "Warning: date outside common date range"
     start_date: Start Date
     start_date_placeholder: YYYY, YYYY-MM or YYYY-MM-DD
     end_date: End Date

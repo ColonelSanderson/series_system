@@ -192,17 +192,31 @@ $(function() {
     };
 
 
-    $(document).on('change', 'section[id^=series_system_] input[id$=_date_]', function() {
-	var $this = $(this);
-	var $common = $this.closest('.subrecord-form-container').find('.series-system-relationship-common-dates');
+    var validateDateForInput = function($input) {
+        var $common = $input.closest('.subrecord-form-container').find('.series-system-relationship-common-dates');
 
-	if ($this.val() != '' &&
-	    (($common.data('start') && sortStart($common.data('start')) > sortStart($this.val())) ||
-	     ($common.data('end') && sortEnd($common.data('end')) < sortEnd($this.val())))) {
-	    $this.closest('.form-group').addClass('has-warning');
-	} else {
-	    $this.closest('.form-group').removeClass('has-warning');
-	}
+        function showWarning($formGroup) {
+            $formGroup.addClass('alert').addClass('alert-warning').addClass('has-warning');
+            $input.after($('#dateOutsideOfCommonDateRangeWarning').html());
+        }
+
+        function hideWarning($formGroup) {
+            $formGroup.removeClass('alert').removeClass('alert-warning').removeClass('has-warning');
+            $formGroup.find('.outside-of-range-warning').remove();
+        }
+
+        if ($input.val() != '' &&
+            (($common.data('start') && sortStart($common.data('start')) > sortStart($input.val())) ||
+                ($common.data('end') && sortEnd($common.data('end')) < sortEnd($input.val())))) {
+            showWarning($input.closest('.form-group'));
+        } else {
+            hideWarning($input.closest('.form-group'));
+        }
+    };
+
+
+    $(document).on('change', 'section[id^=series_system_] input[id$=_date_]', function() {
+        validateDateForInput($(this));
     });
 
 

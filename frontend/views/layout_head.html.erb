@@ -5,6 +5,9 @@
   <% if current_record && RelationshipRules.instance.has_rules_for_jsonmodel_type?(current_record['jsonmodel_type']) %>
     <!-- Allow series system relationships to be created from required contexts -->
     <%= javascript_include_tag("series_system_relationships.crud.js") %>
+    <script id="dateOutsideOfCommonDateRangeWarning" type="text/template">
+      <small class="outside-of-range-warning"><%= I18n.t('series_system_relationships.common_dates_warning') %></small>
+    </script>
   <% end %>
 <% rescue %>
 <% end %>
