@@ -21,6 +21,7 @@ module HiddenFields
         {
           "selector" => 'select[name*="[date_type]"]',
           "nameMustMatchRegex" => "date.*\\[date_type\\]",
+          "nameMustNotMatchRegex" => "dates_of_existence",
           "hideClosestSelector" => '.form-group',
         },
         {
@@ -32,6 +33,7 @@ module HiddenFields
         {
           "selector" => 'select[name*="[date_type]"]',
           "nameMustMatchRegex" => "date.*\\[date_type\\]",
+          "nameMustNotMatchRegex" => "dates_of_existence",
           "value" => 'inclusive',
         },
         {

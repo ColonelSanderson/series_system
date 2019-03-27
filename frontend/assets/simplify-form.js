@@ -169,7 +169,8 @@ class SimplifyFields {
 
         rootElement.querySelectorAll(rule.selector)
                    .forEach(element => {
-                       if (!rule.nameMustMatchRegex || element.name.match(rule.nameMustMatchRegex)) {
+                       if ((!rule.nameMustMatchRegex || element.name.match(rule.nameMustMatchRegex)) &&
+                           (!rule.nameMustNotMatchRegex || !element.name.match(rule.nameMustNotMatchRegex))) {
                            result.push(element);
                        }
                     });
