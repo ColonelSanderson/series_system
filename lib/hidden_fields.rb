@@ -22,15 +22,43 @@ module HiddenFields
           "selector" => 'select[name*="[date_type]"]',
           "nameMustMatchRegex" => "date.*\\[date_type\\]",
           "hideClosestSelector" => '.form-group',
-        }
+        },
+        {
+          "selector" => 'select[name="resource[resource_type]"]',
+          "hideClosestSelector" => '.form-group',
+        },
       ],
       "defaultValues" => [
         {
           "selector" => 'select[name*="[date_type]"]',
           "nameMustMatchRegex" => "date.*\\[date_type\\]",
           "value" => 'inclusive',
+        },
+        {
+          "selector" => 'select[name="resource[level]"]',
+          "value" => 'series',
+        },
+        {
+          "selector" => 'input[name="resource[language]"]',
+          "value" => 'eng',
         }
       ],
+    },
+
+    "resources" => {
+      "finding_aid" => {
+        "show" => [],
+      },
+      "resource_linked_agents_" => {
+        "show" => [],
+      },
+      "resource_extents_" => {
+        "show" => [],
+        "defaultValues" => [
+          {"path" => ["resource_extents_", "_number_"], "value" => "0"},
+          {"path" => ["resource_extents_", "_extent_type_"], "value" => "volumes"},
+          ]
+        }
     },
 
     "agents" => {
@@ -53,9 +81,9 @@ module HiddenFields
           ["agent_dates_of_existence_", "_date_notes_"]
         ],
         "defaultValues" => [
-          {"path"=>["agent_dates_of_existence_", "_date_type_"], "value"=>"range"}
+          {"path" => ["agent_dates_of_existence_", "_date_type_"], "value" => "range"}
         ]
       }
-    }
+    },
   }
 end
