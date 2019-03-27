@@ -53,7 +53,8 @@ class SimplifyFields {
                         targetSection.parentNode.insertBefore(section, targetSection.nextSibling);
                     }
                 }
-                if (typeof currentSectionConfig.show === 'undefined' || currentSectionConfig.show.length === 0) {
+
+                if (typeof currentSectionConfig.show !== 'undefined' && currentSectionConfig.show.length === 0) {
                     section.classList.add('hide');
                     // Check by class name, or by href
                     const sidebarElement = document.querySelector(`[class*='sidebar-entry-${sectionId}'],[href='#${sectionId}']`);
@@ -69,13 +70,15 @@ class SimplifyFields {
     }
 
     parseSectionFields (sectionField, config, configFieldId) {
-        const flatConfig = config.show.map(element => Array.isArray(element) ? element.join('') : element);
-        if (!flatConfig.includes(configFieldId)) {
-            if (sectionField.tagName === 'SECTION') {
-                sectionField.classList.add('hide');
-            } else {
-                // Get the parent div or section to hide
-                sectionField.closest('.form-group,section').classList.add('hide');
+        if (typeof config.show !== 'undefined') {
+            const flatConfig = config.show.map(element => Array.isArray(element) ? element.join('') : element);
+            if (!flatConfig.includes(configFieldId)) {
+                if (sectionField.tagName === 'SECTION') {
+                    sectionField.classList.add('hide');
+                } else {
+                    // Get the parent div or section to hide
+                    sectionField.closest('.form-group,section').classList.add('hide');
+                }
             }
         }
 
