@@ -15,8 +15,8 @@ FactoryBot.modify do
     }
   end
 
-  factory :json_agent_corporate_entity, class: JSONModel(:agent_corporate_entity) do
-    self.dates_of_existence { [build(:json_date, :end => nil, :label => 'existence')] }
+  factory :json_date, class: JSONModel(:date) do
+        self.end { nil }
   end
 end
 
