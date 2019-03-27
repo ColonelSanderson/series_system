@@ -11,22 +11,43 @@ module ControlledRecord
   end
 
 
-  def responsible_agency
-    ds = self.class.controlling_agencies_dataset
+  def controlling_agency_id
+    rlshp_def = self.class.find_relationship('series_system_agent_relationships')
+    jsonmodel_type = self.class.my_jsonmodel.record_type
 
-    if self.respond_to? :root_record_id
-      ds = ds.filter("#{self.class.table_name}_id_0".intern => self.id)
-      if ds.empty?
-        if self.parent_id
-          self.class[self.parent_id].responsible_agency
-        else
-          self.class.root_model[self.root_record_id].responsible_agency
-        end
-      else
-        AgentCorporateEntity[ds.first[:agency_id]]
-      end
+    rule = RelationshipRules.instance.rules_for_jsonmodel_type(jsonmodel_type).find do |rule|
+      rule.target_jsonmodel_category == :agent
+    end
+
+    relationship_type = rule.relationship_types.find do |relationship_type|
+      relationship_type == 'ownership'
+    end
+
+    rlshp_jsonmodel_type = RelationshipRules.instance.build_relationship_jsonmodel_name(rule, relationship_type)
+
+    controlling_agent_model = AgentCorporateEntity
+    controlling_agent_reference_col = rlshp_def.reference_columns_for(controlling_agent_model).first
+    record_reference_col = rlshp_def.reference_columns_for(self.class).first
+
+    rlshp_def.find_by_participant_ids(self.class, [self.id]).each do |r|
+      next unless r.jsonmodel_type == rlshp_jsonmodel_type && r.end_date.nil?
+
+      return r[controlling_agent_reference_col]
+    end
+
+    false
+  end
+
+
+  def responsible_agency
+    agency_id = controlling_agency_id
+
+    return AgentCorporateEntity[agency_id] if agency_id
+
+    if self.parent_id
+      self.class[self.parent_id].responsible_agency
     else
-      AgentCorporateEntity[ds.filter("#{self.class.table_name}_id_0".intern => self.id).first[:agency_id]]
+      self.class.root_model[self.root_record_id].responsible_agency
     end
   end
 
@@ -90,5 +111,6 @@ module ControlledRecord
         .select(Sequel.as(:relationship_target_id, :agency_id))
     end
   end
+
 
 end
