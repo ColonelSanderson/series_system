@@ -2,55 +2,13 @@
   filter_term = params[:filter_term].first
   filter_property = ASUtils.json_parse(filter_term).keys.first
   filter_value = ASUtils.json_parse(filter_term).values.first
-
-
-  def relator_for(record, filter_value)
-    # These search result listings are shown when we're on the
-    # record view for one record type, looking at the list of
-    # records that link back to it.  For example, we might be on
-    # an Agent Corporate Entity page viewing a list of Resource
-    # records that the agent controls.
-
-
-    # The type of record we're viewing (e.g. the Agent in the above example)
-    this_record_url = filter_value
-    this_record_type = JSONModel.parse_reference(this_record_url).fetch(:type)
-
-    # The type of record linked to our record (e.g. the Resource in the above example)
-    linked_record_type = record['jsonmodel_type']
-
-    # The set of JSONModel properties that might contain the reference to the linked record we've found.
-    relationship_properties = RelationshipRules.instance.relationship_jsonmodel_properties(linked_record_type, this_record_type)
-
-    linked_record_json = ASUtils.json_parse(record['json'])
-
-    relator_labels = []
-
-    relationship_properties.each do |property|
-      linked_record_json[property].each do |reference|
-        # For each reference we find that links to this record,
-        # pull out and translate its relator.  This requires
-        # knowing which dynamic enum the relator is from, which
-        # unfortunately requires a trip back to the JSONModel
-        # Schema...
-
-        relator_name = JSONModel(reference['jsonmodel_type'].intern).schema['properties']['relator']['dynamic_enum']
-
-        if reference['ref'] == this_record_url
-          reverse_relator = RelationshipRules.instance.flip_relator(relator_name, reference['relator'])
-
-          relator_labels << I18n.t("enumerations.#{relator_name}.#{reverse_relator}")
-        end
-      end
-    end
-
-    relator_labels.uniq.join(", ")
-  end
 %>
 
 <% if @search_data.results? %>
   <% add_identifier_column if show_identifier_column? %>
-  <%= render_aspace_partial :partial => "shared/pagination_summary" %>
+
+  <%# Took this out because the count are wrong when we duplicate rows for multiple relationships.  Does it matter? %>
+  <%# render_aspace_partial :partial => "shared/pagination_summary" %>
 
   <table id="tabledSearchResults" class="table table-striped table-bordered table-condensed table-hover table-sortable table-search-results" <% if allow_multi_select? %>data-multiselect="true"<% end %>>
     <thead>
@@ -62,6 +20,9 @@
       <th class="col title sortable <% if @search_data.sorted_by === "title_sort"%>sort-<%= @search_data.current_sort_direction %><% end %>">
         <%= link_to title_column_header_label, build_search_params("sort" => @search_data.sort_filter_for("title_sort"), "filter_value" => filter_value) %>
       </th>
+      <th><%= I18n.t("series_system_relationships.start_date") %></th>
+      <th><%= I18n.t("series_system_relationships.end_date") %></th>
+      <th><%= I18n.t("series_system_relationships.note") %></th>
       <th class="col audit-info"></th>
       <% if !params[:linker] || params[:linker] === 'false' %>
         <th class="col actions"><!-- actions --></th>
@@ -71,42 +32,48 @@
     <tbody>
     <% @search_data['results'].each do |result|
       deleted = (params.has_key?("deleted_uri") and Array(params["deleted_uri"]).include?(result["id"])) || false
+      result_view = RelatedRecordViewModel.new(result, filter_value)
     %>
-      <tr class="<%= "deleted" if deleted %>">
-        <td><%= relator_for(result, filter_value) %></td>
-        <td>
-          <%=  I18n.t("#{result["primary_type"]}._singular", :default => I18n.t("plugins.#{result["primary_type"]}._singular")) %>
-        </td>
-        <td>
-          <% if result['primary_type'] === "repository" and session[:repo] === result['id'] %><span class="label label-success"><%= I18n.t("repository._frontend.messages.selected_short") %></span><% end %>
-          <% if result["suppressed"] %><span class="label label-info"><%= I18n.t("states.suppressed") %></span><% end %>
-          <% if deleted %><span class="label label-important"><%= I18n.t("states.deleted") %></span><% end %>
-          <%=  clean_mixed_content(result["title"] || result['display_string']).html_safe %>
-        </td>
-        <td>
-          <%= display_audit_info(result, :format => 'compact') %>
-        </td>
-        <% if !params[:linker] || params[:linker] === 'false' %>
-          <td class="table-record-actions">
-            <% if not deleted %>
-              <div class="btn-group">
-                <%= link_to I18n.t("actions.view"), {:controller => :resolver, :action => :resolve_readonly, :uri => result["id"]}, :class => "btn btn-xs btn-default" %>
-                <% if can_edit_search_result?(result) %>
-                  <%= link_to I18n.t("actions.edit"), {:controller => :resolver, :action => :resolve_edit, :uri => result["id"]}, :class => "btn btn-xs btn-primary" %>
-                <% end %>
-              </div>
-              <% if result['primary_type'] === "repository" and @repositories.any?{|r| r['uri'] === result['id']} %>
+      <% result_view.relationships.each do |rlshp| %>
+        <tr class="<%= "deleted" if deleted %>">
+          <td><%= rlshp.relator %></td>
+          <td>
+            <%=  I18n.t("#{result["primary_type"]}._singular", :default => I18n.t("plugins.#{result["primary_type"]}._singular")) %>
+          </td>
+          <td>
+            <% if result['primary_type'] === "repository" and session[:repo] === result['id'] %><span class="label label-success"><%= I18n.t("repository._frontend.messages.selected_short") %></span><% end %>
+            <% if result["suppressed"] %><span class="label label-info"><%= I18n.t("states.suppressed") %></span><% end %>
+            <% if deleted %><span class="label label-important"><%= I18n.t("states.deleted") %></span><% end %>
+            <%=  clean_mixed_content(result["title"] || result['display_string']).html_safe %>
+          </td>
+          <td><%= rlshp.start_date %></td>
+          <td><%= rlshp.end_date %></td>
+          <td><%= rlshp.note %></td>
+          <td>
+            <%= display_audit_info(result, :format => 'compact') %>
+          </td>
+          <% if !params[:linker] || params[:linker] === 'false' %>
+            <td class="table-record-actions">
+              <% if not deleted %>
+                <div class="btn-group">
+                  <%= link_to I18n.t("actions.view"), {:controller => :resolver, :action => :resolve_readonly, :uri => result["id"]}, :class => "btn btn-xs btn-default" %>
+                  <% if can_edit_search_result?(result) %>
+                    <%= link_to I18n.t("actions.edit"), {:controller => :resolver, :action => :resolve_edit, :uri => result["id"]}, :class => "btn btn-xs btn-primary" %>
+                  <% end %>
+                </div>
+                <% if result['primary_type'] === "repository" and @repositories.any?{|r| r['uri'] === result['id']} %>
 
-                <% if current_repo['uri'] != result['id'] %>
-                  <%= form_tag({:action => :select, :id => JSONModel(:repository).id_for(result['id'])}, {:style => "display: inline;"}) do |f| %>
-                    <button type="submit" class="btn btn-xs btn-success"><%= I18n.t("repository._frontend.action.select") %></button>
+                  <% if current_repo['uri'] != result['id'] %>
+                    <%= form_tag({:action => :select, :id => JSONModel(:repository).id_for(result['id'])}, {:style => "display: inline;"}) do |f| %>
+                      <button type="submit" class="btn btn-xs btn-success"><%= I18n.t("repository._frontend.action.select") %></button>
+                    <% end %>
                   <% end %>
                 <% end %>
               <% end %>
-            <% end %>
-          </td>
-        <% end %>
-      </tr>
+            </td>
+          <% end %>
+        </tr>
+      <% end %>
     <% end %>
     </tbody>
   </table>

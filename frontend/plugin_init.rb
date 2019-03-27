@@ -1,6 +1,7 @@
 ArchivesSpace::Application.extend_aspace_routes(File.join(File.dirname(__FILE__), "routes.rb"))
 
 require_relative 'helpers/series_system_helper'
+require_relative 'helpers/related_record_viewmodel'
 require_relative '../lib/relationship_rules'
 require_relative '../lib/hidden_fields'
 
