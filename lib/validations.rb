@@ -85,8 +85,8 @@ module SeriesSystemValidations
 
       current_control_relns = control_relns.select{|r| !r['end_date'] }
 
-      # must have a current controller
-      if current_control_relns.empty?
+      # series must have a current controller
+      if hash['jsonmodel_type'] == 'resource' && current_control_relns.empty?
         errors << ["series_system_agent_relationships", "must have a current controlled by relationship with an agency"]
       end
 
@@ -122,6 +122,13 @@ module SeriesSystemValidations
 
   if JSONModel(:resource)
     JSONModel(:resource).add_validation("check_series_controlling_agency") do |hash|
+      check_controlling_agency(hash)
+    end
+  end
+
+
+  if JSONModel(:archival_object)
+    JSONModel(:archival_object).add_validation("check_item_controlling_agency") do |hash|
       check_controlling_agency(hash)
     end
   end
