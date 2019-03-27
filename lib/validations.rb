@@ -98,11 +98,6 @@ module SeriesSystemValidations
       while !control_relns.empty?
         reln = control_relns.pop
 
-        # must have a start date
-        unless reln['start_date']
-          errors << ["series_system_agent_relationships", "must have a start date"]
-        end
-
         control_relns.each do |cr|
           # control mustn't overlap
           if overlap?(reln['start_date'], cr['end_date']) && overlap?(cr['start_date'], reln['end_date'])
