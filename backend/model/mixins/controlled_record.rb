@@ -61,10 +61,12 @@ module ControlledRecord
       # check each open control relationship
       json['series_system_agent_relationships'].select{|r| r['relator'] == 'is_controlled_by' && !r['end_date']}.each do |cr|
 
+        target_table =  RelationshipRules.instance.model_for_jsonmodel_type(cr['relationship_target_record_type']).table_name
+
         # controlling agency is dead if it doesn't have any open (ie lacking an end date) 'existence' date sub-records
-        controller_is_dead = db[cr['relationship_target_record_type'].intern]
-          .filter("#{cr['relationship_target_record_type']}__id".intern => cr['relationship_target_id'])
-          .left_join(:date, "date__#{cr['relationship_target_record_type']}_id".intern => "#{cr['relationship_target_record_type']}__id".intern)
+        controller_is_dead = db[target_table]
+          .filter("#{target_table}__id".intern => cr['relationship_target_id'])
+          .left_join(:date, "date__#{target_table}_id".intern => "#{target_table}__id".intern)
           .left_join(Sequel.as(:enumeration_value, :date_label), :id => :date__label_id)
           .filter(:date_label__value => 'existence')
           .filter(:date__end => nil)
