@@ -148,7 +148,7 @@ class SimplifyFields {
     }
 
     setInputValueWithChangeEvent (input, value) {
-        if (input.value !== value) {
+        if (input.value !== value && input.value === '') {
             input.value = value;
 
             if (input.closest('.combobox-container')) {
