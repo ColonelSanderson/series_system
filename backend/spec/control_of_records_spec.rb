@@ -4,39 +4,46 @@ describe 'Series System' do
 
   describe 'Control of Records' do
 
-    it 'ensures a series has exactly one current controlling agency' do
-      current_agency =
-        create(:json_agent_corporate_entity,
-               :dates_of_existence => [{
-                                         :label => 'existence',
-                                         :date_type => 'range',
-                                         :begin => '2019-01-01'
-                                       }])
+    let!(:current_agency) {
+      create(:json_agent_corporate_entity,
+             :dates_of_existence => [{
+                                       :label => 'existence',
+                                       :date_type => 'range',
+                                       :begin => '2019-01-01'
+                                     }])
+    }
 
-      old_agency =
-        create(:json_agent_corporate_entity,
-               :dates_of_existence => [{
-                                         :label => 'existence',
-                                         :date_type => 'range',
-                                         :begin => '1999-01-01',
-                                         :end => '2001-01-01'
-                                       }])
+    let!(:old_agency) {
+      create(:json_agent_corporate_entity,
+             :dates_of_existence => [{
+                                       :label => 'existence',
+                                       :date_type => 'range',
+                                       :begin => '1999-01-01',
+                                       :end => '2001-01-01'
+                                     }])
+    }
 
-      current_controller = {
+    let!(:current_controller) {
+      {
         :jsonmodel_type => 'series_system_agent_record_ownership_relationship',
         :relator => 'is_controlled_by',
         :start_date => '2019-02-01',
         :ref => current_agency.uri
       }
+    }
 
-      old_controller = {
+    let!(:old_controller) {
+      {
         :jsonmodel_type => 'series_system_agent_record_ownership_relationship',
         :relator => 'is_controlled_by',
         :start_date => '1999-02-01',
         :end_date => '2001-01-01',
         :ref => old_agency.uri
       }
+    }
 
+
+    it 'ensures a series has exactly one current controlling agency' do
       expect { create(:json_resource,
                       :series_system_agent_relationships => []) }.to raise_error(JSONModel::ValidationException)
 
@@ -75,7 +82,7 @@ describe 'Series System' do
 
 
     it 'does not allow agencies with current control of records to be terminated' do
-      current_agency =
+      immortal_agency =
         create(:json_agent_corporate_entity,
                :dates_of_existence => [{
                                          :label => 'existence',
@@ -83,51 +90,27 @@ describe 'Series System' do
                                          :begin => '2019-01-01'
                                        }])
 
-      current_controller = {
+      open_controller = {
         :jsonmodel_type => 'series_system_agent_record_ownership_relationship',
         :relator => 'is_controlled_by',
         :start_date => '2019-01-01',
-        :ref => current_agency.uri
+        :ref => immortal_agency.uri
       }
 
-      create(:json_resource, :series_system_agent_relationships => [current_controller])
+      create(:json_resource, :series_system_agent_relationships => [open_controller])
 
       # refresh the agency because its lock_version gets bumped when the relationship is created
-      current_agency = AgentCorporateEntity.to_jsonmodel(current_agency.id)
+      immortal_agency = AgentCorporateEntity.to_jsonmodel(immortal_agency.id)
 
-      current_agency['dates_of_existence'][0]['end'] = '2019-01-31'
+      immortal_agency['dates_of_existence'][0]['end'] = '2019-01-31'
 
       RequestContext.in_global_repo do
-        expect { AgentCorporateEntity[current_agency.id].update_from_json(current_agency) }.to raise_error(ConflictException)
+        expect { AgentCorporateEntity[immortal_agency.id].update_from_json(immortal_agency) }.to raise_error(ConflictException)
       end
     end
 
 
     it 'does not allow dates of control to overlap for a record' do
-      current_agency =
-        create(:json_agent_corporate_entity,
-               :dates_of_existence => [{
-                                         :label => 'existence',
-                                         :date_type => 'range',
-                                         :begin => '2019-01-01'
-                                       }])
-
-      old_agency =
-        create(:json_agent_corporate_entity,
-               :dates_of_existence => [{
-                                         :label => 'existence',
-                                         :date_type => 'range',
-                                         :begin => '2019-01-01',
-                                         :end => '2019-03-01'
-                                       }])
-
-      current_controller = {
-        :jsonmodel_type => 'series_system_agent_record_ownership_relationship',
-        :relator => 'is_controlled_by',
-        :start_date => '2019-02-01',
-        :ref => current_agency.uri
-      }
-
       overlapping_controller = {
         :jsonmodel_type => 'series_system_agent_record_ownership_relationship',
         :relator => 'is_controlled_by',
@@ -165,14 +148,6 @@ describe 'Series System' do
 
 
     it 'ensures control relationships have a start date' do
-      current_agency =
-        create(:json_agent_corporate_entity,
-               :dates_of_existence => [{
-                                         :label => 'existence',
-                                         :date_type => 'range',
-                                         :begin => '2019-01-01'
-                                       }])
-
       no_start_controller = {
         :jsonmodel_type => 'series_system_agent_record_ownership_relationship',
         :relator => 'is_controlled_by',
@@ -224,23 +199,6 @@ describe 'Series System' do
 
 
     it 'tells you who the responsible agency is for a record and aggregates them at series level' do
-      current_agency =
-        create(:json_agent_corporate_entity,
-               :dates_of_existence => [{
-                                         :label => 'existence',
-                                         :date_type => 'range',
-                                         :begin => '2019-01-01'
-                                       }])
-
-      old_agency =
-        create(:json_agent_corporate_entity,
-               :dates_of_existence => [{
-                                         :label => 'existence',
-                                         :date_type => 'range',
-                                         :begin => '1999-01-01',
-                                         :end => '2001-01-01'
-                                       }])
-
       item_override_agency =
         create(:json_agent_corporate_entity,
                :dates_of_existence => [{
@@ -248,21 +206,6 @@ describe 'Series System' do
                                          :date_type => 'range',
                                          :begin => '2019-01-01'
                                        }])
-
-      current_controller = {
-        :jsonmodel_type => 'series_system_agent_record_ownership_relationship',
-        :relator => 'is_controlled_by',
-        :start_date => '2019-02-01',
-        :ref => current_agency.uri
-      }
-
-      old_controller = {
-        :jsonmodel_type => 'series_system_agent_record_ownership_relationship',
-        :relator => 'is_controlled_by',
-        :start_date => '1999-02-01',
-        :end_date => '2001-01-01',
-        :ref => old_agency.uri
-      }
 
       override_controller = {
         :jsonmodel_type => 'series_system_agent_record_ownership_relationship',
