@@ -21,7 +21,7 @@ module HiddenFields
         {
           "selector" => 'select[name*="[date_type]"]',
           "nameMustMatchRegex" => "date.*\\[date_type\\]",
-          "nameMustNotMatchRegex" => "dates_of_existence",
+          "nameMustNotMatchRegex" => "(dates_of_existence|(mandate|function)\\[date\\])",
           "hideClosestSelector" => '.form-group',
         },
         {
@@ -33,8 +33,13 @@ module HiddenFields
         {
           "selector" => 'select[name*="[date_type]"]',
           "nameMustMatchRegex" => "date.*\\[date_type\\]",
-          "nameMustNotMatchRegex" => "dates_of_existence",
+          "nameMustNotMatchRegex" => "(dates_of_existence|(mandate|function)\\[date\\])",
           "value" => 'inclusive',
+        },
+        {
+          "selector" => 'select[name*="[date_type]"]',
+          "nameMustMatchRegex" => "(mandate|function)\\[date\\]\\[date_type\\]",
+          "value" => 'range',
         },
         {
           "selector" => 'select[name="resource[level]"]',

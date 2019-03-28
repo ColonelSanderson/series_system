@@ -1,11 +1,11 @@
 class SimplifyFields {
     constructor (config, controller) {
-        this.config = config[controller];
+        this.config = config[controller] || {};
         this.controller = controller;
         this.globalRules = config._global || {};
 
-        if ((!this.config || !controller) && this.globalRules.length === 0) {
-            return;
+        if (!this.config[controller]) {
+            this.config[controller] = {};
         }
         this.simplify();
         $(document).on("subrecordcreated.aspace", (event, objectName, subform) => {
@@ -22,16 +22,16 @@ class SimplifyFields {
                     return;
                 }
                 const topmostSectionId = topmostSection.id;
-                const configSection = config[controller][topmostSectionId];
+                const configSection = this.config[controller][topmostSectionId];
                 if (typeof configSection === 'undefined' || typeof configSection.show === 'undefined') {
                     return;
                 }
-                config[controller][topmostSectionId].show.forEach(showFieldNames => {
+                this.config[controller][topmostSectionId].show.forEach(showFieldNames => {
                     if (Array.isArray(showFieldNames) &&
                         showFieldNames.filter(element => splitConfigNames.map(
                             element => element.replace('${index}_', '')).includes(element))
                     ) {
-                        this.parseSubsectionVisibility(subformValue, config[controller][topmostSectionId], subsectionId);
+                        this.parseSubsectionVisibility(subformValue, this.config[controller][topmostSectionId], subsectionId);
                     }
                 });
             });
