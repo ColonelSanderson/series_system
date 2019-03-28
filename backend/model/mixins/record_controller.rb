@@ -13,7 +13,9 @@ module RecordController
         .count
 
       if open_control > 0
-        raise ConflictException.new("Unable to terminate agency. It currently has control of #{open_control} record#{open_control > 1 ? 's' : ''}.")
+        errors = Sequel::Model::Errors.new
+        errors.add('dates_of_existence', "Unable to terminate agency that controls records")
+        raise Sequel::ValidationFailed.new(errors)
       end
     end
 
