@@ -1,5 +1,8 @@
 module ControlledRecord
 
+  ControlRelationship = Struct.new(:definition, :jsonmodel, :agency_model, :record, :agency)
+
+
   def self.included(base)
     base.extend(ClassMethods)
   end
@@ -11,38 +14,10 @@ module ControlledRecord
   end
 
 
-  def controlling_agency_id
-    rlshp_def = self.class.find_relationship('series_system_agent_relationships')
-    jsonmodel_type = self.class.my_jsonmodel.record_type
-
-    rule = RelationshipRules.instance.rules_for_jsonmodel_type(jsonmodel_type).find do |rule|
-      rule.target_jsonmodel_category == :agent
-    end
-
-    relationship_type = rule.relationship_types.find do |relationship_type|
-      relationship_type == 'ownership'
-    end
-
-    rlshp_jsonmodel_type = RelationshipRules.instance.build_relationship_jsonmodel_name(rule, relationship_type)
-
-    controlling_agent_model = AgentCorporateEntity
-    controlling_agent_reference_col = rlshp_def.reference_columns_for(controlling_agent_model).first
-    record_reference_col = rlshp_def.reference_columns_for(self.class).first
-
-    rlshp_def.find_by_participant_ids(self.class, [self.id]).each do |r|
-      next unless r.jsonmodel_type == rlshp_jsonmodel_type && r.end_date.nil?
-
-      return r[controlling_agent_reference_col]
-    end
-
-    false
-  end
-
-
   def responsible_agency
-    agency_id = controlling_agency_id
+    agency_uri = self.class.controlling_agency_uris([self.id]).fetch(self.id, false)
 
-    return AgentCorporateEntity[agency_id] if agency_id
+    return agency_uri if agency_uri
 
     if self.parent_id
       self.class[self.parent_id].responsible_agency
@@ -54,18 +29,14 @@ module ControlledRecord
 
   def other_responsible_agencies
     # for now we're only supporting this at series level
-    return [] if self.respond_to? :root_record_id
+    return {} if self.respond_to? :root_record_id
 
     # this is only pertinent to models that have trees under them
-    return [] unless self.class.respond_to? :node_model
+    return {} unless self.class.respond_to? :node_model
 
-    children_ids = self.class.node_model.filter(:root_record_id => self.id).select(:id)
+    children_ids = self.class.node_model.filter(:root_record_id => self.id).select(:id).all.map{|r| r[:id]}
 
-    self.class.controlling_agencies_dataset
-      .filter("#{self.class.node_model.table_name}_id_0".intern => children_ids)
-      .map{|row| row[:agency_id]}
-      .uniq
-      .map{|id| AgentCorporateEntity[id]}
+    self.class.node_model.controlling_agency_uris(children_ids)
   end
 
 
@@ -102,15 +73,55 @@ module ControlledRecord
     end
 
 
-    def controlling_agencies_dataset
-      @controlling_agencies_dataset ||=
-        db[:series_system_rlshp]
-        .filter(:jsonmodel_type => 'series_system_agent_record_ownership_relationship')
-        .filter(:relationship_target_record_type => 'agent_corporate_entity')
-        .filter(:end_date => nil)
-        .select(Sequel.as(:relationship_target_id, :agency_id))
-    end
-  end
+    def controlling_agency_uris(ids)
+      # given an array of record ids, returns a hash keyed on those ids
+      # with values of the uris of the corresponding controlling agencies
 
+      out = {}
+
+      control_relationship.definition.find_by_participant_ids(self, ids).each do |r|
+        next unless r.jsonmodel_type == control_relationship.jsonmodel && r.end_date.nil?
+
+        out[r[control_relationship.record]] = control_relationship.agency_model.my_jsonmodel.uri_for(r[control_relationship.agency])
+      end
+
+      out
+    end
+
+
+    private
+
+
+    def control_relationship
+      @control_reln_defn ||= find_control_relationship_defn
+    end
+
+
+    def find_control_relationship_defn
+      rlshp_def = find_relationship('series_system_agent_relationships')
+      jsonmodel_type = my_jsonmodel.record_type
+
+      rule = RelationshipRules.instance.rules_for_jsonmodel_type(jsonmodel_type).find do |rule|
+        rule.target_jsonmodel_category == :agent
+      end
+
+      relationship_type = rule.relationship_types.find do |relationship_type|
+        relationship_type == 'ownership'
+      end
+
+      rlshp_jsonmodel_type = RelationshipRules.instance.build_relationship_jsonmodel_name(rule, relationship_type)
+
+      controlling_agent_model = AgentCorporateEntity
+      controlling_agent_reference_col = rlshp_def.reference_columns_for(controlling_agent_model).first
+      record_reference_col = rlshp_def.reference_columns_for(self).first
+
+      ControlRelationship.new(rlshp_def,
+                              rlshp_jsonmodel_type,
+                              controlling_agent_model,
+                              record_reference_col,
+                              controlling_agent_reference_col)
+    end
+
+  end
 
 end

@@ -289,19 +289,19 @@ describe 'Series System' do
                :resource => { :ref => series.uri},
                :series_system_agent_relationships => [])
 
-      Resource[series.id].responsible_agency.id.should eq(current_agency.id)
+      Resource[series.id].responsible_agency.should eq(current_agency.uri)
 
-      ArchivalObject[item_inheriting_control_from_series.id].responsible_agency.id.should eq(current_agency.id)
+      ArchivalObject[item_inheriting_control_from_series.id].responsible_agency.should eq(current_agency.uri)
 
-      ArchivalObject[item_overriding_control.id].responsible_agency.id.should eq(item_override_agency.id)
+      ArchivalObject[item_overriding_control.id].responsible_agency.should eq(item_override_agency.uri)
 
-      ArchivalObject[item_inheriting_control_from_parent.id].responsible_agency.id.should eq(item_override_agency.id)
+      ArchivalObject[item_inheriting_control_from_parent.id].responsible_agency.should eq(item_override_agency.uri)
 
       other_responsible_agencies = Resource[series.id].other_responsible_agencies
 
       other_responsible_agencies.length.should eq(1)
 
-      other_responsible_agencies[0].id.should eq(item_override_agency.id)
+      other_responsible_agencies[item_overriding_control.id].should eq(item_override_agency.uri)
     end
   end
 end
