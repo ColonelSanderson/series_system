@@ -228,3 +228,6 @@ en:
     _frontend:
       action:
         add: Add Non-Preferred Name
+
+  validation_errors:
+    must_have_a_current_controlled_by_relationship_with_an_agency: Must have a current Ownership relationship with an Agency
