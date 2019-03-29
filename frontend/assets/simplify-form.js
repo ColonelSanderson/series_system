@@ -187,7 +187,7 @@ class SimplifyFields {
         // Hide fields marked for hiding
         (this.globalRules.hideFields || []).forEach(rule => {
             this.findElementsMatchingRule(element, rule).forEach(match => {
-                const hideMe = rule.hideClosestSelector ? match.closest(rule.hideClosestSelector) : element;
+                const hideMe = rule.hideClosestSelector ? match.closest(rule.hideClosestSelector) : match;
 
                 if (hideMe && !hideMe.matches('.hide')) {
                     hideMe.classList.add('hide');

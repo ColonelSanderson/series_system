@@ -27,6 +27,9 @@ module HiddenFields
           "selector" => 'select[name="resource[resource_type]"]',
           "hideClosestSelector" => '.form-group',
         },
+        {
+          "selector" => '.extent-calculator-btn',
+        }
       ],
       "defaultValues" => [
         {
