@@ -7,6 +7,7 @@ class SimplifyFields {
         if (!this.config[controller]) {
             this.config[controller] = {};
         }
+        $(document).on("loadedrecordform.aspace", () => { this.simplify(); });
         this.simplify();
         $(document).on("subrecordcreated.aspace", (event, objectName, subform) => {
             // In modals, `subform` can have multiple matches, which are not distinguishable from the subform torget we want.
