@@ -67,7 +67,17 @@ module HiddenFields
           {"path" => ["resource_extents_", "_number_"], "value" => "0"},
           {"path" => ["resource_extents_", "_extent_type_"], "value" => "volumes"},
           ]
-        }
+        },
+      "archival_object_linked_agents_" => {
+        "show" => [],
+      },
+      "archival_object_extents_" => {
+        "show" => [],
+        "defaultValues" => [
+          {"path" => ["archival_object_extents_", "_number_"], "value" => "0"},
+          {"path" => ["archival_object_extents_", "_extent_type_"], "value" => "volumes"},
+        ]
+      },
     },
 
     "agents" => {
