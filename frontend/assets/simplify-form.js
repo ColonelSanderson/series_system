@@ -61,9 +61,8 @@ class SimplifyFields {
                     if (!!sidebarElement) {
                         sidebarElement.classList.add('hide');
                     }
-                } else {
-                    this.parseSectionVisibility(section, currentSectionConfig);
                 }
+                this.parseSectionVisibility(section, currentSectionConfig);
             });
 
         this.applyGlobalRules(document);
@@ -111,8 +110,6 @@ class SimplifyFields {
         // Check if it's a section or subsection
         const subsectionList = section.querySelector('ul.subrecord-form-list');
         if (subsectionList === null) {
-            subsectionList.querySelector('.form-group input,select,textarea')
-                .forEach(listField => this.parseSectionFields(listField, config, listField.id));
             return;
         }
 
