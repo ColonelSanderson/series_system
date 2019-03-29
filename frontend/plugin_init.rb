@@ -10,6 +10,7 @@ Rails.application.config.after_initialize do
   Plugins.add_resolve_field('mandates')
   Plugins.add_resolve_field('functions')
   Plugins.add_resolve_field('related_functions')
+  Plugins.add_resolve_field('responsible_agency')
 
   Plugins.register_edit_role_for_type('mandate', 'update_mandate_record')
   Plugins.register_edit_role_for_type('function', 'update_function_record')

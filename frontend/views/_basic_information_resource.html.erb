@@ -1,0 +1,12 @@
+<% if controller.action_name == 'show' %>
+
+  <% define_template "series_system_responsible_agency", jsonmodel_definition(:resource) do |form| %>
+
+    <%= render_aspace_partial :partial => "responsible_agencies/responsible_agency",
+                              :locals => {:form => form, :agency => record['responsible_agency']} %>
+
+  <% end %>
+
+  <% form.emit_template("series_system_responsible_agency") %>
+
+<% end %>

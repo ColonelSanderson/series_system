@@ -19,6 +19,11 @@ module ControlledRecord
 
     return agency_uri if agency_uri
 
+    unless self.respond_to? :parent_id
+      # something terrible has happened, but let's pretend everytihng is fine
+      return ''
+    end
+
     if self.parent_id
       self.class[self.parent_id].responsible_agency
     else
@@ -41,6 +46,15 @@ module ControlledRecord
 
 
   module ClassMethods
+    def sequel_to_jsonmodel(objs, opts = {})
+      jsons = super
+      jsons.zip(objs).each do |json, obj|
+        json['responsible_agency'] = { 'ref' => obj.responsible_agency }
+      end
+
+      jsons
+    end
+
     def create_from_json(json, opts = {})
       ensure_controller_is_not_dead(json)
       super
