@@ -2,7 +2,7 @@ require 'factory_bot'
 require 'spec/lib/factory_bot_helpers'
 
 FactoryBot.modify do
-  factory :json_resource, class: JSONModel(:resource) do
+  factory :json_resource, class: JSONModel::JSONModel(:resource) do
     self.series_system_agent_relationships {
       [
        {
@@ -15,7 +15,7 @@ FactoryBot.modify do
     }
   end
 
-  factory :json_date, class: JSONModel(:date) do
+  factory :json_date, class: JSONModel::JSONModel(:date) do
         self.end { nil }
   end
 end
