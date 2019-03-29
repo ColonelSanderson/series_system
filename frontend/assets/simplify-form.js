@@ -37,7 +37,9 @@ class SimplifyFields {
                 });
             });
 
-            this.applyGlobalRules(subform[0]);
+            if (subform[0]) {
+                this.applyGlobalRules(subform[0]);
+            }
         });
     }
 
