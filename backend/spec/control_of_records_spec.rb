@@ -105,7 +105,7 @@ describe 'Series System' do
       immortal_agency['dates_of_existence'][0]['end'] = '2019-01-31'
 
       RequestContext.in_global_repo do
-        expect { AgentCorporateEntity[immortal_agency.id].update_from_json(immortal_agency) }.to raise_error(ConflictException)
+        expect { AgentCorporateEntity[immortal_agency.id].update_from_json(immortal_agency) }.to raise_error(Sequel::ValidationFailed)
       end
     end
 
