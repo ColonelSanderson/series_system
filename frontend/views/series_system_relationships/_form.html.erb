@@ -79,6 +79,7 @@
           </div>
         </div>
 
+      <% if relationship_jsonmodel == 'series_system_agent_record_ownership_relationship' %>
         <div class="form-group">
           <label class="control-label col-sm-2">
             <%= I18n.t("series_system_relationships.common_dates") %>
@@ -90,6 +91,7 @@
             </div>
           </div>
         </div>
+      <% end %>
 
         <div class="form-group required">
           <label class="control-label col-sm-2">

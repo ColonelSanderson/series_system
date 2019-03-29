@@ -196,6 +196,7 @@ $(function() {
         var $common = $input.closest('.subrecord-form-container').find('.series-system-relationship-common-dates');
 
         function showWarning($formGroup) {
+	    hideWarning($formGroup);
             $formGroup.addClass('alert').addClass('alert-warning').addClass('has-warning');
             $input.after($('#dateOutsideOfCommonDateRangeWarning').html());
         }
@@ -215,12 +216,12 @@ $(function() {
     };
 
 
-    $(document).on('change', 'section[id^=series_system_] input[id$=_date_]', function() {
+    $(document).on('change', 'section[id$=_series_system_agent_relationships_] input[id$=_date_]', function() {
         validateDateForInput($(this));
     });
 
 
-    $(document).on('change', 'section[id^=series_system_] input.linker', function () {
+    $(document).on('change', 'section[id$=_series_system_agent_relationships_] input.linker', function () {
 	calculateCommonDates(this);
 	prePopulateDateFields(this);
     });
@@ -234,35 +235,35 @@ $(function() {
 
 
      $(document).on('loadedrecordform.aspace', function () {
-         $('section[id^=series_system_] input.linker.initialised').each(function() {
+         $('section[id$=_series_system_agent_relationships_] input.linker.initialised').each(function() {
  	    calculateCommonDates(this, true);
  	});
      });
 
 
     $(document).on('change', 'section[id$=_dates_of_existence] input[id$=_begin_]', function () {
-        $('section[id^=series_system_] input.linker.initialised').each(function() {
+        $('section[id$=_series_system_agent_relationships_] input.linker.initialised').each(function() {
 	    calculateCommonDates(this);
 	});
     });
 
 
     $(document).on('change', 'section[id$=_dates_of_existence] input[id$=_end_]', function () {
-        $('section[id^=series_system_] input.linker.initialised').each(function() {
+        $('section[id$=_series_system_agent_relationships_] input.linker.initialised').each(function() {
 	    calculateCommonDates(this);
 	});
     });
 
 
-    $(document).on('change', 'section[id$=_date_] input[id$=_begin_]', function () {
-        $('section[id^=series_system_] input.linker.initialised').each(function() {
+    $(document).on('change', 'section[id$=_dates_] input[id$=_begin_]', function () {
+        $('section[id$=_series_system_agent_relationships_] input.linker.initialised').each(function() {
 	    calculateCommonDates(this);
 	});
     });
 
 
-    $(document).on('change', 'section[id$=_date_] input[id$=_end_]', function () {
-        $('section[id^=series_system_] input.linker.initialised').each(function() {
+    $(document).on('change', 'section[id$=_dates_] input[id$=_end_]', function () {
+        $('section[id$=_series_system_agent_relationships_] input.linker.initialised').each(function() {
 	    calculateCommonDates(this);
 	});
     });
