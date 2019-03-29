@@ -171,7 +171,9 @@
 
 <section id="<%= section_id %>" class="subrecord-form" data-subrecord-form="true" data-template="template_<%= "#{template_prefix}_relationships" %>" data-object-name="series_system_relationship" data-cardinality="on-to-many">
   <h3 class="subrecord-form-heading">
-    <%= I18n.t("series_system_relationships.relationship_names.#{name}") %>
+    <%= wrap_with_tooltip(I18n.t("series_system_relationships.relationship_names.#{name}"),
+                          "#{form.i18n_for(name)}_tooltip",
+                          "subrecord-form-heading-label") %>
     <button class="btn btn-sm btn-default pull-right"><%= I18n.t("series_system_relationships.add") %></button>
   </h3>
 

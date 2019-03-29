@@ -10,6 +10,7 @@ Rails.application.config.after_initialize do
   Plugins.add_resolve_field('mandates')
   Plugins.add_resolve_field('functions')
   Plugins.add_resolve_field('related_functions')
+  Plugins.add_resolve_field('responsible_agency')
 
   Plugins.register_edit_role_for_type('mandate', 'update_mandate_record')
   Plugins.register_edit_role_for_type('function', 'update_function_record')
@@ -98,7 +99,7 @@ Rails.application.config.after_initialize do
       @rule = opts.fetch(:rule)
       @relationship_jsonmodel_types = opts.fetch(:relationship_jsonmodel_types)
       @source_jsonmodel_type = opts.fetch(:source_jsonmodel_type)
-      @section_id = "series_system_#{opts.fetch(:target_jsonmodel_category)}_#{@name}"
+      @section_id = "#{@source_jsonmodel_type}_#{@name}_"
     end
   end
 
@@ -134,6 +135,16 @@ Rails.application.config.after_initialize do
             }
           )
         )
+
+        # add handy tooltips!
+        I18n.backend.store_translations(:en,
+                                        {
+                                          source_jsonmodel_type.intern =>
+                                          {
+                                            "series_system_#{rule.target_jsonmodel_category}_relationships_tooltip".intern =>
+                                            "Used for linking #{rule.target_jsonmodel_category}s"
+                                          }
+                                        })
       end
     else
       reverse_jsonmodel_property =  RelationshipRules.instance.build_jsonmodel_property(rule.source_jsonmodel_category)

@@ -1,2 +1,2 @@
 AgentCorporateEntity.include(ExternalIDs)
-AgentCorporateEntity.include(AgentManager::Mixin)
+AgentCorporateEntity.include(RecordController)
