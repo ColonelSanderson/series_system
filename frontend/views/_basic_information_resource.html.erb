@@ -5,6 +5,9 @@
     <%= render_aspace_partial :partial => "responsible_agencies/responsible_agency",
                               :locals => {:form => form, :agency => record['responsible_agency']} %>
 
+    <%= render_aspace_partial :partial => "responsible_agencies/other_responsible_agencies",
+                              :locals => {:form => form, :agencies => record['other_responsible_agencies']} %>
+
   <% end %>
 
   <% form.emit_template("series_system_responsible_agency") %>

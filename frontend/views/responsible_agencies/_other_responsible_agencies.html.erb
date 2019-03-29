@@ -1,0 +1,10 @@
+<%=
+  form.label_with_field "other_responsible_agencies",
+                        agencies.map{|agency|
+                          render_token(:object => agency['_resolved'],
+                                       :label => agency['_resolved']['title'],
+                                       :type => agency['_resolved']['jsonmodel_type'],
+                                       :uri => agency['ref'],
+                                       :placement => "top")
+                         }.join
+%>

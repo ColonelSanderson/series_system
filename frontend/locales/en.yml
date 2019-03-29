@@ -238,4 +238,7 @@ en:
 
   series_system_responsible_agency:
     responsible_agency: Responsible Agency
+    responsible_agency_tooltip: The current controlling agency for this record
     no_responsible_agency: -- NO RESPONSIBLE AGENCY --
+    other_responsible_agencies: Other Responsible Agencies
+    other_responsible_agencies_tooltip: Other agencies that control items in this series

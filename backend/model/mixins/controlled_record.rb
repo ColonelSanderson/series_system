@@ -50,6 +50,10 @@ module ControlledRecord
       jsons = super
       jsons.zip(objs).each do |json, obj|
         json['responsible_agency'] = { 'ref' => obj.responsible_agency }
+
+        if obj.class.my_jsonmodel.schema['properties'].has_key?('other_responsible_agencies')
+          json['other_responsible_agencies'] = obj.other_responsible_agencies.map{|id, agency| { 'ref' => agency }}
+        end
       end
 
       jsons
