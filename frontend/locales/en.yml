@@ -13,8 +13,8 @@ en:
     note: Note
     external_ids: External IDs
     publish: Publish?
-    commencement_date: Commencement Date
-    termination_date: Termination Date
+    commencement_date: Begin Date
+    termination_date: End Date
     date: Date
     _singular: Mandate
     _plural: Mandates
@@ -37,8 +37,8 @@ en:
     source: Source
     note: Note
     publish: Publish?
-    commencement_date: Commencement Date
-    termination_date: Termination Date
+    commencement_date: Begin Date
+    termination_date: End Date
     date: Date
     _singular: Function
     _plural: Functions
@@ -95,8 +95,8 @@ en:
 
   search_sorting:
     mandate_type_u_ssort: Mandate type
-    commencement_date_u_sortdate: Commencement Date
-    termination_date_u_sortdate: Termination Date
+    commencement_date_u_sortdate: Begin Date
+    termination_date_u_sortdate: End Date
 
   search_results:
     filter:
@@ -129,16 +129,16 @@ en:
 
   advanced_search:
     date:
-      commencement_date: Commencement Date
-      termination_date: Termination Date
+      commencement_date: Begin Date
+      termination_date: End Date
 
   mandate_rlshp:
-    start_date: Commencement Date
-    end_date: Termination Date
+    start_date: Begin Date
+    end_date: End Date
 
   function_rlshp:
-    start_date: Commencement Date
-    end_date: Termination Date
+    start_date: Begin Date
+    end_date: End Date
 
   series_system_agency:
     agency_category: Agency Category
