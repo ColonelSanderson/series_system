@@ -57,7 +57,18 @@ $(function() {
     };
 
 
+    var weAreNotDealingWithARecord = function() {
+	var form_id = $('form.aspace-record-form').attr('id');
+	return (!form_id.match('resource') && !form_id.match('archival_object'));
+    };
+
+
     var calculateCommonDates = function(linker, init) {
+	// we only care about common dates if we are dealing with a resource or an archival_object
+	if (weAreNotDealingWithARecord()) {
+	    return;
+	}
+
 	var $linker = $(linker);
 
 	if (!init && !$linker.closest('.subrecord-form-container').find('.token-input-token:first').is('[id]')) {
@@ -80,9 +91,10 @@ $(function() {
 
 	if (typeof obj === 'string') {
 	    obj = JSON.parse(obj);
-	    if (obj.hasOwnProperty('json')) {
-		obj = JSON.parse(obj['json']);
-	    }
+	}
+
+	if (obj.hasOwnProperty('json')) {
+	    obj = JSON.parse(obj['json']);
 	}
 
 	var linkedStart = false;
@@ -101,7 +113,6 @@ $(function() {
 		linkedEnd = newDates[1];
 	    });
 	}
-
 	var $datesSection = $('section[id$=_dates_of_existence]');
 	if ($datesSection.length == 0) {
 	    $datesSection = $('section[id$=_date_]');
@@ -157,10 +168,16 @@ $(function() {
 	$commonInput.html(msg);
 	$commonInput.data('start', commonStart);;
 	$commonInput.data('end', commonEnd);;
+
+	validateDatesForLinker($linker);
     };
 
 
     var prePopulateDateFields = function(linker) {
+        if (weAreNotDealingWithARecord()) {
+	    return;
+	}
+
 	var $linker = $(linker);
 
 	var $container = $linker.closest('.subrecord-form-container');
@@ -189,6 +206,12 @@ $(function() {
 		$endInput.trigger('change');
 	    }
 	}
+    };
+
+
+    var validateDatesForLinker = function($linker) {
+	var $container = $linker.closest('.subrecord-form-container');
+	$container.find('input[id$=_date_]').each(function() { validateDateForInput($(this)); });
     };
 
 
@@ -228,7 +251,7 @@ $(function() {
 
 
     $(document).on('subrecordcreated.aspace', function (event, type, subform) {
-        if (type.startsWith('series_system_')) {
+        if (type == 'series_system_agent_relationship') {
 	    calculateCommonDates($(subform).find('input.linker.initialised'), true);
 	}
     });
