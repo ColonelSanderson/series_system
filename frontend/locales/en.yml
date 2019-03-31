@@ -232,7 +232,7 @@ en:
     cannot_have_more_than_one_current_controlled_by_relationship_with_an_agency: Cannot have more than one current Ownership relationship with an Agency
     unable_to_terminate_agency_that_controls_records: Unable to terminate Agency. It currently controls records.
     cannot_be_controlled_by_a_terminated_agency: Cannot be controlled by a terminated agency
-    cannot_be_before_start_date: cannot be before start date
+    cannot_be_before_start_date: Cannot be before start date
 
   series_system_responsible_agency:
     responsible_agency: Responsible Agency
