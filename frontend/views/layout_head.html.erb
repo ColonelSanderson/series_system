@@ -18,7 +18,7 @@
   <li><%= link_to I18n.t("function._plural"), :controller => :functions, :action => :index %></li>
 </script>
 <script type="text/template" id="seriesSystemCreateActions">
-  <% if user_can?('update_mandate_record') || if user_can?('update_function_record') %>
+  <% if user_can?('update_mandate_record') || user_can?('update_function_record') %>
     <li class="divider"></li>
   <% end %>
   <% if user_can?('update_mandate_record') %>
