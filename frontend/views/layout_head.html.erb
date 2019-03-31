@@ -18,9 +18,15 @@
   <li><%= link_to I18n.t("function._plural"), :controller => :functions, :action => :index %></li>
 </script>
 <script type="text/template" id="seriesSystemCreateActions">
-  <li class="divider"></li>
-  <li><%= link_to I18n.t("mandate._singular"), :controller => :mandates, :action => :new %></li>
-  <li><%= link_to I18n.t("function._singular"), :controller => :functions, :action => :new %></li>
+  <% if user_can?('update_mandate_record') || if user_can?('update_function_record') %>
+    <li class="divider"></li>
+  <% end %>
+  <% if user_can?('update_mandate_record') %>
+    <li><%= link_to I18n.t("mandate._singular"), :controller => :mandates, :action => :new %></li>
+  <% end %>
+  <% if user_can?('update_function_record') %>
+    <li><%= link_to I18n.t("function._singular"), :controller => :functions, :action => :new %></li>
+  <% end %>
 </script>
 
 <% if ['new', 'edit', 'create', 'update'].include?(controller.action_name) %>
