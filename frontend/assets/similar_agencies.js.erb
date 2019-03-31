@@ -65,6 +65,10 @@ $(document).ready(function() {
     var shouldHandle = function (input) {
         var formAction = $(input).closest('#agent_form').attr('action');
 
+        if (!$(input).attr('name')) {
+            return false;
+        }
+
         /* We're on a primary_name field within an authoritive name on a corporate entity agent. */
         return ($(input).attr('name').endsWith('[primary_name]') &&
                 $(input).closest('.authoritive-name').length > 0 &&
