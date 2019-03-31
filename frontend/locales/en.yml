@@ -233,6 +233,7 @@ en:
     unable_to_terminate_agency_that_controls_records: Unable to terminate Agency. It currently controls records.
     cannot_be_controlled_by_a_terminated_agency: Cannot be controlled by a terminated agency
     cannot_be_before_start_date: Cannot be before start date
+    must_have_dates_of_existence: Must have dates of existence
 
   series_system_responsible_agency:
     responsible_agency: Responsible Agency

@@ -119,6 +119,16 @@ module SeriesSystemValidations
   end
 
 
+  def self.check_dates_of_existence(hash)
+    errors = []
+
+    if hash.fetch('dates_of_existence', []).length != 1
+      errors << ["corporate_entity_dates_of_existence", "must have dates of existence"]
+    end
+
+    errors
+  end
+
 
   if JSONModel(:resource)
     JSONModel(:resource).add_validation("check_series_controlling_agency") do |hash|
@@ -133,5 +143,10 @@ module SeriesSystemValidations
     end
   end
 
+  if JSONModel(:agent_corporate_entity)
+    JSONModel(:agent_corporate_entity).add_validation("check_dates_of_existence") do |hash|
+      check_dates_of_existence(hash)
+    end
+  end
 
 end
