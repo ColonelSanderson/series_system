@@ -21,7 +21,7 @@ describe 'series_system relationships' do
         RelationshipRules.instance.jsonmodel_expander(rule.target_jsonmodel_category).each do |target_jsonmodel|
           rule.relationship_types.each do |relationship_type|
 
-            it "#{source_jsonmodel} #{relationship_type} #{target_jsonmodel}" do
+            xit "#{source_jsonmodel} #{relationship_type} #{target_jsonmodel}" do
               source_model = RelationshipRules.instance.model_for_jsonmodel_type(source_jsonmodel)
               target_model = RelationshipRules.instance.model_for_jsonmodel_type(target_jsonmodel)
 
@@ -73,7 +73,7 @@ describe 'series_system relationships' do
             end
 
 
-            it "#{source_jsonmodel} #{relationship_type} #{target_jsonmodel} date validations" do
+            xit "#{source_jsonmodel} #{relationship_type} #{target_jsonmodel} date validations" do
               target_model = RelationshipRules.instance.model_for_jsonmodel_type(target_jsonmodel)
 
               target = target_model.create_from_json(build("json_#{target_jsonmodel}".intern),
@@ -132,7 +132,7 @@ describe 'series_system relationships' do
             end
 
             if rule.source_jsonmodel_category != rule.target_jsonmodel_category
-              it "#{source_jsonmodel} #{relationship_type} #{target_jsonmodel} ref validation" do
+              xit "#{source_jsonmodel} #{relationship_type} #{target_jsonmodel} ref validation" do
                 source_model = RelationshipRules.instance.model_for_jsonmodel_type(source_jsonmodel)
 
                 target = source_model.create_from_json(build("json_#{source_jsonmodel}".intern),
