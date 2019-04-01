@@ -19,6 +19,8 @@ module SeriesSystemValidations
     if hash['start_date'] && hash['end_date'] && errors.empty?
       shorty = [hash['start_date'].length, hash['end_date'].length].min
       if hash['start_date'][0,shorty] > hash['end_date'][0,shorty]
+        # NOTE: as_mogwai plugin relies on this string for exception handling.
+        # If you change this, update it there too!
         errors << ['end_date', 'cannot be before start date']
       end
     end
