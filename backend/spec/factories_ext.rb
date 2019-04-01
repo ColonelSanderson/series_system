@@ -1,6 +1,3 @@
-require 'factory_bot'
-require 'spec/lib/factory_bot_helpers'
-
 FactoryBot.modify do
   factory :json_resource, class: JSONModel::JSONModel(:resource) do
     self.series_system_agent_relationships {

@@ -1,4 +1,3 @@
-require_relative './factories_ext'
 require 'spec_helper'
 
 describe 'series_system relationships' do
