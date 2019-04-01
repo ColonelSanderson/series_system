@@ -81,6 +81,9 @@ module HiddenFields
     },
 
     "agents" => {
+      "agent_corporate_entity_related_agents" => {
+        "show" => [],
+      },
       "agent_corporate_entity_names" => {
         "show" => [
           ["agent_names_", "_primary_name_"],
