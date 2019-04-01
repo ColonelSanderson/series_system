@@ -18,6 +18,23 @@ class RelationshipRules
     :item => [:archival_object],
   }
 
+  RELATOR_VALUES = {
+    'abolition' => {:source => "abolished", :target => "is_abolished_by"},
+    'administers' => {:source => "administered", :target => "is_administered_by"},
+    'association' => {:source => "is_associated_with", :target => "is_associated_with"},
+    'containment' => {:source => "contains", :target => "is_contained_within"},
+    'creation' => {:source => "established", :target => "established_by"},
+    'derivation' => {:source => "derives", :target => "is_derived_from"},
+    'documentation' => {:source => "is_documented_by", :target => "documents"},
+    'ownership' => {:source => "controls", :target => "is_controlled_by"},
+    'represented' => {:source => "represents", :target => "is_represented_by"},
+    'responsibility' => {:source => "is_responsible_for", :target => "under_responsibility_of"},
+    'restriction' => {:source => "restricts", :target => "is_restricted_by"},
+    'succession' => {:source => "supercedes", :target => "precedes"},
+    'preferred_term' => {:source => "has_preferred_term_of", :target => "is_preferred_term_of"},
+    'nonpreferred_term' => {:source => "has_nonpreferred_term_of", :target => "is_nonpreferred_term_of"},
+  }
+
 
   RelationshipRule = Struct.new(:source_jsonmodel_category, :target_jsonmodel_category, :relationship_types, :reverse_rule, :is_reversed) do
     def key
@@ -29,26 +46,10 @@ class RelationshipRules
   def initialize
     @mode = :backend
 
-    relator_values = {}
-    relator_values['abolition'] = {:source => "abolished", :target => "is_abolished_by"}
-    relator_values['administers'] = {:source => "administered", :target => "is_administered_by"}
-    relator_values['association'] = {:source => "is_associated_with", :target => "is_associated_with"}
-    relator_values['containment'] = {:source => "contains", :target => "is_contained_within"}
-    relator_values['creation'] = {:source => "established", :target => "established_by"}
-    relator_values['derivation'] = {:source => "derives", :target => "is_derived_from"}
-    relator_values['documentation'] = {:source => "is_documented_by", :target => "documents"}
-    relator_values['ownership'] = {:source => "controls", :target => "is_controlled_by"}
-    relator_values['represented'] = {:source => "represents", :target => "is_represented_by"}
-    relator_values['responsibility'] = {:source => "is_responsible_for", :target => "under_responsibility_of"}
-    relator_values['restriction'] = {:source => "restricts", :target => "is_restricted_by"}
-    relator_values['succession'] = {:source => "supercedes", :target => "precedes"}
-    relator_values['preferred_term'] = {:source => "has_preferred_term_of", :target => "is_preferred_term_of"}
-    relator_values['nonpreferred_term'] = {:source => "has_nonpreferred_term_of", :target => "is_nonpreferred_term_of"}
-
     @relationships = {}
-    relator_values.keys.each do |key|
+    RELATOR_VALUES.keys.each do |key|
       relator = "series_system_#{key}_relator"
-      @relationships[key] = RelationshipType.new(key, relator, relator_values.fetch(key))
+      @relationships[key] = RelationshipType.new(key, relator, RELATOR_VALUES.fetch(key))
     end
 
     @rules = []
@@ -80,6 +81,10 @@ class RelationshipRules
   # relationship (with a different record) to take its place.
   def enduring_relationships
     ['series_system_agent_record_ownership_relationship']
+  end
+
+  def all_relators
+    RELATOR_VALUES.keys
   end
 
   # Non-closeable relationships are left open even when an agency is being terminated

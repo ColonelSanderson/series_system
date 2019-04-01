@@ -144,7 +144,7 @@ Rails.application.config.after_initialize do
                                           {
                                             "series_system_#{rule.target_jsonmodel_category}_relationships_tooltip".intern =>
                                             "Used for linking #{rule.target_jsonmodel_category}s"
-                                          }
+                                          },
                                         })
       end
     else
@@ -164,6 +164,15 @@ Rails.application.config.after_initialize do
       )
     end
   end
+
+  I18n.backend.store_translations(:en,
+                                  {
+                                    :enumeration_names =>
+                                    RelationshipRules.instance.all_relators.map {|relator|
+                                      ["series_system_#{relator}_relator", "Series System - #{relator} relator"]
+                                    }.to_h
+                                  })
+
 
   Plugins.add_resolve_field(all_series_system_relationship_properties.uniq)
 
