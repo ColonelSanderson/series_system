@@ -17,7 +17,7 @@ FactoryBot.modify do
   end
 
   factory :json_agent_corporate_entity, class: JSONModel::JSONModel(:agent_corporate_entity) do
-    self.dates_of_existence { [build(:json_date, {:label => 'existence'})] }
+    self.dates_of_existence { [build(:json_date, {:label => 'existence', :date_type => 'range'})] }
   end
 end
 
