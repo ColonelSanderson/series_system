@@ -79,7 +79,6 @@
           </div>
         </div>
 
-      <% if relationship_jsonmodel == 'series_system_agent_record_ownership_relationship' %>
         <div class="form-group">
           <label class="control-label col-sm-2">
             <%= I18n.t("series_system_relationships.common_dates") %>
@@ -91,7 +90,6 @@
             </div>
           </div>
         </div>
-      <% end %>
 
         <div class="form-group required">
           <label class="control-label col-sm-2">
@@ -171,7 +169,7 @@
 
 
 
-<section id="<%= section_id %>" class="subrecord-form" data-subrecord-form="true" data-template="template_<%= "#{template_prefix}_relationships" %>" data-object-name="series_system_relationship" data-cardinality="on-to-many">
+<section id="<%= section_id %>" class="subrecord-form series_system_section" data-subrecord-form="true" data-template="template_<%= "#{template_prefix}_relationships" %>" data-object-name="series_system_relationship" data-cardinality="on-to-many">
   <h3 class="subrecord-form-heading">
     <%= wrap_with_tooltip(I18n.t("series_system_relationships.relationship_names.#{name}"),
                           "#{form.i18n_for(name)}_tooltip",
