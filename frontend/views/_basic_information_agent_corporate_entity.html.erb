@@ -1,6 +1,0 @@
-<% define_template "series_system_agency", jsonmodel_definition(:agent_corporate_entity) do |form| %>
-    <%= form.label_and_select "agency_category", form.possible_options_for('agency_category', true) %>
-<% end %>
-
-<% form.emit_template("series_system_agency") %>
-

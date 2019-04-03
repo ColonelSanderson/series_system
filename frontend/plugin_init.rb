@@ -16,22 +16,6 @@ Rails.application.config.after_initialize do
   Plugins.register_edit_role_for_type('mandate', 'update_mandate_record')
   Plugins.register_edit_role_for_type('function', 'update_function_record')
 
-  Plugins.register_plugin_section(
-    Plugins::PluginSubRecord.new(
-      'series_system',
-      'external_ids',
-      ['agent_corporate_entity'],
-      {
-        template_name: 'external_id',
-        js_edit_template_name: 'template_external_id',
-        template_erb: "external_ids/edit",
-        erb_edit_template_path: "external_ids/template",
-        erb_readonly_template_path: "external_ids/show",
-        sidebar_label: I18n.t('external_id._plural'),
-      }
-    )
-  )
-
   Plugins.add_search_facets(:mandate, "mandate_type_u_ssort")
   Plugins.add_facet_group_i18n("mandate_type_u_ssort",
                                proc {|facet| "enumerations.mandate_type.#{facet}" })
@@ -44,13 +28,6 @@ Rails.application.config.after_initialize do
   # we need this for parse_reference to work
   JSONModel(:function)
   JSONModel(:mandate)
-
-  # Show a new search facet for our category
-  Plugins.add_search_facets(:agent_corporate_entity, "agency_category_u_sstr")
-
-  Plugins.add_facet_group_i18n("agency_category_u_sstr",
-                               proc {|facet| "enumerations.agency_category.#{facet}" })
-
 
   # Series system relationships *magic*
   RelationshipRules.instance.mode(:frontend).bootstrap!

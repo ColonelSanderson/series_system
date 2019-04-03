@@ -32,18 +32,3 @@ The `defaultValues` property allows fields have have mandatory values added to t
 If given, `moveSectionAfter` will cause the current section to be
 repositioned to sit after another section (specified by element ID).
 
-
-## Dependencies
-
-### External IDs
-
-To expose External IDs on relevant Series system records (and other
-ArchivesSpace records), add the following configuration:
-```
-AppConfig[:show_external_ids] = true
-```
-
-To allow External IDs to be editable, use this plugin in conjunction with the
-`editable_external_ids` plugin available here:
-
-* https://github.com/hudmol/editable_external_ids

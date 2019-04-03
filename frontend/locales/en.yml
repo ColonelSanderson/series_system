@@ -71,7 +71,6 @@ en:
     date_notes_placeholder: Notes about this date
 
   enumeration_names:
-    agency_category: Agency Category
     function_source: Function Source
     mandate_type: Mandate Type
     user_defined_enum_1: Security Level
@@ -99,7 +98,6 @@ en:
     filter:
       function_source_u_sstr: Function Source
       mandate_type_u_ssort: Mandate Type
-      agency_category_u_sstr: Agency Category
       agent_series_system_agent_relationships_u_sstr: Agent Relationship
       agent_series_system_function_relationships_u_sstr: Function Relationship
       agent_series_system_mandate_relationships_u_sstr: Mandate Relationship
@@ -136,9 +134,6 @@ en:
   function_rlshp:
     start_date: Begin Date
     end_date: End Date
-
-  series_system_agency:
-    agency_category: Agency Category
 
   similar_agencies:
     label: Similar Agencies
