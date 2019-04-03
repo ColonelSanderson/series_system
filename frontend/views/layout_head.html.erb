@@ -34,12 +34,3 @@
   <link href="<%= "#{AppConfig[:frontend_proxy_prefix]}assets/styles/similar_agencies.css" %>" media="all" rel="stylesheet" type="text/css">
   <%= javascript_include_tag("similar_agencies.js") %>
 <% end %>
-
-<%= javascript_include_tag "#{AppConfig[:frontend_proxy_prefix]}assets/simplify-form.js" %>
-
-<script>
- $(function () {
-   new SimplifyFields(<%== ASUtils.to_json(HiddenFields::CONFIG) %>,
-                      '<%= controller_name %>');
- });
-</script>
