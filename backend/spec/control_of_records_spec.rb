@@ -58,6 +58,18 @@ describe 'Series System' do
     end
 
 
+    it 'ensures a series which has ceased to exist still has a current controlling agency' do
+      expect { create(:json_resource,
+                      :dates => [{
+                                   :label => 'existence',
+                                   :date_type => 'inclusive',
+                                   :begin => '1999-01-01',
+                                   :end => '2001-01-01'
+                                 }],
+                      :series_system_agent_relationships => [old_controller]) }.to raise_error(JSONModel::ValidationException)
+    end
+
+
     it 'does not allow terminated agencies to control records' do
       terminated_agency =
         create(:json_agent_corporate_entity,

@@ -79,38 +79,37 @@ module SeriesSystemValidations
   def self.check_controlling_agency(hash)
     errors = []
 
-    if hash['dates'].select {|d| d['label'] == 'existence' && d['end']}.empty?
-      control_relns = hash["series_system_agent_relationships"].select do |ar|
-        ar['jsonmodel_type'] == 'series_system_agent_record_ownership_relationship' &&
+    control_relns = hash["series_system_agent_relationships"].select do |ar|
+      ar['jsonmodel_type'] == 'series_system_agent_record_ownership_relationship' &&
         ar['relator'] == 'is_controlled_by'
-      end
+    end
 
-      current_control_relns = control_relns.select{|r| !r['end_date'] }
+    current_control_relns = control_relns.select{|r| !r['end_date'] }
 
-      # series must have a current controller
-      if hash['jsonmodel_type'] == 'resource' && current_control_relns.empty?
-        errors << ["series_system_agent_relationships", "must have a current controlled by relationship with an agency"]
-      end
+    # series must have a current controller
+    if hash['jsonmodel_type'] == 'resource' && current_control_relns.empty?
+      errors << ["series_system_agent_relationships", "must have a current controlled by relationship with an agency"]
+    end
 
-      # mustn't have more than one current controller
-      if current_control_relns.length > 1
-        errors << ["series_system_agent_relationships", "cannot have more than one current controlled by relationship with an agency"]
-      end
+    # mustn't have more than one current controller
+    if current_control_relns.length > 1
+      errors << ["series_system_agent_relationships", "cannot have more than one current controlled by relationship with an agency"]
+    end
 
-      while !control_relns.empty?
-        reln = control_relns.pop
+    while !control_relns.empty?
+      reln = control_relns.pop
 
-        control_relns.each do |cr|
-          # control mustn't overlap
-          if overlap?(reln['start_date'], cr['end_date']) && overlap?(cr['start_date'], reln['end_date'])
-            errors << ["series_system_agent_relationships", "controlled by relationship dates cannot overlap"]
-          end
+      control_relns.each do |cr|
+        # control mustn't overlap
+        if overlap?(reln['start_date'], cr['end_date']) && overlap?(cr['start_date'], reln['end_date'])
+          errors << ["series_system_agent_relationships", "controlled by relationship dates cannot overlap"]
         end
       end
     end
 
     errors
   end
+
 
   def self.overlap?(start_date, end_date)
     start_date ||= '0' * end_date.length
