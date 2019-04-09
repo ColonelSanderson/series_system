@@ -1,7 +1,6 @@
 module ResponsibleAgency
 
   def self.prepended(base)
-#    base.prepend(ClassMethods)
     class << base
       prepend(ClassMethods)
     end
