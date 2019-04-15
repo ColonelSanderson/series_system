@@ -236,6 +236,7 @@ class RelationshipRules
       if backend?
         source_model = model_for_jsonmodel_type(source_jsonmodel_type)
         source_model.include(DirectionalRelationships) unless source_model.included_modules.include?(DirectionalRelationships)
+        source_model.include(RelationshipTracer) unless source_model.included_modules.include?(RelationshipTracer)
         references = jsonmodel_expander(rule.target_jsonmodel_category).map {|type|
           model_for_jsonmodel_type(type)
         }

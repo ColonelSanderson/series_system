@@ -1,0 +1,157 @@
+require 'spec_helper'
+
+describe 'Series System' do
+
+  describe 'Relationship Tracer' do
+
+    it 'traces linear relationships' do
+
+      really_old_agency =
+        create(:json_agent_corporate_entity,
+               :dates_of_existence => [{
+                                         :label => 'existence',
+                                         :date_type => 'range',
+                                         :begin => '1900-01-01',
+                                         :end => '1999-01-01'
+                                       }])
+
+      old_agency =
+        create(:json_agent_corporate_entity,
+               :dates_of_existence => [{
+                                         :label => 'existence',
+                                         :date_type => 'range',
+                                         :begin => '1999-01-01',
+                                         :end => '2001-01-01'
+                                       }],
+               :series_system_agent_relationships => [
+                                                      {
+                                                        :jsonmodel_type => 'series_system_agent_agent_succession_relationship',
+                                                        :relator => 'supercedes',
+                                                        :start_date => '1999-01-01',
+                                                        :ref => really_old_agency.uri
+                                                      }
+                                                     ])
+
+      current_agency =
+        create(:json_agent_corporate_entity,
+               :dates_of_existence => [{
+                                         :label => 'existence',
+                                         :date_type => 'range',
+                                         :begin => '2019-01-01'
+                                       }],
+               :series_system_agent_relationships => [
+                                                      {
+                                                        :jsonmodel_type => 'series_system_agent_agent_succession_relationship',
+                                                        :relator => 'supercedes',
+                                                        :start_date => '2001-01-01',
+                                                        :ref => old_agency.uri
+                                                      }
+                                                     ])
+
+      ca_obj = AgentCorporateEntity[current_agency.id]
+      oa_obj = AgentCorporateEntity[old_agency.id]
+      roa_obj = AgentCorporateEntity[really_old_agency.id]
+
+      ca_obj.trace('supercedes').flatten.should eq([old_agency.uri, really_old_agency.uri])
+      oa_obj.trace('supercedes').flatten.should eq([really_old_agency.uri])
+      roa_obj.trace('supercedes').flatten.should eq([])
+
+      roa_obj.trace('precedes').flatten.should eq([old_agency.uri, current_agency.uri])
+
+      ca_obj.trace('supercedes', :max_depth => 1).flatten.should eq([old_agency.uri, '-- MAX DEPTH REACHED --'])      
+    end
+
+
+    it 'does not mind which side the relationship is defined on' do
+      agent = create(:json_agent_corporate_entity)
+
+      function =
+        create(:json_function,
+               :series_system_agent_relationships => [
+                                                         {
+                                                           :jsonmodel_type => 'series_system_agent_function_administers_relationship',
+                                                           :relator => 'is_administered_by',
+                                                           :start_date => '2019-01-01',
+                                                           :ref => agent.uri
+                                                         }
+                                                        ])
+
+      AgentCorporateEntity[agent.id].trace('administered').flatten.should eq([function.uri])
+      Function[function.id].trace('is_administered_by').flatten.should eq([agent.uri])
+
+      function = create(:json_function)
+
+      agent =
+        create(:json_agent_corporate_entity,
+               :series_system_function_relationships => [
+                                                         {
+                                                           :jsonmodel_type => 'series_system_agent_function_administers_relationship',
+                                                           :relator => 'administered',
+                                                           :start_date => '2019-01-01',
+                                                           :ref => function.uri
+                                                         }
+                                                        ])
+
+      AgentCorporateEntity[agent.id].trace('administered').flatten.should eq([function.uri])
+      Function[function.id].trace('is_administered_by').flatten.should eq([agent.uri])
+    end
+
+
+    it 'traces branching relationships' do
+
+      rel = {
+        :jsonmodel_type => 'series_system_agent_agent_containment_relationship',
+        :relator => 'is_contained_within',
+        :start_date => '2019-01-01',
+      }
+
+      root = create(:json_agent_corporate_entity)
+
+      child1 = create(:json_agent_corporate_entity,
+                      :series_system_agent_relationships => [rel.merge(:ref => root.uri)])
+
+      child2 = create(:json_agent_corporate_entity,
+                      :series_system_agent_relationships => [rel.merge(:ref => root.uri)])
+
+      child3 = create(:json_agent_corporate_entity,
+                      :series_system_agent_relationships => [rel.merge(:ref => root.uri)])
+
+      child4 = create(:json_agent_corporate_entity,
+                      :series_system_agent_relationships => [rel.merge(:ref => root.uri)])
+
+      child1_1 = create(:json_agent_corporate_entity,
+                        :series_system_agent_relationships => [rel.merge(:ref => child1.uri)])
+
+      child1_2 = create(:json_agent_corporate_entity,
+                        :series_system_agent_relationships => [rel.merge(:ref => child1.uri)])
+
+      child2_1 = create(:json_agent_corporate_entity,
+                        :series_system_agent_relationships => [rel.merge(:ref => child2.uri)])
+
+      child3_1 = create(:json_agent_corporate_entity,
+                        :series_system_agent_relationships => [rel.merge(:ref => child3.uri)])
+
+      child3_2 = create(:json_agent_corporate_entity,
+                        :series_system_agent_relationships => [rel.merge(:ref => child3.uri)])
+
+      child3_3 = create(:json_agent_corporate_entity,
+                        :series_system_agent_relationships => [rel.merge(:ref => child3.uri)])
+
+      root_obj = AgentCorporateEntity[root.id]
+
+      root_obj.trace('is_contained_within').should eq([])
+
+      root_obj.trace('contains').should eq(
+                                           [[child1.uri,
+                                             [child1_1.uri, child1_2.uri]],
+                                            [child2.uri, [child2_1.uri]],
+                                            [child3.uri,
+                                             [child3_1.uri,
+                                              child3_2.uri,
+                                              child3_3.uri]],
+                                            child4.uri]
+                                           )
+    end
+
+  end
+end
