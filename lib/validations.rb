@@ -79,7 +79,7 @@ module SeriesSystemValidations
   def self.check_controlling_agency(hash)
     errors = []
 
-    control_relns = hash["series_system_agent_relationships"].select do |ar|
+    control_relns = hash.fetch("series_system_agent_relationships", []).select do |ar|
       ar['jsonmodel_type'] == 'series_system_agent_record_ownership_relationship' &&
         ar['relator'] == 'is_controlled_by'
     end
