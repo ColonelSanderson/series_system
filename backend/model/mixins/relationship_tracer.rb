@@ -1,10 +1,5 @@
 module RelationshipTracer
 
-  def self.included(base)
-    base.extend(ClassMethods)
-  end
-
-
   # Recursively find all series system relationships for an object
   # Returns nested arrays of uris
   #
@@ -58,10 +53,6 @@ module RelationshipTracer
     end
 
     out
-  end
-
-
-  module ClassMethods
   end
 
 end
