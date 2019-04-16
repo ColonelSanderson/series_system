@@ -1,5 +1,8 @@
 module RelationshipTracer
 
+  class StepLimitExceeded < StandardError; end
+  class UnknownRelator < StandardError; end
+
   # Recursively find all series system relationships for an object
   # Returns nested arrays of uris
   #
@@ -8,12 +11,18 @@ module RelationshipTracer
   #   obj.trace('contains')
   #
   def trace(relator, opts = {})
-    # backstop in case of loops
-    opts[:max_depth] ||= 9999
-
-    return ['-- MAX DEPTH REACHED --'] if opts[:max_depth] < 1
-
     out = []
+
+    # backstop in case of loops
+    opts[:steps] ||= 9999
+
+    if opts[:steps] < 1
+      if opts[:raise_on_step_limit]
+        raise StepLimitExceeded.new("Step limit reached while tracing relationships")
+      else
+        return out
+      end
+    end
 
     # The current rule definitions have unique relators across types
     # It is possible that future definitions will overload relators
@@ -22,7 +31,7 @@ module RelationshipTracer
     # option to explicitly use the type intended
     relationship_type = opts[:relationship_type] || RelationshipRules.instance.relationships.select{|k,v| v.relator_values.values.include?(relator)}.keys.first
 
-    raise "Can't find a relationship type for the provided relator: #{relator}" unless relationship_type
+    raise UnknownRelator.new("Can't find a relationship type for the provided relator: #{relator}") unless relationship_type
 
     # get the id for the relator - we'll need it later
     relator_id = db[:enumeration_value].filter(:value => relator).get(:id)
@@ -47,12 +56,22 @@ module RelationshipTracer
         other = rel.other_referent_than(self)
         other_uri = rel.uri_for_other_referent_than(self)
 
-        other_trace = other.trace(relator, opts.merge({:max_depth => opts[:max_depth] - 1}))
+        other_trace = other.trace(relator, opts.merge({:steps => opts[:steps] - 1}))
         out << (other_trace.empty? ? other_uri : [other_uri, other_trace])
       end
     end
 
     out
+  end
+
+
+  def trace_set(relator, opts = {})
+    trace(relator, opts).flatten
+  end
+
+
+  def trace_one(relator, opts = {})
+    trace_set(relator, opts.merge(:steps => 1))
   end
 
 end
