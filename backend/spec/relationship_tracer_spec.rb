@@ -221,5 +221,21 @@ describe 'Series System' do
       Mandate[third.id].trace_one('supercedes').should eq([second.uri])
     end
 
+
+    it 'detects relationship loops' do
+      rel = {
+        :jsonmodel_type => 'series_system_mandate_mandate_association_relationship',
+        :relator => 'is_associated_with',
+        :start_date => '1066',
+      }
+
+      first = create(:json_mandate)
+      second = create(:json_mandate, :series_system_mandate_relationships => [rel.merge(:ref => first.uri)])
+      third = create(:json_mandate, :series_system_mandate_relationships => [rel.merge(:ref => second.uri), rel.merge(:ref => first.uri)])
+
+      Mandate[first.id].trace_set('is_associated_with').should eq([second.uri, third.uri])
+      Mandate[second.id].trace_set('is_associated_with').should eq([first.uri, third.uri])
+      Mandate[third.id].trace_set('is_associated_with').should eq([second.uri, first.uri])
+    end
   end
 end

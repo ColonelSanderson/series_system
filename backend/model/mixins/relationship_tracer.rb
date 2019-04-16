@@ -16,6 +16,10 @@ module RelationshipTracer
     # backstop in case of loops
     opts[:steps] ||= 9999
 
+    opts[:visited] ||= []
+    return out if opts[:visited].include?(self.uri)
+    opts[:visited].push(self.uri)
+
     if opts[:steps] < 1
       if opts[:raise_on_step_limit]
         raise StepLimitExceeded.new("Step limit reached while tracing relationships")
@@ -33,6 +37,9 @@ module RelationshipTracer
 
     raise UnknownRelator.new("Can't find a relationship type for the provided relator: #{relator}") unless relationship_type
 
+    # find out if the relationship type is non-directional
+    non_directional = RelationshipRules.instance.relationships[relationship_type].relator_values.values.uniq.length == 1
+
     # get the id for the relator - we'll need it later
     relator_id = db[:enumeration_value].filter(:value => relator).get(:id)
 
@@ -47,14 +54,18 @@ module RelationshipTracer
       rels = rlshp_def.find_by_participant(self)
         .select{|rel| rel.jsonmodel_type == rlshp_jsonmodel_type}
         .select{|rel|
-                  # make sure it's the right way around!
-                  the_target_is_me = rel.relationship_target_record_type.intern == self.class.table_name && rel.relationship_target_id == self.id
-                  the_target_is_me ? rel.relator_id != relator_id : rel.relator_id == relator_id
+                  # don't care about direction if it's non-directional
+                  non_directional ||
+                  # otherwise make sure it's the right way around!
+                  (the_target_is_me = rel.relationship_target_record_type.intern == self.class.table_name && rel.relationship_target_id == self.id
+                   the_target_is_me ? rel.relator_id != relator_id : rel.relator_id == relator_id)
                }
 
       rels.each do |rel|
         other = rel.other_referent_than(self)
-        other_uri = rel.uri_for_other_referent_than(self)
+        other_uri = other.uri
+
+        next if opts[:visited].include?(other_uri)
 
         other_trace = other.trace(relator, opts.merge({:steps => opts[:steps] - 1}))
         out << (other_trace.empty? ? other_uri : [other_uri, other_trace])
