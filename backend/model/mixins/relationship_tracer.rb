@@ -13,18 +13,22 @@ module RelationshipTracer
   def trace(relator, opts = {})
     out = []
 
-    # backstop in case of loops
-    opts[:steps] ||= 9999
-
     opts[:visited] ||= []
     return out if opts[:visited].include?(self.uri)
     opts[:visited].push(self.uri)
 
-    if opts[:steps] < 1
-      if opts[:raise_on_step_limit]
-        raise StepLimitExceeded.new("Step limit reached while tracing relationships")
-      else
-        return out
+    if opts.has_key?(:steps)
+      raise ArgumentError.new("opts[:steps] must be an integer: #{opts[:steps]}") unless opts[:steps].is_a? Integer
+
+      opts[:_steps_taken] ||= 0
+      opts[:_steps_taken] += 1
+
+      if opts[:_steps_taken] > opts[:steps]
+        if opts[:raise_on_step_limit]
+          raise StepLimitExceeded.new("Step limit (#{opts[:steps]}) reached while tracing relationships")
+        else
+          return out
+        end
       end
     end
 
@@ -67,7 +71,7 @@ module RelationshipTracer
 
         next if opts[:visited].include?(other_uri)
 
-        other_trace = other.trace(relator, opts.merge({:steps => opts[:steps] - 1}))
+        other_trace = other.trace(relator, opts)
         out << (other_trace.empty? ? other_uri : [other_uri, other_trace])
       end
     end

@@ -170,7 +170,8 @@ describe 'Series System' do
       first_obj.trace('precedes').flatten.should eq([second.uri, third.uri, fourth.uri, fifth.uri])
       first_obj.trace('precedes', :steps => 2).flatten.should eq([second.uri, third.uri])
 
-      expect { first_obj.trace('precedes', :steps => 2, :raise_on_step_limit => true).flatten }.to raise_error(RelationshipTracer::StepLimitExceeded)
+      expect { first_obj.trace('precedes', :steps => 2, :raise_on_step_limit => true) }.to raise_error(RelationshipTracer::StepLimitExceeded)
+      expect { first_obj.trace('precedes', :steps => 'moo') }.to raise_error(ArgumentError)
     end
 
 
