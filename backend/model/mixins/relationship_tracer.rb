@@ -13,12 +13,14 @@ module RelationshipTracer
   def trace(relator, opts = {})
     out = []
 
-    opts[:visited] ||= []
-    return out if opts[:visited].include?(self.uri)
-    opts[:visited].push(self.uri)
+    opts[:break_on] ||= []
+    raise ArgumentError.new("opts[:break_on] must be an array. You provided a #{opts[:break_on].class}") unless opts[:break_on].is_a? Array
+
+    return out if opts[:break_on].include?(self.uri)
+    opts[:break_on].push(self.uri)
 
     if opts.has_key?(:steps)
-      raise ArgumentError.new("opts[:steps] must be an integer: #{opts[:steps]}") unless opts[:steps].is_a? Integer
+      raise ArgumentError.new("opts[:steps] must be an integer. You provided a #{opts[:steps].class}") unless opts[:steps].is_a? Integer
 
       opts[:_steps_taken] ||= 0
       opts[:_steps_taken] += 1
@@ -69,7 +71,7 @@ module RelationshipTracer
         other = rel.other_referent_than(self)
         other_uri = other.uri
 
-        next if opts[:visited].include?(other_uri)
+        next if opts[:break_on].include?(other_uri)
 
         other_trace = other.trace(relator, opts)
         out << (other_trace.empty? ? other_uri : [other_uri, other_trace])

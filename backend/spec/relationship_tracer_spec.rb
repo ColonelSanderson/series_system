@@ -238,5 +238,21 @@ describe 'Series System' do
       Mandate[second.id].trace_set('is_associated_with').should eq([first.uri, third.uri])
       Mandate[third.id].trace_set('is_associated_with').should eq([second.uri, first.uri])
     end
+
+
+    it 'supports excluding a list of uris' do
+      rel = {
+        :jsonmodel_type => 'series_system_mandate_mandate_association_relationship',
+        :relator => 'is_associated_with',
+        :start_date => '1066',
+      }
+
+      first = create(:json_mandate)
+      second = create(:json_mandate, :series_system_mandate_relationships => [rel.merge(:ref => first.uri)])
+      third = create(:json_mandate, :series_system_mandate_relationships => [rel.merge(:ref => second.uri), rel.merge(:ref => first.uri)])
+
+      Mandate[first.id].trace_set('is_associated_with', :break_on => [third.uri]).should eq([second.uri])
+      expect { Mandate[first.id].trace_set('is_associated_with', :break_on => 'moo') }.to raise_error(ArgumentError)
+    end
   end
 end
