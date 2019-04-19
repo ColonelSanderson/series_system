@@ -229,6 +229,7 @@ en:
     cannot_be_controlled_by_a_terminated_agency: Cannot be controlled by a terminated agency
     cannot_be_before_start_date: Cannot be before start date
     must_have_dates_of_existence: Must have dates of existence
+    date_format_must_be_one_of_yyyy__yyyy-mm__or_yyyy-mm-dd: Date format must be one of YYYY, YYYY-MM, or YYYY-MM-DD
 
   series_system_responsible_agency:
     responsible_agency: Responsible Agency

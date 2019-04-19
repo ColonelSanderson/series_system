@@ -4,19 +4,22 @@ module SeriesSystemValidations
   def self.series_system_relationship_check_dates(hash)
     errors = []
 
-    begin
-      JSONModel::Validations.parse_sloppy_date(hash['start_date']) if hash['start_date']
-    rescue ArgumentError => e
-      errors << ["start_date", "not a valid date"]
+    ['start_date', 'end_date'].each do |date|
+      unless hash.fetch(date, '').empty?
+        # make sure it's a valid date
+        begin
+          JSONModel::Validations.parse_sloppy_date(hash[date])
+        rescue ArgumentError => e
+          errors << [date, "not a valid date"]
+        end
+
+        unless valid_date_format(hash[date])
+          errors << [date, "date format must be one of YYYY, YYYY-MM, or YYYY-MM-DD"]
+        end
+      end
     end
 
-    begin
-      JSONModel::Validations.parse_sloppy_date(hash['end_date']) if hash['end_date']
-    rescue ArgumentError => e
-      errors << ["end_date", "not a valid date"]
-    end
-
-    if hash['start_date'] && hash['end_date'] && errors.empty?
+    if !hash.fetch('start_date', '').empty? && !hash.fetch('end_date', '').empty? && errors.empty?
       shorty = [hash['start_date'].length, hash['end_date'].length].min
       if hash['start_date'][0,shorty] > hash['end_date'][0,shorty]
         # NOTE: as_mogwai plugin relies on this string for exception handling.
@@ -131,6 +134,24 @@ module SeriesSystemValidations
   end
 
 
+  def self.valid_date_format(date)
+    # make sure date complies with the formatting standard we're enforcing
+    # must be one of: YYYY, YYYY-MM, YYYY-MM-DD
+    date.nil? || date.empty? || (date.match(/^\d\d\d\d(-\d\d(-\d\d)?)?$/) ? true : false)
+  end
+
+
+  def self.check_date_format(hash)
+    errors = []
+    ['begin', 'end'].each do |date|
+      unless valid_date_format(hash[date])
+        errors << [date, "date format must be one of YYYY, YYYY-MM, or YYYY-MM-DD"]
+      end
+    end
+    errors
+  end
+
+
   if JSONModel(:resource)
     JSONModel(:resource).add_validation("check_series_controlling_agency") do |hash|
       check_controlling_agency(hash)
@@ -147,6 +168,12 @@ module SeriesSystemValidations
   if JSONModel(:agent_corporate_entity)
     JSONModel(:agent_corporate_entity).add_validation("check_dates_of_existence") do |hash|
       check_dates_of_existence(hash)
+    end
+  end
+
+  if JSONModel(:date)
+    JSONModel(:date).add_validation("check_date_format") do |hash|
+      check_date_format(hash)
     end
   end
 
