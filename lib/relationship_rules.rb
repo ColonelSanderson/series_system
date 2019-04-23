@@ -87,6 +87,12 @@ class RelationshipRules
     RELATOR_VALUES.keys
   end
 
+  def all_jsonmodels
+    @rules.map{|rule| [rule.source_jsonmodel_category, rule.target_jsonmodel_category]}
+      .flatten.uniq.map{|category| jsonmodel_expander(category)}
+      .flatten.uniq
+  end
+
   # Non-closeable relationships are left open even when an agency is being terminated
   def non_auto_closeable_relationships
     result = []
