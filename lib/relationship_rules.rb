@@ -166,6 +166,10 @@ class RelationshipRules
     JSONMODEL_CATEGORIES.fetch(jsonmodel_category, ASUtils.wrap(jsonmodel_category))
   end
 
+  def categories_for_jsonmodel(jsonmodel)
+    JSONMODEL_CATEGORIES.select{|cat, models| models.include?(jsonmodel.intern)}.keys + [jsonmodel.intern]
+  end
+
   def global?(jsonmodel_category)
     jsonmodel_expander(jsonmodel_category).any? {|jsonmodel_type|
       !JSONModel.JSONModel(jsonmodel_type).schema.fetch('uri').start_with?("/repositories/")
@@ -238,6 +242,13 @@ class RelationshipRules
       }
       JSONModel.validate_schema(source_schema)
       log "Added #{jsonmodel_property} to #{source_jsonmodel_type} schema supporting: #{relationship_jsonmodels}"
+
+      # add a property to access the relationship tracer
+      source_schema['properties']['relationship_tracer'] = {
+        'type' => 'object',
+        'subtype' => 'ref',
+        'properties' => { 'ref' => { 'type' => 'uri' }}
+      }
 
       if backend?
         source_model = model_for_jsonmodel_type(source_jsonmodel_type)
