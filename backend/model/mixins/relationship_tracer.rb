@@ -54,7 +54,10 @@ module RelationshipTracer
     end
 
     rules.each do |rule|
-      rlshp_def = self.class.find_relationship("series_system_#{rule.target_jsonmodel_category}_relationships")
+      rlshp_def = self.class.find_relationship("series_system_#{rule.target_jsonmodel_category}_relationships", true)
+      # we might have to wait for the reverse rule
+      next unless rlshp_def
+
       rlshp_jsonmodel_type = RelationshipRules.instance.build_relationship_jsonmodel_name(rule, relationship_type)
 
       rels = rlshp_def.find_by_participant(self)
