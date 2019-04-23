@@ -137,7 +137,7 @@ module SeriesSystemValidations
   def self.valid_date_format(date)
     # make sure date complies with the formatting standard we're enforcing
     # must be one of: YYYY, YYYY-MM, YYYY-MM-DD
-    date.nil? || date.empty? || (date.match(/^\d\d\d\d(-\d\d(-\d\d)?)?$/) ? true : false)
+    date.nil? || date.empty? || !!date.match(/^\d\d\d\d(-\d\d(-\d\d)?)?$/)
   end
 
 
