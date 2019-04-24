@@ -11,44 +11,59 @@ en:
       distressing: This record may contain information or photographs which some people may find distressing
       atsi_cultural: These records may contain terms or images which Aboriginal and Torres Strait Islander people may find distressing or offensive
 
-    series_system_abolition_relator:
+    series_system_abolition_relator: &abolition_relators
       abolished: Abolished
       is_abolished_by: Is abolished by
-    series_system_administers_relator:
+    series_system_administers_relator: &administers_relators
       administered: Administered
       is_administered_by: Is administered by
-    series_system_association_relator:
+    series_system_association_relator: &association_relators
       is_associated_with: Is associated with
-    series_system_succession_relator:
+    series_system_succession_relator: &succession_relators
       supercedes: Supercedes
       precedes: Precedes
-    series_system_ownership_relator:
+    series_system_ownership_relator: &ownership_relators
       controls: Controls
       is_controlled_by: Is controlled by
-    series_system_containment_relator:
+    series_system_containment_relator: &containment_relators
       contains: Contains
       is_contained_within: Is contained within
-    series_system_creation_relator:
+    series_system_creation_relator: &creation_relators
       established: Established
       established_by: Established by
-    series_system_responsibility_relator:
+    series_system_responsibility_relator: &responsibility_relators
       is_responsible_for: Is responsible for
       under_responsibility_of: Under responsibility of
-    series_system_represented_relator:
+    series_system_represented_relator: &represented_relators
       represents: Represents
       is_represented_by: Is represented by
-    series_system_derivation_relator:
+    series_system_derivation_relator: &derivation_relators
       derives: Derives
       is_derived_from: Is derived from
-    series_system_documentation_relator:
+    series_system_documentation_relator: &documentation_relators
       documents: Documents
       is_documented_by: Is documented by
-    series_system_restriction_relator:
+    series_system_restriction_relator: &restriction_relators
       restricts: Restricts
       is_restricted_by: Is restricted by
-    series_system_preferred_term_relator:
+    series_system_preferred_term_relator: &preferred_term_relators
       has_preferred_term_of: Has preferred term of
       is_preferred_term_of: Is preferred term of
-    series_system_nonpreferred_term_relator:
+    series_system_nonpreferred_term_relator: &nonpreferred_term_relators
       has_nonpreferred_term_of: Has nonpreferred term of
       is_nonpreferred_term_of: Is nonpreferred term of
+    series_system_relationship_relator:
+      <<: *abolition_relators
+      <<: *administers_relators
+      <<: *association_relators
+      <<: *succession_relators
+      <<: *ownership_relators
+      <<: *containment_relators
+      <<: *creation_relators
+      <<: *responsibility_relators
+      <<: *represented_relators
+      <<: *derivation_relators
+      <<: *documentation_relators
+      <<: *restriction_relators
+      <<: *preferred_term_relators
+      <<: *nonpreferred_term_relators
