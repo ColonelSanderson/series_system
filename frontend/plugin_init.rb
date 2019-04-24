@@ -156,6 +156,7 @@ Rails.application.config.after_initialize do
   include SeriesSystemValidations
 
   begin
+    HistoryController.add_skip_field('relationship_id')
     HistoryController.add_enum_handler {|type, field|
       if type.start_with?('series_system_') && type.end_with?('_relationship') && field == 'relator'
         ['series_system_relationship', 'relator']
