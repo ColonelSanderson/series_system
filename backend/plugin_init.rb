@@ -35,6 +35,7 @@ include SeriesSystemValidations
 begin
   History.register_model(Mandate)
   History.register_model(Function)
+  History.add_diff_skip_field(:relationship_id)
 rescue NameError
   Log.info("Unable to register Mandate and Function for history. Please install the as_history plugin")
 end
