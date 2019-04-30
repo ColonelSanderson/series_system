@@ -258,5 +258,14 @@ describe 'Series System' do
 
       other_responsible_agencies[item_overriding_control.id].should eq(item_override_agency.uri)
     end
+
+    it 'tells you which agencies recently controlled a record' do
+      date = (Time.now() - (60*60*24*50)).strftime('%Y-%m-%d')
+
+      series = create(:json_resource, :series_system_agent_relationships => [current_controller.merge({:start_date => date}),
+                                                                             old_controller.merge({:end_date => date})])
+
+      Resource[series.id].recent_responsible_agencies.values.should eq([old_agency.uri])
+    end
   end
 end

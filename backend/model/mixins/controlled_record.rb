@@ -45,6 +45,11 @@ module ControlledRecord
   end
 
 
+  def recent_responsible_agencies
+    self.class.controlling_agency_uris([self.id], :age => 90)
+  end
+
+
   module ClassMethods
     def sequel_to_jsonmodel(objs, opts = {})
       jsons = super
@@ -91,14 +96,21 @@ module ControlledRecord
     end
 
 
-    def controlling_agency_uris(ids)
+    def controlling_agency_uris(ids, opts = {})
       # given an array of record ids, returns a hash keyed on those ids
       # with values of the uris of the corresponding controlling agencies
 
       out = {}
 
       control_relationship.definition.find_by_participant_ids(self, ids).each do |r|
-        next unless r.jsonmodel_type == control_relationship.jsonmodel && r.end_date.nil?
+        next unless r.jsonmodel_type == control_relationship.jsonmodel
+
+        if opts[:age]
+          next if r.end_date.nil?
+          next if Time.new(*r.end_date.split('-')) < Time.now() - (60*60*24 * opts[:age].to_i)
+        else
+          next unless r.end_date.nil?
+        end
 
         out[r[control_relationship.record]] = control_relationship.agency_model.my_jsonmodel.uri_for(r[control_relationship.agency])
       end
