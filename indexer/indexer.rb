@@ -81,6 +81,10 @@ class IndexerCommon
         doc['responsible_agency_u_sstr'] = record['record']['responsible_agency']['ref']
       end
 
+      if record['record'].has_key?('recent_responsible_agencies')
+        doc['recent_responsible_agencies_u_sstr'] = record['record']['recent_responsible_agencies'].map{|r| r['ref']}
+      end
+
       if record['record'].has_key?('other_responsible_agencies')
         doc['other_responsible_agencies_u_sstr'] = record['record']['other_responsible_agencies'].map{|r| r['ref']}
       end
