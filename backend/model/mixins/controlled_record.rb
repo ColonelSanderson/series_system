@@ -47,7 +47,7 @@ module ControlledRecord
 
   def recent_responsible_agencies(opts = {})
     age_days = opts.fetch(:age_days, 90)
-    self.class.controlling_agency_uris([self.id], :age_days => age_days)
+    self.class.controlling_agency_uris([self.id], :age_days => age_days).fetch(self.id, [])
   end
 
 
@@ -56,6 +56,7 @@ module ControlledRecord
       jsons = super
       jsons.zip(objs).each do |json, obj|
         json['responsible_agency'] = { 'ref' => obj.responsible_agency }
+        json['recent_responsible_agencies'] = obj.recent_responsible_agencies
 
         if obj.class.my_jsonmodel.schema['properties'].has_key?('other_responsible_agencies')
           json['other_responsible_agencies'] = obj.other_responsible_agencies.map{|id, agency| { 'ref' => agency }}
@@ -111,7 +112,8 @@ module ControlledRecord
         if opts[:age_days]
           next if r.end_date.nil?
           next if Time.new(*r.end_date.split('-')) < Time.now() - (60*60*24 * opts[:age_days].to_i)
-          out[r[control_relationship.record]] = {
+          out[r[control_relationship.record]] ||= []
+          out[r[control_relationship.record]] << {
             :ref => control_relationship.agency_model.my_jsonmodel.uri_for(r[control_relationship.agency]),
             :end_date => r.end_date
           }
