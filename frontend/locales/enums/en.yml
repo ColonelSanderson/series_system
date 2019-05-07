@@ -4,12 +4,6 @@ en:
       official: Official
       sensitive: Sensitive
       protected: Protected
-    user_defined_enum_2:
-      published: Public Access / Published
-      cultural_sensitivity: Cultural Sensitivity Warning
-      secret_and_sacred: Secret and Sacred
-      distressing: This record may contain information or photographs which some people may find distressing
-      atsi_cultural: These records may contain terms or images which Aboriginal and Torres Strait Islander people may find distressing or offensive
 
     series_system_abolition_relator: &abolition_relators
       abolished: Abolished

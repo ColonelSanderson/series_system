@@ -74,7 +74,6 @@ en:
     function_source: Function Source
     mandate_type: Mandate Type
     user_defined_enum_1: Security Level
-    user_defined_enum_2: Sensitivity Label
 
   enumerations:
     mandate_type:
@@ -87,7 +86,6 @@ en:
   resource:
     user_defined:
       enum_1: Security Level
-      enum_2: Sensitivity Label
 
   search_sorting:
     mandate_type_u_ssort: Mandate type
