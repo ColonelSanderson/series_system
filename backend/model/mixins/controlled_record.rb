@@ -59,7 +59,7 @@ module ControlledRecord
         json['recent_responsible_agencies'] = obj.recent_responsible_agencies
 
         if obj.class.my_jsonmodel.schema['properties'].has_key?('other_responsible_agencies')
-          json['other_responsible_agencies'] = obj.other_responsible_agencies.map{|id, agency| { 'ref' => agency }}
+          json['other_responsible_agencies'] = obj.other_responsible_agencies.values.uniq.map{|agency| { 'ref' => agency }}
         end
       end
 
