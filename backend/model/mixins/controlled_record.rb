@@ -47,131 +47,71 @@ module ControlledRecord
     self.class.node_model.controlling_agency_uris(children_ids)
   end
 
-  class DateRange
-    attr_reader :start_date, :end_date
 
-    def initialize(start_date, end_date)
-      @start_date = start_date.is_a?(String) ? Date.parse(start_date) : start_date
-      @end_date = end_date.is_a?(String) ? Date.parse(end_date) : end_date
+  # The agencies that have controlled a given record over various time periods.
+  RecordControllingAgencies = Struct.new(:id, :agency_controls)
 
-      raise unless @end_date.nil? || @start_date <= @end_date
-    end
+  # The range of dates a given agency controlled some record.
+  AgencyControlPeriod = Struct.new(:agency, :range)
 
-    def to_s
-      [@start_date.strftime("%Y-%m-%d"), @end_date ? @end_date.strftime("%Y-%m-%d") : ""].join(" -- ")
-    end
-
-    def inspect
-      "<#DateRange #{to_s}>"
-    end
-
-    def remove_range(other_range)
-      if ((other_range.end_date && other_range.end_date < @start_date) ||
-          (@end_date && other_range.start_date > @end_date))
-        # No overlap in these ranges
-        return [self]
-      end
-
-      result = []
-
-      if @start_date < other_range.start_date
-        result << DateRange.new(@start_date, other_range.start_date - 1)
-      end
-
-      if (other_range.end_date && @end_date) && other_range.end_date < @end_date
-        result << DateRange.new(other_range.end_date + 1, @end_date)
-      end
-
-      if @end_date.nil? && other_range.end_date
-        result << DateRange.new(other_range.end_date + 1, nil)
-      end
-
-      result
-    end
-  end
-
-  TreeNode = Struct.new(:id, :agency_controls)
-  Control = Struct.new(:agency, :range)
-
+  # FIXME: ditch recursion
   def calculate_grace(branch, inherited_controls = [])
-    if branch.empty?
-      return inherited_controls
-    end
+    while !branch.empty?
+      current_node = branch.shift
+      new_inherited = []
 
-    current_node = branch[0]
-    new_inherited = []
-
-    if current_node.agency_controls.empty?
-      new_inherited = inherited_controls
-    else
-      # Remove ranges based on new controls in this record
-      current_node.agency_controls.each do |control|
-        inherited_controls.each do |inherited|
-          split_range = inherited.range.remove_range(control.range)
-          new_inherited.concat(split_range.map {|r| Control.new(inherited.agency, r)})
+      if current_node.agency_controls.empty?
+        # If this node doesn't add any agency controls, we fully inherit from
+        # the record above.
+        new_inherited = inherited_controls
+      else
+        # Remove ranges based on new controls in this record.
+        current_node.agency_controls.each do |control|
+          inherited_controls.each do |inherited|
+            split_range = inherited.range.remove_range(control.range)
+            new_inherited.concat(split_range.map {|r| AgencyControlPeriod.new(inherited.agency, r)})
+          end
         end
       end
+
+      # Add new controls established by this record
+      new_inherited += current_node.agency_controls
+
+      inherited_controls = new_inherited
     end
 
-    # Add new controls established by this record
-    new_inherited += current_node.agency_controls
-
-    calculate_grace(branch.drop(1), new_inherited)
-  end
-
-  def date_parse_down(s)
-    begin
-      return Date.strptime(s, '%Y-%m-%d')
-    rescue ArgumentError
-      begin
-        return Date.strptime(s, '%Y-%m')
-      rescue ArgumentError
-        begin
-          return Date.strptime(s, '%Y')
-        rescue
-          return nil
-        end
-      end
-    end
-  end
-
-
-  def date_parse_up(s)
-    begin
-      return Date.strptime(s, '%Y-%m-%d')
-    rescue ArgumentError
-      begin
-        month = Date.strptime(s, '%Y-%m')
-        return month.next_month - 1
-      rescue ArgumentError
-        begin
-          year = Date.strptime(s, '%Y')
-          return year.next_year - 1
-        rescue
-          return nil
-        end
-      end
-    end
+    inherited_controls
   end
 
   def recent_responsible_agencies(age_days)
+    # The record we're working on as we walk our way up the tree
     current_record = self
-    branch_relationships = []
+
+    # "branch" refers to the chain of records from the root of the tree down to
+    # the record of the interest.  For each record in the branch, we record a
+    # RecordControllingAgencies entry that tells us which agencies had control
+    # on which dates.
+    branch_controllers = []
 
     while current_record
       controlling_relationships = self.class.control_relationship.definition.find_by_participant(current_record)
-      current_node_controls = controlling_relationships.map {|r|
-        parsed_start = date_parse_down(r.start_date)
-        parsed_end = r.end_date ? date_parse_up(r.end_date) : nil
+
+      current_record_controllers = RecordControllingAgencies.new(self.id, [])
+
+      controlling_relationships.each do |r|
+        parsed_start = DateParse.date_parse_down(r.start_date)
+        parsed_end = r.end_date ? DateParse.date_parse_up(r.end_date) : nil
 
         if parsed_start
-          Control.new(r.other_referent_than(current_record).uri,
-                      DateRange.new(parsed_start, parsed_end))
+          control_period = AgencyControlPeriod.new(r.other_referent_than(current_record).uri,
+                                                   DateRange.new(parsed_start, parsed_end))
+          current_record_controllers.agency_controls << control_period
         end
-      }.compact
+      end
 
-      branch_relationships.unshift(TreeNode.new(current_record.uri, current_node_controls))
+      branch_controllers.unshift(current_record_controllers)
 
+      # Move up the tree
       if current_record.is_a?(TreeNodes)
         if current_record.parent_id
           current_record = current_record.class[current_record.parent_id]
@@ -179,13 +119,14 @@ module ControlledRecord
           current_record = current_record.class.root_model[current_record.root_record_id]
         end
       else
+        # If we were at the root, there's no further to go.
         break
       end
     end
 
     agency_end_dates = {}
 
-    calculate_grace(branch_relationships).each do |control|
+    calculate_grace(branch_controllers).each do |control|
       next if !control.range.end_date || (control.range.end_date + age_days) < Date.today()
 
       # If we don't have an entry yet, or if we've found a later end date, take

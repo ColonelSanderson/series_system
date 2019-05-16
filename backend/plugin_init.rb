@@ -1,3 +1,6 @@
+require_relative 'lib/date_parse'
+require_relative 'lib/date_range'
+
 Permission.define("manage_function_record",
                   "The ability to create, modify and delete a function record",
                   :level => "repository")
