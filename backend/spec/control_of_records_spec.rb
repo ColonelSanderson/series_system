@@ -286,5 +286,37 @@ describe 'Series System' do
 
       Resource[series.id].recent_responsible_agencies.should eq([{:ref => old_agency.uri, :end_date => not_too_old}])
     end
+
+    it 'inherits controlling information' do
+      day_secs = 60*60*24
+
+      very_old_agency = create(:json_agent_corporate_entity,
+                               :dates_of_existence => [{
+                                                         :label => 'existence',
+                                                         :date_type => 'range',
+                                                         :begin => '1950-01-01',
+                                                         :end => '1999-01-01'
+                                                       }])
+
+
+      way_too_old = (Time.now() - (day_secs * 200 )).strftime('%Y-%m-%d')
+      too_old = (Time.now() - (day_secs * 100 )).strftime('%Y-%m-%d')
+      not_too_old = (Time.now() - (day_secs * 50 )).strftime('%Y-%m-%d')
+
+      series = create(:json_resource, :series_system_agent_relationships => [current_controller.merge({:start_date => not_too_old}),
+                                                                             old_controller.merge({:start_date => too_old,
+                                                                                                   :end_date => not_too_old}),
+                                                                             old_controller.merge({:start_date => way_too_old,
+                                                                                                   :end_date => too_old,
+                                                                                                   :ref => very_old_agency.uri})])
+
+
+
+      ao = create(:json_archival_object,
+                  :resource => { :ref => series.uri },
+                  :series_system_agent_relationships => [])
+
+      ArchivalObject.to_jsonmodel(ao.id)['recent_responsible_agencies'].should_not be_empty
+    end
   end
 end
