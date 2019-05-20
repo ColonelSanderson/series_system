@@ -83,7 +83,7 @@ module ControlledRecord
     inherited_controls
   end
 
-  def recent_responsible_agencies(age_days)
+  def recent_responsible_agencies(age_days = GRACE_DAYS)
     # The record we're working on as we walk our way up the tree
     current_record = self
 
@@ -150,7 +150,7 @@ module ControlledRecord
       jsons = super
       jsons.zip(objs).each do |json, obj|
         json['responsible_agency'] = { 'ref' => obj.responsible_agency }
-        json['recent_responsible_agencies'] = obj.recent_responsible_agencies(GRACE_DAYS)
+        json['recent_responsible_agencies'] = obj.recent_responsible_agencies
 
         if obj.class.my_jsonmodel.schema['properties'].has_key?('other_responsible_agencies')
           json['other_responsible_agencies'] = obj.other_responsible_agencies.values.uniq.map{|agency| { 'ref' => agency }}
