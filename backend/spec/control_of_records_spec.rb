@@ -284,7 +284,7 @@ describe 'Series System' do
                                                                                                     :end_date => too_old,
                                                                                                     :ref => very_old_agency.uri})])
 
-      Resource[series.id].recent_responsible_agencies.should eq([{:ref => old_agency.uri, :end_date => not_too_old}])
+      Resource[series.id].recent_responsible_agencies.should eq([{'ref' => old_agency.uri, 'end_date' => not_too_old}])
     end
 
     it 'inherits controlling information' do
