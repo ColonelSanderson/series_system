@@ -154,8 +154,8 @@ en:
     _plural: Representationas
 
   transfer:
-    _singular: transfer
-    _plural: transfers
+    _singular: Transfer
+    _plural: Transfers
 
   series_system_relationships: &series_system_relationship
     add: Add Relationship
