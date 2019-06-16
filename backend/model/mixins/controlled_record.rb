@@ -54,7 +54,6 @@ module ControlledRecord
   # The range of dates a given agency controlled some record.
   AgencyControlPeriod = Struct.new(:agency, :range)
 
-  # FIXME: ditch recursion
   def calculate_grace(branch, inherited_controls = [])
     while !branch.empty?
       current_node = branch.shift
