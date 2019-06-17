@@ -1,1 +1,2 @@
 ArchivalObject.include(ControlledRecord)
+ArchivalObject.include(CreatingAgency::ArchivalObjectCreation)
