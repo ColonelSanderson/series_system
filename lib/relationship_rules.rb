@@ -13,7 +13,6 @@ class RelationshipRules
   JSONMODEL_CATEGORIES = {
     :agent => [:agent_corporate_entity, :agent_family, :agent_person, :agent_software],
     :record => [:resource, :archival_object],
-    :transfer => [:accession],
     :series => [:resource],
     :item => [:archival_object],
   }
@@ -55,15 +54,12 @@ class RelationshipRules
     @rules = []
     @rules << RelationshipRule.new(:agent, :agent, ['succession', 'ownership', 'containment', 'association'])
     @rules << RelationshipRule.new(:agent, :record, ['ownership', 'creation'])
-    @rules << RelationshipRule.new(:agent, :transfer, ['ownership'])
     @rules << RelationshipRule.new(:agent, :mandate, ['creation', 'administers'])
     @rules << RelationshipRule.new(:agent, :function, ['administers'])
 
     @rules << RelationshipRule.new(:series, :series, ['succession', 'ownership', 'association'])
 
     @rules << RelationshipRule.new(:item, :item, ['containment', 'succession'])
-
-    @rules << RelationshipRule.new(:transfer, :record, ['containment'])
 
     @rules << RelationshipRule.new(:mandate, :series, ['documentation', 'restriction'])
     @rules << RelationshipRule.new(:mandate, :mandate, ['association', 'containment', 'succession'])

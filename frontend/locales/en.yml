@@ -109,7 +109,6 @@ en:
       mandate_series_system_function_relationships_u_sstr: Function Relationship
       mandate_series_system_mandate_relationships_u_sstr: Mandate Relationship
       record_series_system_agent_relationships_u_sstr: Agent Relationship
-      record_series_system_transfer_relationships_u_sstr: Transfer Relationship
       representation_series_system_agent_relationships_u_sstr: Agent Relationship
       representation_series_system_item_relationships_u_sstr: Item Relationship
       representation_series_system_representation_relationships_u_sstr: Representation Relationship
@@ -117,8 +116,6 @@ en:
       series_series_system_item_relationships_u_sstr: Item Relationship
       series_series_system_mandate_relationships_u_sstr: Mandate Relationship
       series_series_system_series_relationships_u_sstr: Series Relationship
-      transfer_series_system_agent_relationships_u_sstr: Agent Relationship
-      transfer_series_system_record_relationships_u_sstr:  Record Relationship
 
   advanced_search:
     date:
@@ -152,10 +149,6 @@ en:
   representation:
     _singular: Representation
     _plural: Representations
-
-  transfer:
-    _singular: Transfer
-    _plural: Transfers
 
   series_system_relationships: &series_system_relationship
     add: Add Relationship
