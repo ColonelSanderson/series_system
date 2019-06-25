@@ -44,7 +44,8 @@ module ControlledRecord
 
     children_ids = self.class.node_model.filter(:root_record_id => self.id).select(:id).all.map{|r| r[:id]}
 
-    self.class.node_model.controlling_agency_uris(children_ids)
+    my_agency = self.responsible_agency
+    self.class.node_model.controlling_agency_uris(children_ids).select{|_,other_agency| other_agency != my_agency}
   end
 
 
