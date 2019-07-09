@@ -157,11 +157,10 @@ Rails.application.config.after_initialize do
 
   begin
     HistoryController.add_skip_field('relationship_id')
+    HistoryController.add_skip_field('relationship_tracer')
     HistoryController.add_enum_handler {|type, field|
       if type.start_with?('series_system_') && type.end_with?('_relationship') && field == 'relator'
-        ['series_system_relationship', 'relator']
-      else
-        [type, field]
+        'series_system_relationship_relator'
       end
     }
   rescue NameError
