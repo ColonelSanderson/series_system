@@ -1,1 +1,2 @@
 AgentCorporateEntity.include(RecordController)
+AgentCorporateEntity.include(SuccessionDatesValidation)
