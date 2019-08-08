@@ -1,2 +1,3 @@
 recommends_plugins:
+  - qsa_kitchensink
   - as_history
