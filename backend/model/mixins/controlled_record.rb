@@ -42,10 +42,28 @@ module ControlledRecord
     # this is only pertinent to models that have trees under them
     return {} unless self.class.respond_to? :node_model
 
-    children_ids = self.class.node_model.filter(:root_record_id => self.id).select(:id).all.map{|r| r[:id]}
-
+    # For very large resource trees, hitting the relationship code was too slow
+    # here.  Fast pathing this by hitting the DB directly.
     my_agency = self.responsible_agency
-    self.class.node_model.controlling_agency_uris(children_ids).select{|_,other_agency| other_agency != my_agency}
+
+    DB.open do |db|
+      db[:series_system_rlshp]
+      .join(:archival_object, Sequel.qualify(:archival_object, :id) => Sequel.qualify(:series_system_rlshp, :archival_object_id_0))
+      .filter(Sequel.qualify(:archival_object, :root_record_id) => self.id)
+      .filter(Sequel.qualify(:series_system_rlshp, :jsonmodel_type) => self.class.control_relationship.jsonmodel)
+      .filter(Sequel.qualify(:series_system_rlshp, :end_date) => nil)
+      .select(
+        Sequel.as(Sequel.qualify(:archival_object, :id), :archival_object_id),
+        Sequel.as(Sequel.qualify(:series_system_rlshp, :agent_corporate_entity_id_0),
+                       :agency_id))
+      .map {|row|
+        agency_uri = JSONModel(:agent_corporate_entity).uri_for(row[:agency_id])
+
+        if agency_uri != my_agency
+          [row[:archival_object_id], agency_uri]
+        end
+      }.compact.to_h
+    end
   end
 
 
@@ -176,7 +194,6 @@ module ControlledRecord
 
       # check each open control relationship
       json['series_system_agent_relationships'].select{|r| r['relator'] == 'is_controlled_by' && !r['end_date']}.each do |cr|
-
         target_table =  RelationshipRules.instance.model_for_jsonmodel_type(cr['relationship_target_record_type']).table_name
 
         # controlling agency is dead if it doesn't have any open (ie lacking an end date) 'existence' date sub-records
