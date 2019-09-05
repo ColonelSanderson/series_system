@@ -179,7 +179,12 @@ module ControlledRecord
     end
 
     def create_from_json(json, opts = {})
-      ensure_controller_is_not_dead(json)
+      if AppConfig[:plugins].include?('qsa_migration_adapter')
+        # You're the boss. Monkey away!
+      else
+        ensure_controller_is_not_dead(json)
+      end
+
       super
     end
 
