@@ -7,7 +7,7 @@ SeriesSystem.prototype.setupNavigation = function() {
     var $browseActions = $($('#seriesSystemBrowseActions').html());
 
     $createActions.appendTo('.repository-header .create-container ul:first');
-    $browseActions.appendTo('.repository-header .browse-container ul:first');
+    $('.repository-header .navbar-nav .browse-container .dropdown-menu .divider:first').before(AS.renderTemplate("seriesSystemBrowseActions"));
 };
 
 
