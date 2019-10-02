@@ -102,49 +102,63 @@ module ControlledRecord
   end
 
   def recent_responsible_agencies(age_days = GRACE_DAYS)
-    # The record we're working on as we walk our way up the tree
-    current_record = self
+    # Our branch is the path to this record from the root of the tree, so it'll look like:
+    #
+    #  [[ArchivalObject, myid], [ArchivalObject, myparentid], ..., [Resource, root_record_id]]
+    branch = []
+    current_model = self.class
+    current_id = self.id
 
-    # "branch" refers to the chain of records from the root of the tree down to
-    # the record of the interest.  For each record in the branch, we record a
-    # RecordControllingAgencies entry that tells us which agencies had control
-    # on which dates.
-    branch_controllers = []
+    loop do
+      branch << [current_model, current_id]
 
-    while current_record
-      controlling_relationships = self.class.control_relationship.definition.find_by_participant(current_record)
+      if current_model.ancestors.include?(TreeNodes)
+        next_row = current_model.filter(:id => current_id).select(:parent_id, :root_record_id).first
 
-      current_record_controllers = RecordControllingAgencies.new(self.id, [])
-
-      controlling_relationships.each do |r|
-        parsed_start = DateParse.date_parse_down(r.start_date)
-        parsed_end = r.end_date ? DateParse.date_parse_up(r.end_date) : nil
-
-        if parsed_start
-          control_period = AgencyControlPeriod.new(r.other_referent_than(current_record).uri,
-                                                   DateRange.new(parsed_start, parsed_end))
-          current_record_controllers.agency_controls << control_period
-        end
-      end
-
-      branch_controllers.unshift(current_record_controllers)
-
-      # Move up the tree
-      if current_record.is_a?(TreeNodes)
-        if current_record.parent_id
-          current_record = current_record.class[current_record.parent_id]
+        if next_row[:parent_id]
+          current_id = next_row[:parent_id]
         else
-          current_record = current_record.class.root_model[current_record.root_record_id]
+          # Next stop: root record
+          current_model = self.class.root_model
+          current_id = next_row[:root_record_id]
         end
       else
-        # If we were at the root, there's no further to go.
+        # We've hit the root and we're done
         break
       end
     end
 
+    # Group our branch by record type to fetch relationships in as few queries
+    # as possible
+    record_control_periods = {}
+
+    controlling_rlshp = self.class.control_relationship.definition
+    branch.group_by(&:first).each do |record_model, branch_entries|
+      record_ids = branch_entries.map {|e| e[1]}
+
+      controlling_relationships = controlling_rlshp.find_by_participant_ids(record_model, record_ids)
+      controlling_relationships.each do |relationship|
+        controlling_rlshp.reference_columns_for(record_model).each do |col|
+          next unless relationship[:jsonmodel_type] == 'series_system_agent_record_ownership_relationship'
+
+          if relationship[col]
+            key = [record_model, relationship[col]]
+
+            parsed_start = DateParse.date_parse_down(relationship.start_date)
+            parsed_end = relationship.end_date ? DateParse.date_parse_up(relationship.end_date) : nil
+
+            record_control_periods[key] ||= []
+            record_control_periods[key] << AgencyControlPeriod.new(JSONModel(:agent_corporate_entity).uri_for(relationship[:agent_corporate_entity_id_0]),
+                                                                   DateRange.new(parsed_start, parsed_end))
+          end
+        end
+      end
+    end
+
+    controlling_agencies = branch.map {|key| RecordControllingAgencies.new(key[1], record_control_periods.fetch(key, []))}
     agency_end_dates = {}
 
-    calculate_grace(branch_controllers).each do |control|
+    calculate_grace(controlling_agencies.reverse).each do |control|
       next if !control.range.end_date || (control.range.end_date + age_days) < Date.today()
 
       # If we don't have an entry yet, or if we've found a later end date, take
